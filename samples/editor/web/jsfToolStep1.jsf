@@ -1,0 +1,42 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <sun:html>
+	<sun:head id="propertyhead" title="#{msgs.propertysheet_title}" />
+	<sun:body>
+	    <sun:form id="propertyForm"> 
+		<!-- PropertySheet Example.... -->
+		<sun:propertySheet id="propertySheet" jumpLinks="#{PropertySheetBean.jumpLink}" 
+		    requiredFields="#{PropertySheetBean.requiredLabel}">
+
+		    <!-- Text Field section -->               
+		    <sun:propertySheetSection id="propertSectionTextField" label="">
+			<sun:property id="propertyTextField"  labelAlign="left" noWrap="#{true}" overlapLabel="#{false}">
+			    <sun:label text="Page Name" for="pageName" id="nameLabel"/>                           
+			    <sun:image id="space" url="/theme/com/sun/rave/web/ui/defaulttheme/images/other/dot.gif" width="$int{27}" height="$int{1}"/>
+			    <sun:textField id="pageName"  text="#{pagename}" required="#{true}"/> 
+			    <sun:button primary="#{true}" value="Create" Align="right">
+				<!command  getUIComponent(clientId="propertyForm:propertySheet:propertSectionTextField:propertyTextField:pageName", component=>$attribute{pageName});
+					    getUIComponentProperty(component="$attribute{pageName}", name="value", value=>$attribute{pagename});
+                                            navigate(page="/jsfToolStep2.jsf");
+				/>
+			    </sun:button>  
+			</sun:property>
+
+		    "<br /><br />
+		    </sun:propertySheetSection>
+		</sun:propertySheet>     
+	    </sun:form>           
+	</sun:body> 
+    </sun:html>  
+</sun:page>

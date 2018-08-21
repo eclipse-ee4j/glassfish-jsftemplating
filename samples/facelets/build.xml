@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<project name="FaceletsDemo" basedir="." xmlns:artifact="urn:maven-artifact-ant">
+    <!-- ********************************************************************* -->
+    <!-- * Property Definitions                                              * -->
+    <!-- ********************************************************************* -->
+    <property name="project.name" value="FaceletsDemo" />
+    <property name="project.version" value="1.0" />
+    <property name="maven2.repo" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/" />
+	
+
+	<property name="web.dir" value="WebRoot" />
+	<property name="demo.war" value="FaceletsDemo.war" />
+	
+	<property name="src.dir" value="${basedir}/src"/>
+	
+	<!--
+		This file assumes you have the ant contrib lib in your Ant home:
+		http://mirrors.ibiblio.org/pub/mirrors/maven2/ant-contrib/ant-contrib/1.0b2/ant-contrib-1.0b2.jar
+	-->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	
+	<macrodef name="download">
+		<attribute name="target"/>
+		<attribute name="url" />
+			
+		<sequential>
+			<if>
+				<not>
+					<available file="@{target}" property="ignore.me"/>
+				</not>
+				<then>
+					<get src="@{url}" dest="@{target}" usetimestamp="true" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+	
+	<target name="download">
+		<!-- Facelets Files -->
+		<mkdir dir="${web.dir}/WEB-INF/lib"/>
+		<download url="${maven2.repo}/com/sun/facelets/jsf-facelets/1.1.11/jsf-facelets-1.1.11.jar"
+			target="${web.dir}/WEB-INF/lib/jsf-facelets-1.1.11.jar" />
+			
+		<!-- JSFTemplating Files -->
+		<copy todir="${web.dir}/WEB-INF/lib/">
+			<fileset dir="../../dist">
+				<include name="jsftemplating*.jar"/>
+				<exclude name="*-dt.jar" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="package" depends="download">
+		<delete file="${demo.war}" />
+
+		<war destfile="${demo.war}" basedir="${web.dir}" needxmlfile="false" />
+	</target>
+</project>

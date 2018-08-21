@@ -1,0 +1,82 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.orderablelist_resultsTitle}" >
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form">                             
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+      
+      <!-- Breadcrumbs -->   
+      <sun:breadcrumbs id="breadcrumbs">
+	<sun:hyperlink id="indexPageLink" 
+	    text="#{msgs.index_title}"
+	    toolTip="#{msgs.index_title}"
+	    actionExpression="$methodExpression{showIndex}" 
+	    actionListenerExpression="$methodExpression{#{OrderableListBean.processLinkAction}, true}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="orderableListLink"
+	    text="#{msgs.orderablelist_title}"
+	    toolTip="#{msgs.orderablelist_title}"
+	    actionExpression="$methodExpression{showOrderableList}"
+	    onMouseOver="javascript:window.status='#{msgs.orderablelist_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="resultsPageLink" text="#{msgs.orderablelist_resultsTitle}"/>
+      </sun:breadcrumbs>
+      
+      <!-- Content Page Title -->
+      <sun:title id="title"              
+	  title="#{msgs.orderablelist_resultsTitle}"
+	  helpText="#{msgs.orderablelist_resultsHelpText}" >
+
+	<!facet "pageButtonsTop">  
+	  <!-- Back Button -->
+	  <sun:button id="backButton"
+	      immediate="#{true}"  
+	      text="#{msgs.orderablelist_backButton}" 
+	      actionExpression="$methodExpression{showOrderableList}" />               
+	</facet>          
+	 
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+	<f:verbatim><br /><br /></f:verbatim>                           
+
+	  <!-- User Selections Table -->
+	  <sun:table id="table1" title="#{msgs.orderablelist_tableHeading}">              
+	    <sun:tableRowGroup id="rowGroup1"
+		sourceData="#{OrderableListBean.userData.dataProvider}"
+		sourceVar="data">
+		
+	      <sun:tableColumn id="col1" headerText="#{msgs.orderablelist_columnHeading}">                      
+		<sun:staticText id="text1" text="#{data.value.name}" />
+	      </sun:tableColumn>                                    
+	    </sun:tableRowGroup>
+	  </sun:table>        
+		      
+	</sun:markup>
+      </sun:title>                     
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

@@ -1,0 +1,198 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:html id="html">  
+      <sun:head id="head" title="#{msgs.menu_title}" >
+        <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+      </sun:head>
+      <sun:body id="body">
+        <sun:form id="form">                             
+                
+          <!-- Masthead -->
+          <sun:masthead id="masthead"
+              productImageURL="/images/example_primary_masthead.png"
+              productImageHeight="$int{40}"
+              productImageWidth="$int{188}"
+              userInfo="test_user" 
+              serverInfo="test_server"
+              productImageDescription="#{msgs.mastheadAltText}" />
+          
+          <!-- Breadcrumbs -->   
+          <sun:breadcrumbs id="breadcrumbs">
+            <sun:hyperlink id="indexLink"
+                text="#{msgs.index_title}"
+                toolTip="#{msgs.index_title}"
+                actionExpression="$methodExpression{#{MenuListBean.showExampleIndex}}" 
+                onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+                onMouseOut="javascript: window.status=''; return true" />
+            <sun:hyperlink id="exampleLink" text="#{msgs.menu_title}"/>
+          </sun:breadcrumbs>
+          
+          <!-- Alert -->
+          <sun:alert id="alert"
+              summary="#{msgs.menu_alertElement}"
+              type="info"
+              rendered="#{MenuListBean.alertRendered}"
+              detail="#{MenuListBean.alertDetail}" />
+            
+          <!-- Content Page Title -->
+          <sun:title id="title" title="#{msgs.menu_title}"/>           
+          
+          <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+<f:verbatim>
+            <br />
+            <br />
+            <table border="0">
+              <tr>                
+                <td valign="top"> &nbsp; </td>
+                <td>                
+</f:verbatim>
+                  <!-- Action Jump Menu -->                     
+                  <sun:dropDown id="jumpMenu"
+                      toolTip="#{msgs.menu_jumpMenuTitle}"                 
+                      submitForm="#{true}"
+                      immediate="#{true}"
+                      forgetValue="#{true}"
+                      disabled="#{MenuListBean.jumpMenuDisabled}"
+                      selected="#{MenuListBean.jumpMenuSelectedOption}"
+                      items="#{MenuListBean.jumpMenuOptions}"                      
+                      actionListenerExpression="$methodExpression{#{MenuListBean.processJumpMenuSelection}, true}" />                     
+<f:verbatim>
+                </td>
+              </tr>
+              <tr>
+                <td> &nbsp; </td>
+                <td>                   
+</f:verbatim>
+                  <sun:helpInline id="jumpMenuHelp" type="field" text="#{msgs.menu_jumpMenuHelp}" />                                  
+<f:verbatim>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"> &nbsp; </td>
+              </tr>
+              <tr>
+                <td colspan="2"> &nbsp; </td>
+              </tr>
+              <tr>
+                <td valign="top">                
+</f:verbatim>
+                  <!-- Standard Menu Label --> 
+                  <sun:label id="standardMenuLabel"
+                      for="standardMenu"
+                      style="padding-right:10px;"
+                      text="#{msgs.menu_standardMenuLabel}" />                
+<f:verbatim>
+                </td>
+                <td>                
+</f:verbatim>
+                  <!-- Standard Menu -->                     
+                  <sun:dropDown id="standardMenu"
+                      toolTip="#{msgs.menu_standardMenuTitle}"
+                      disabled="#{MenuListBean.standardMenuDisabled}"
+                      selected="#{MenuListBean.standardMenuSelectedOption}"
+                      items="#{MenuListBean.standardMenuOptions}"
+                      actionListenerExpression="$methodExpression{#{MenuListBean.processStandardMenuSelection}, true}" />                     
+<f:verbatim>
+                </td>
+              </tr>
+              <tr>
+                <td> &nbsp; </td>
+		<td>    
+</f:verbatim>
+                  <sun:helpInline id="standardMenuHelp" type="field" text="#{msgs.menu_standardMenuHelp}" />                
+<f:verbatim>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"> &nbsp; </td>
+              </tr>
+              <tr>
+                <td colspan="2"> &nbsp; </td>
+              </tr>
+              <tr>
+                <td valign="top">                
+                  <!-- Scrolling List Label -->  
+</f:verbatim>
+                  <sun:label id="scrollListLabel"
+                      for="scrollList"
+                      style="padding-right:10px;"
+                      text="#{msgs.menu_selectableListLabel}" />                
+<f:verbatim>
+                </td>
+                <td>
+                  <!-- Scrolling List -->                     
+</f:verbatim>
+                  <sun:listbox id="scrollList"                    
+                      toolTip="#{menu_selectableListTitle}"
+                      selected="#{MenuListBean.listboxSelectedOption}"
+                      disabled="#{MenuListBean.listboxDisabled}"   
+                      items="#{MenuListBean.listboxOptions}"
+                      onChange="javascript:
+                                var value = webui.suntheme.listbox.getSelectedValue('form:scrollList');                                
+                                if (value == 'option_0_value') {
+                                    (document.getElementById('form:text')).innerHTML='#{msgs.menu_noOption}'; 
+                                } else {
+                                    (document.getElementById('form:text')).innerHTML='#{msgs.menu_staticText} ' + value;
+                                }
+                                return true;">
+		    <!afterCreate
+			setAttribute(key="lb" value="$this{component}");
+			println(" Comp: #{lb.class.name}");
+			println(" Comp: #{lb.rendererType}");
+		    />
+		</sun:listbox>
+		" Comp: #{lb.class.name}
+		" Comp: #{lb.rendererType}
+<f:verbatim>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"> &nbsp; </td>
+              </tr>
+              <tr>
+                <td> &nbsp; </td>                
+                <td align="left">                                                       
+                  <!-- Static Text for showing the value of the selected option. -->                    
+</f:verbatim>
+                  <sun:staticText id="text" text="" />                                        
+<f:verbatim>
+                </td>
+              </tr>                
+              <tr>
+                <td colspan="2"> &nbsp; </td>
+              </tr>              
+            </table>
+               
+</f:verbatim>
+            <sun:panelGroup id="pageActionsGroup" block="#{true}" style="padding:25px 0px 0px 0px;">     
+              <!-- Submit Button -->            
+              <sun:button id="SubmitButton"                       
+                  text="#{msgs.menu_submitButton}"
+                  actionExpression="$methodExpression{#{MenuListBean.showMenuListResults}}" />
+                  
+              <!-- Test Case Menu -->                     
+              <sun:dropDown id="testCaseMenu"     
+                  immediate="#{true}"
+                  submitForm="#{true}"
+                  forgetValue="#{true}"                     
+                  items="#{MenuListBean.testCaseOptions}"
+                  actionListenerExpression="$methodExpression{#{MenuListBean.processTestCaseMenuSelection}, true}" /> 
+            </sun:panelGroup>     
+                            
+          </sun:markup>          
+        </sun:form>
+      </sun:body>
+    </sun:html>  
+</sun:page>

@@ -1,0 +1,38 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<!-- Actions (Bottom) -->
+<sun:button id="action1"
+    actionExpression="$methodExpression{#{TableBean.groupD.actions.delete}}"
+    disabled="#{TableBean.groupD.actions.disabled}"
+    onClick="if (confirmDeleteSelectedRows() == false) return false"
+    text="#{msgs.table_ActionDelete}"/>
+<sun:button id="action2"
+    actionExpression="$methodExpression{#{TableBean.groupD.actions.action}}"
+    disabled="#{TableBean.groupD.actions.disabled}"
+    onClick="if (confirmSelectedRows() == false) return false"
+    text="#{msgs.table_Action2}"/>
+<sun:button id="action3"
+    actionExpression="$methodExpression{#{TableBean.groupD.actions.action}}"
+    disabled="#{TableBean.groupD.actions.disabled}"
+    onClick="if (confirmSelectedRows() == false) return false"
+    text="#{msgs.table_Action3}"/>
+<sun:button id="action4"
+    actionExpression="$methodExpression{#{TableBean.groupD.actions.action}}"
+    disabled="#{TableBean.groupD.actions.disabled}"
+    onClick="if (confirmSelectedRows() == false) return false"
+    text="#{msgs.table_Action4}"/>
+<sun:dropDown submitForm="#{true}" id="moreActions"
+    actionExpression="$methodExpression{#{TableBean.groupD.actions.moreActions}}"
+    disabled="#{TableBean.groupD.actions.disabled}"
+    items="#{TableBean.groupD.actions.moreActionsOptions}"
+    selected="#{TableBean.groupD.actions.moreActions}"/>

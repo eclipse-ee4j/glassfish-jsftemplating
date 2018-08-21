@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------
+Test set: com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.038 sec <<< FAILURE! - in com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest
+testRead1(com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest)  Time elapsed: 0.022 sec  <<< FAILURE!
+java.lang.AssertionError: null
+	at org.junit.Assert.fail(Assert.java:86)
+	at org.junit.Assert.fail(Assert.java:95)
+	at com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest.testRead1(FaceletsLayoutDefinitionReaderTest.java:59)
+
+testSpeed(com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest)  Time elapsed: 0.015 sec  <<< FAILURE!
+java.lang.AssertionError: null
+	at org.junit.Assert.fail(Assert.java:86)
+	at org.junit.Assert.fail(Assert.java:95)
+	at com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest.timeTest(FaceletsLayoutDefinitionReaderTest.java:75)
+	at com.sun.jsftemplating.layout.facelets.FaceletsLayoutDefinitionReaderTest.testSpeed(FaceletsLayoutDefinitionReaderTest.java:81)
+

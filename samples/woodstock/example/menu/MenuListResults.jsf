@@ -1,0 +1,82 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.menu_resultsPageTitle}" >
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form">                             
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+      
+      <!-- Breadcrumbs -->   
+      <sun:breadcrumbs id="breadcrumbs">
+	<sun:hyperlink id="indexLink" 
+	    text="#{msgs.index_title}"
+	    toolTip="#{msgs.index_title}"
+	    actionExpression="$methodExpression{#{MenuListBean.showExampleIndex}}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="exampleLink"
+	    text="#{msgs.menu_title}"
+	    toolTip="#{msgs.menu_title}"
+	    actionExpression="$methodExpression{showMenuList}"
+	    onMouseOver="javascript:window.status='#{msgs.menu_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="resultsLink" text="#{msgs.menu_resultsPageTitle}"/>
+      </sun:breadcrumbs>
+      
+      <!-- Content Page Title -->
+      <sun:title id="title"              
+	  title="#{msgs.menu_resultsPageTitle}"
+	  helpText="#{msgs.menu_resultsPageHelpText}" >
+
+	<!-- Back Button -->
+	<!facet "pageButtonsTop">                
+	  <sun:button id="backButton"
+	      text="#{msgs.menu_backButton}"
+	      immediate="#{true}"
+	      actionExpression="$methodExpression{showMenuList}" />               
+	</facet>
+	
+      </sun:title> 
+		
+      <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+"	  <br /><h2>              
+	    <sun:staticText id="selectionText" text="#{msgs.menu_resultsPageSelectionLabel}" />                
+"	  </h2>
+	 
+	  <!-- StandardMenu Text-->
+	  <sun:label id="standardMenuLabel" for="standardMenu" text="#{msgs.menu_standardMenuLabel}" />
+	  <sun:staticText id="standardMenu" text="#{MenuListBean.standardMenuResult}" />                             
+	  
+"	  <br /><br />              
+	  
+	  <!-- ScrollList Text-->
+	  <sun:label id="scrollListLabel" for="scrollList" text="#{msgs.menu_selectableListLabel}" />
+	  <sun:staticText id="scrollList" text="#{MenuListBean.scrollingListResult}" />                                       
+      </sun:markup>
+	      
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

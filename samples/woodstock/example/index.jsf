@@ -1,0 +1,76 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:html id="html">  
+      <sun:head id="head" title="#{msgs.index_title}">
+	<sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+      </sun:head>
+      <sun:body id="body">
+	<sun:form id="form">                             
+	    
+	  <!-- Masthead -->
+	  <sun:masthead id="masthead"
+	     productImageURL="/images/example_primary_masthead.png"
+	     productImageHeight="$int{40}"
+	     productImageWidth="$int{188}"
+	     userInfo="test_user" 
+	     serverInfo="test_server"
+	     productImageDescription="#{msgs.mastheadAltText}" />
+	  
+	  <!-- Content Page Title -->
+	  <sun:title id="contentPageTitle"
+	      title="#{msgs.index_title}"               
+	      helpText="#{msgs.index_summary}" />              
+	     
+	  <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}"> 
+"	    <br />
+	    <!-- Table -->          
+	    <sun:table id="table" title="#{msgs.pluginName}">
+	  
+	      <!-- Table Row -->
+	      <sun:tableRowGroup id="rowGroup1"                 
+		  sourceData="#{IndexBean.dataProvider}"
+		  sourceVar="data">
+		
+		<!-- Example App Column -->  
+		<sun:tableColumn id="col1"                    
+		    valign="top"                  
+		    sort="name"
+		    noWrap="#{true}"  
+		    headerText="#{msgs.index_exampleHeader}">
+		  <sun:hyperlink id="exampleLink"
+		      text="#{msgs[data.value.name]}"
+		      immediate="#{true}"
+		      actionExpression="$methodExpression{#{data.value.appAction.action}}" />
+		</sun:tableColumn>
+	      
+		<!-- Description Column -->
+		<sun:tableColumn id="col2"                    
+		    valign="top"                  
+		    headerText="#{msgs.index_conceptsHeader}">
+		  <sun:staticText id="description" text="#{msgs[data.value.concepts]}" />
+		</sun:tableColumn>
+	      
+		<!-- Files Column -->
+		<sun:tableColumn id="col3"                                       
+		    valign="top"                  
+		    binding="#{IndexBean.tableColumn}" />                                          
+	      </sun:tableRowGroup>              
+	    </sun:table>
+	  </sun:markup>
+	  
+	</sun:form>
+      </sun:body>
+    </sun:html>  
+</sun:page>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        Here is some text outside the the ui:decorate that <i>will</i> be rendered.
+        <br />
+        <ui:decorate template="simpleTemplate.xhtml">
+            <ui:define name="foo2">
+                This is ui:define#foo2 in a ui:decorate.  This <i>will</i> be rendered on the client.
+                <br />
+            </ui:define>
+            This text will *not* be rendered on the client.
+            <br />
+            <ui:define name="foo3">
+                Nor will this text. If you're seeing this, we have a bug! :)
+                <br />
+            </ui:define>
+        </ui:decorate>
+        Here is some more text outside the the ui:decorate that <i>will</i> be rendered.
+        <br />
+    </body>
+</html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<project name="editor" default="build" basedir=".">
+
+<!-- ========== Initialize Properties =================================== -->
+    <property file="../build.properties"/>
+    <property file="../user.properties" />
+    <property file="./build.properties"/>
+    <!-- <property file="${user.home}/build.properties" /> -->
+
+    <path id="dependencies">
+	<pathelement location="${servlet-api.jar}" />
+	<pathelement location="${jsf-api.jar}" />
+	<pathelement location="${jsf-el.jar}" />
+	<pathelement location="../../${jsftemplating-dt.jar}" />
+	<pathelement location="../../${jsftemplating.jar}" />
+	<pathelement location="${dataprovider.jar}" />
+	<pathelement location="${defaulttheme.jar}" />
+	<pathelement location="${webui.jar}" />
+    </path>
+
+
+    <!-- build the war file --> 
+    <target name="build" depends="war" 
+        description="Compile all the sources and build the war file">  
+    </target>
+    
+    <target name="init" description="sets ant to execute">
+        <condition property="execute.ant" value="${ant.home}/bin/ant.bat" else="${ant.home}/bin/ant">
+                <os family="windows" />
+        </condition>
+        <echo message="Using ${execute.ant}" />
+        <echo message="java.home=${java.home}"/>
+        <echo message="ant.home=${ant.home}" />
+    </target>
+    
+    <!-- Compile the java code from ${src.java.dir} into ${classes.dir} -->
+    <target name="compile" depends="init" >
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <echo message="using: ${execute.ant}" />
+	<apt	srcdir="${src}"
+		fork="true"
+		destdir="${build}/."
+		debug="${compile.debug}"
+		deprecation="${compile.deprecation}"
+		excludes="**/annotation/**"
+		optimize="${compile.optimize}">
+		<classpath refid="dependencies" />
+	</apt>
+    </target>
+    
+    <!-- assemble the war file -->
+    <target name="assemble-war" depends="compile" >
+	<delete dir="${assemble.dir}" />
+        <copy todir="${assemble.dir}">
+            <fileset dir="${src.web.dir}">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        <copy todir="${assemble.dir}/WEB-INF/lib" file="../../${jsftemplating.jar}" />
+        <copy todir="${assemble.dir}/WEB-INF/lib" >
+            <fileset dir="${external.lib.dir}">
+		    <include name="*.jar" />
+            </fileset>
+
+            <fileset dir="${external.lib.woodstock.dir}">
+		    <include name="*.jar" />
+            </fileset>
+
+            <fileset dir="${external.dist.dir}">
+		    <include name="**/*.jar" />
+            </fileset>
+        </copy>
+        <copy todir="${assemble.dir}/WEB-INF/classes" >
+            <fileset dir="${classes.dir}/" includes="**"/>
+            <fileset dir="${src.conf.dir}/" includes="*"/>
+        </copy>
+    </target> 
+
+    <target name="war" depends="assemble-war" >
+        <echo message="Creating '${appname}'." />
+	<jar destfile="${appname}" basedir="${assemble.dir}" />
+    </target>
+    
+    <!-- Delete the build/assemble directories -->
+    <target name="clean">
+	<delete dir="${build.dir}" />
+	<delete dir="${assemble.dir}" />
+	<delete file="${appname}" />
+    </target>
+
+</project>

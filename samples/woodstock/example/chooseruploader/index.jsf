@@ -1,0 +1,91 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+    <sun:html>
+	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<sun:head id="indexHead" title="#{msgs.chooserUploader_title}">
+	  <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+	</sun:head>
+	<sun:body>
+				      
+	<sun:form id="indexForm">
+				   
+		<!-- Masthead -->
+		<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+			    productImageDescription="#{msgs.mastheadAltText}" 
+			    userInfo="test_user"
+			    serverInfo="test_server" />     
+		 
+		<!-- Bread Crumb Component -->
+		<sun:breadcrumbs id="breadcrumbs">
+		    <sun:hyperlink id="exampleIndex"
+				  text="#{msgs.index_title}"
+				  toolTip="#{msgs.index_title}"
+				  actionExpression="$methodExpression{#{IndexBean.showIndex}}" 
+				  onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true" />
+		    <sun:hyperlink id="chooserIndex" text="#{msgs.chooserUploader_title}"/>
+		</sun:breadcrumbs>
+		
+		<!-- Page Title -->
+		<sun:title id="indexContentpage" title="#{msgs.chooserUploderIndex_title}" />
+		    
+			<!-- Button Index-->
+			<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+<f:verbatim>
+			<table><tr style="height:20px"><td></td></tr><tr>
+							   
+			<!-- File Chooser hyperlink -->
+			<td>
+</f:verbatim>
+			   <sun:hyperlink  text="#{msgs.chooserUploaderIndex_fileChooserhyperlink}" id="fileChooser"  
+					  toolTip="#{msgs.chooserUploaderIndex_fileChooserTooltip}"
+					  actionExpression="$methodExpression{#{ChooserUploaderBean.forwardAction}}"
+					  actionListenerExpression="$methodExpression{#{ChooserUploaderBean.goToPage}, true}"/>
+<f:verbatim>
+			</td></tr><tr>
+			
+			<!-- File Uploader hyperlink -->
+			<td>
+</f:verbatim>
+			   <sun:hyperlink  text="#{msgs.chooserUploaderIndex_fileUploaderhyperlink}" id="fileUploader"  
+					  toolTip="#{msgs.chooserUploaderIndex_fileUploaderTooltip}"
+					  actionExpression="$methodExpression{#{ChooserUploaderBean.forwardAction}}"
+					  actionListenerExpression="$methodExpression{#{ChooserUploaderBean.goToPage}, true}"/>
+<f:verbatim>
+			</td></tr><tr>
+			    
+			<!--Folder Chooser hyperlink -->
+			<td>
+</f:verbatim>
+			   <sun:hyperlink  text="#{msgs.chooserUploaderIndex_folderChooserhyperlink}" id="folderChooser"  
+					  toolTip="#{msgs.chooserUploaderIndex_folderChooserTooltip}"
+					  actionExpression="$methodExpression{#{ChooserUploaderBean.forwardAction}}"
+					  actionListenerExpression="$methodExpression{#{ChooserUploaderBean.goToPage}, true}"/>
+<f:verbatim>
+			</td></tr><tr>
+			    
+			<!-- Uploader and Chooser hyperlink-->
+			<td>
+</f:verbatim>
+			   <sun:hyperlink  text="#{msgs.chooserUploaderIndex_chooserUploaderhyperlink}" id="fileChooserUploader"  
+					  toolTip="#{msgs.chooserUploaderIndex_chooserUploaderTooltip}"
+					  actionExpression="$methodExpression{#{ChooserUploaderBean.forwardAction}}"
+					  actionListenerExpression="$methodExpression{#{ChooserUploaderBean.goToPage}, true}"/>
+"			</td></tr></table>
+			</sun:markup>
+		       
+	    </sun:form>           
+	</sun:body> 
+    </sun:html>  
+</sun:page>

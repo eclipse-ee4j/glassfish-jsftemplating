@@ -1,0 +1,95 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+    <sun:html>
+	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<sun:head id="folderChooserHead" title="#{msgs.folderChooser_title}">
+<f:verbatim>
+	<script>                  
+	 
+	   /**
+	     * This js function populates the directory field of parent screen.  
+	     * 
+	     */
+	    function fnPopulateDir(){
+     
+	    var dirPath=document.getElementById("folderFormPopup:folderContent:folderChooser:folderChooser_lookinField_field").value;
+	    var selfield = document.getElementById("folderFormPopup:folderContent:folderChooser:folderChooser_selectedField_field").value;
+		if (selfield.length > 0) {
+		    if (((dirPath.lastIndexOf('\\\\')) == (dirPath.length-1))){
+			     dirPath = dirPath + selfield;   
+
+		    } else if ((dirPath.indexOf('\\\\')) >= 0 ) {
+			     dirPath = dirPath + "\\\\" + selfield;  
+		    }
+		    if ( (dirPath.lastIndexOf('/')) == (dirPath.length-1)){
+			     dirPath = dirPath + selfield;            
+		    } else if ((dirPath.lastIndexOf('/')) >= 0) {
+			     dirPath = dirPath + "/" + selfield;
+		    }
+		}
+		window.opener.document.getElementById("uploaderFormPopup:dirPath_field").value = dirPath;
+			window.close();    
+	    }
+       
+	 </script>
+ </f:verbatim>
+	</sun:head>
+	<sun:body>
+
+	    <sun:form id="folderFormPopup">
+
+	   <!-- Masthead -->
+	   <sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	     productImageDescription="#{msgs.mastheadAltText}" 
+	     userInfo="test_user"
+	     serverInfo="test_server" secondary="#{true}"/>     
+
+"	     <br />
+	     <!-- Alert for validator exception. -->
+	     <sun:alert id="popupFolderChooserAlert" rendered="#{ChooserUploaderBean.errorsOnPage}" type="error" 
+			     summary="#{ChooserUploaderBean.summaryMsg}">                              
+		  <sun:message for="folderChooser" showDetail="#{true}"/>
+	     </sun:alert>
+					
+	     <!-- Page Title -->
+	     <sun:title title="#{msgs.folderChooser_title}" id="folderContent">
+	       <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+		    
+	       <!-- Folder Chooser -->
+"	       <table><tr><td>
+		 <sun:fileChooser id="folderChooser"
+				 lookin="#{ChooserUploaderBean.lookin}"
+				 selected="#{ChooserUploaderBean.selected}"
+				 sortField="size" descending="#{true}" 
+				 multiple="#{false}" folderChooser="#{true}"/>
+"	       </td></tr>
+					 
+	       <!--  Folder Chooser button -->
+"	       <tr><td>
+		       <sun:button id="select_folder"
+				text="#{msgs.folderChooser_buttonCaption}" 
+			     onClick="fnPopulateDir()"
+			     toolTip="#{msgs.folderChooser_buttonTooltip}"/>
+"	       </td></tr></table>
+	       </sun:markup>
+	     </sun:title>
+<f:verbatim>
+	     <script>
+		 document.getElementById("folderFormPopup:folderContent:folderChooser").setChooseButton("folderFormPopup:folderContent:select_folder");
+	     </script>
+</f:verbatim>
+	    </sun:form>
+	</sun:body> 
+    </sun:html>  
+</sun:page>

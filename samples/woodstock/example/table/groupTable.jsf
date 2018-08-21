@@ -1,0 +1,174 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.table_groupTableTitle}">
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />        
+      <sun:script url="js/select.js"/>
+    </sun:head>
+    <sun:body>
+      <sun:form id="form1">
+
+	<!-- Masthead -->
+	<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	  productImageDescription="#{msgs.mastheadAltText}" 
+	  userInfo="test_user"
+	  serverInfo="test_server" />     
+		       
+	<!-- Bread Crumb Component -->
+	<sun:breadcrumbs id="breadcrumbs">
+	  <sun:hyperlink actionExpression="$methodExpression{#{TableBean.showExampleIndex}}" text="#{msgs.exampleTitle}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink actionExpression="$methodExpression{#{TableBean.showTableIndex}}" text="#{msgs.table_title}"
+	    onMouseOver="javascript:window.status='#{msgs.table_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink text="#{msgs.table_groupTableTitle}"/>
+	</sun:breadcrumbs>
+
+	<sun:title title="#{msgs.table_groupTableTitle}"/>
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+	    
+	    <!-- Messages -->
+	    <sun:messageGroup showSummary="#{true}" showDetail="#{true}"/>
+"	    <br/>
+	    
+	    <!-- Group Table -->
+	    <sun:table id="table1"
+			    clearSortButton="#{true}"
+			    deselectMultipleButton="#{true}"
+			    selectMultipleButton="#{true}"
+			    sortPanelToggleButton="#{true}"
+			    footerText="#{msgs.table_tableFooter}">
+		
+		<!-- Title -->
+		<!facet "title">
+		    <sun:staticText text="#{msgs.table_groupTableTitle}"/>
+		</facet>
+		
+		<sun:tableRowGroup id="rowGroup1"
+					binding="#{TableBean.groupB.tableRowGroup}"
+					footerText="#{msgs.table_groupFooter}"
+					headerText="#{msgs.table_groupHeader}"
+					selected="#{TableBean.groupB.select.selectedState}"
+					selectMultipleToggleButton="#{true}"
+					sourceData="#{TableBean.groupB.names}"
+					sourceVar="name"
+					groupToggleButton="#{true}">
+		    
+		    <sun:tableColumn id="col0"
+					  extraHeaderHtml="nowrap='nowrap'"
+					  extraFooterHtml="nowrap='nowrap'"
+					  extraTableFooterHtml="nowrap='nowrap'"
+					  footerText=""
+					  selectId="select"
+					  sort="#{TableBean.groupB.select.selectedState}">
+			<sun:checkbox id="select"
+					   onClick="setTimeout('initAllRows()', 0)"
+					   selected="#{TableBean.groupB.select.selected}"
+					   selectedValue="#{TableBean.groupB.select.selectedValue}"/>
+		    </sun:tableColumn>
+		    <sun:tableColumn id="col1"
+					  extraHeaderHtml="nowrap='nowrap'"
+					  alignKey="last"
+					  footerText="#{msgs.table_columnFooter}"
+					  headerText="#{msgs.table_LastName}"
+					  rowHeader="#{true}"
+					  sort="last">
+			<sun:staticText text="#{name.value.last}"/>
+		    </sun:tableColumn>
+		    <sun:tableColumn id="col2"
+					  alignKey="first"
+					  footerText="#{msgs.table_columnFooter}"
+					  headerText="#{msgs.table_FirstName}"
+					  sort="first">
+			<sun:staticText text="#{name.value.first}"/>
+		    </sun:tableColumn>
+		</sun:tableRowGroup>
+		
+		<sun:tableRowGroup id="rowGroup2"
+					binding="#{TableBean.groupC.tableRowGroup}"
+					collapsed="#{true}"
+					selected="#{TableBean.groupC.select.selectedState}"
+					selectMultipleToggleButton="#{true}"
+					sourceData="#{TableBean.groupC.names}"
+					sourceVar="name"
+					groupToggleButton="#{true}">
+		    
+		    <!-- Row group header -->
+		    <!facet "header">
+		      <sun:panelGroup id="groupHeader">
+			<sun:markup tag="span" extraAttributes="class='#{themeStyles.TABLE_GROUP_HEADER_LEFT}'">
+			  <sun:staticText styleClass="#{themeStyles.TABLE_GROUP_HEADER_TEXT}" text="#{msgs.table_groupHeader}"/>
+			</sun:markup>
+			<sun:markup tag="span" extraAttributes="class='#{themeStyles.TABLE_GROUP_HEADER_RIGHT}'">
+			  <sun:staticText styleClass="#{themeStyles.TABLE_GROUP_MESSAGE_TEXT}" text="#{msgs.table_alignedRight}"/>
+			</sun:markup>
+		      </sun:panelGroup>
+		    </facet>
+		    
+		    <!-- Row group footer -->
+		    <!facet "footer">
+			<sun:staticText styleClass="#{themeStyles.TABLE_GROUP_FOOTER_TEXT}" text="#{msgs.table_groupFooter}"/>
+		    </facet>
+		    
+		    <sun:tableColumn id="col0"
+					  extraHeaderHtml="nowrap='nowrap'"
+					  extraFooterHtml="nowrap='nowrap'"
+					  extraTableFooterHtml="nowrap='nowrap'"
+					  footerText="#{msgs.table_columnFooter}"
+					  selectId="select"
+					  sort="#{TableBean.groupC.select.selectedState}"
+					  tableFooterText="">
+			<sun:checkbox id="select"
+					   onClick="setTimeout('initAllRows()', 0)"
+					   selected="#{TableBean.groupC.select.selected}"
+					   selectedValue="#{TableBean.groupC.select.selectedValue}"/>
+		    </sun:tableColumn>
+		    <sun:tableColumn id="col1"
+					  alignKey="last"
+					  footerText="#{msgs.table_columnFooter}"
+					  rowHeader="#{true}"
+					  sort="last"
+					  tableFooterText="#{msgs.table_tableColumnFooter}">
+			<sun:staticText text="#{name.value.last}"/>
+		    </sun:tableColumn>
+		    <sun:tableColumn id="col2"
+					  alignKey="first"
+					  footerText="#{msgs.table_columnFooter}"
+					  sort="first"
+					  tableFooterText="#{msgs.table_tableColumnFooter}">
+			<sun:staticText text="#{name.value.first}"/>
+		    </sun:tableColumn>
+		</sun:tableRowGroup>
+	    </sun:table>
+	    
+"	    <div>
+	    <sun:button/>
+"	    </div>
+	    
+"	    <br/>
+	    <sun:staticText text="#{msgs.table_groupTableConcepts1}"/>
+	    
+"	    <br/><br/>
+	    <sun:staticText text="#{msgs.table_groupTableConcepts2}"/>
+	    
+"	    <br/><br/>
+	    <sun:staticText text="#{msgs.table_groupTableConcepts3}"/>
+	    
+	</sun:markup>
+      </sun:form>
+    </sun:body>
+  </sun:html>
+</sun:page>

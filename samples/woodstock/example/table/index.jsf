@@ -1,0 +1,152 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.table_title}">
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+    </sun:head>        
+    <sun:body>
+      <sun:form id="form1">
+
+	<!-- Masthead -->
+	<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	  productImageDescription="#{msgs.mastheadAltText}" 
+	  userInfo="test_user"
+	  serverInfo="test_server" />     
+		       
+	<!-- Bread Crumb Component -->
+	<sun:breadcrumbs id="breadcrumbs">
+	  <sun:hyperlink actionExpression="$methodExpression{#{IndexBean.showIndex}}" text="#{msgs.exampleTitle}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink text="#{msgs.table_title}"/>
+	</sun:breadcrumbs>
+
+	<!-- Main Example -->
+	<sun:title title="#{msgs.table_mainTitle}">
+	  <sun:markup tag="br" singleton="#{true}"/>
+	  <sun:panelGroup style="margin-left:10px" id="linkGroup1" block="#{true}" separator="<br />" >
+	    <sun:hyperlink id="table"
+	      text="#{msgs.table_tableTitle}"
+	      actionExpression="$methodExpression{showTableMain}"
+	      onMouseOver="javascript:window.status='#{msgs.table_tableTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	  </sun:panelGroup>
+	</sun:title>
+	
+	<!-- TLD Examples -->
+	<sun:title title="#{msgs.table_tldTitle}">
+	  <sun:markup tag="br" singleton="#{true}"/>
+	  <sun:panelGroup style="margin-left:10px" id="linkGroup2" block="#{true}" separator="<br />" >
+	    <sun:hyperlink id="actions"
+	      text="#{msgs.table_actionsTitle}"
+	      actionExpression="$methodExpression{showTableActions}"
+	      onMouseOver="javascript:window.status='#{msgs.table_actionsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="alarms"
+	      text="#{msgs.table_alarmsTitle}"
+	      actionExpression="$methodExpression{showTableAlarms}"
+	      onMouseOver="javascript:window.status='#{msgs.table_alarmsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="basicTable"
+	      text="#{msgs.table_basicTitle}"
+	      actionExpression="$methodExpression{showTableBasic}"
+	      onMouseOver="javascript:window.status='#{msgs.table_basicTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="customTitle"
+	      text="#{msgs.table_customTitle}"
+	      actionExpression="$methodExpression{showTableCustomTitle}"
+	      onMouseOver="javascript:window.status='#{msgs.table_customTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="dynamicGroupTable"
+	      text="#{msgs.table_dynamicGroupTitle}"
+	      actionExpression="$methodExpression{showTableDynamicGroupTable}"
+	      onMouseOver="javascript:window.status='#{msgs.table_dynamicGroupTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="dynamicTable"
+	      text="#{msgs.table_dynamicTitle}"
+	      actionExpression="$methodExpression{showTableDynamicTable}"
+	      onMouseOver="javascript:window.status='#{msgs.table_dynamicTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="embeddedActions"
+	      text="#{msgs.table_embeddedActionsTitle}"
+	      actionExpression="$methodExpression{showTableEmbeddedActions}"
+	      onMouseOver="javascript:window.status='#{msgs.table_embeddedActionsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="emptyCells"
+	      text="#{msgs.table_emptyCellsTitle}"
+	      actionExpression="$methodExpression{showTableEmptyCells}"
+	      onMouseOver="javascript:window.status='#{msgs.table_emptyCellsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="filter"
+	      text="#{msgs.table_filterTitle}"
+	      actionExpression="$methodExpression{showTableFilter}"
+	      onMouseOver="javascript:window.status='#{msgs.table_filterTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="groupTable"
+	      text="#{msgs.table_groupTableTitle}"
+	      actionExpression="$methodExpression{showTableGroupTable}"
+	      onMouseOver="javascript:window.status='#{msgs.table_groupTableTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="hiddenSelectedRows"
+	      text="#{msgs.table_hiddenSelectedRowsTitle}"
+	      actionExpression="$methodExpression{showTableHiddenSelectedRows}"
+	      onMouseOver="javascript:window.status='#{msgs.table_hiddenSelectedRowsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="liteTable"
+	      text="#{msgs.table_liteTitle}"
+	      actionExpression="$methodExpression{showTableLiteTable}"
+	      onMouseOver="javascript:window.status='#{msgs.table_liteTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="nestedColumns"
+	      text="#{msgs.table_nestedColumnsTitle}"
+	      actionExpression="$methodExpression{showTableMultiHeadersFooters}"
+	      onMouseOver="javascript:window.status='#{msgs.table_nestedColumnsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="paginatedTable"
+	      text="#{msgs.table_paginatedTableTitle}"
+	      actionExpression="$methodExpression{showTablePaginatedTable}"
+	      onMouseOver="javascript:window.status='#{msgs.table_paginatedTableTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="preferences"
+	      text="#{msgs.table_preferencesTitle}"
+	      actionExpression="$methodExpression{showTablePreferences}"
+	      onMouseOver="javascript:window.status='#{msgs.table_preferencesTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="selectMultipleRows"
+	      text="#{msgs.table_selectMultipleRowsTitle}"
+	      actionExpression="$methodExpression{showTableSelectMultiRows}"
+	      onMouseOver="javascript:window.status='#{msgs.table_selectMultipleRowsTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="selectSingleRow"
+	      text="#{msgs.table_selectSingleRowTitle}"
+	      actionExpression="$methodExpression{showTableSelectSingleRow}"
+	      onMouseOver="javascript:window.status='#{msgs.table_selectSingleRowTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="spacerColumn"
+	      text="#{msgs.table_spacerColumnTitle}"
+	      actionExpression="$methodExpression{showTableSpacerColumn}"
+	      onMouseOver="javascript:window.status='#{msgs.table_spacerColumnTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="sortableTable"
+	      text="#{msgs.table_sortableTableTitle}"
+	      actionExpression="$methodExpression{showTableSortableTable}"
+	      onMouseOver="javascript:window.status='#{msgs.table_sortableTableTitle}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	  </sun:panelGroup>
+	</sun:title>
+      </sun:form>
+    </sun:body>
+  </sun:html>
+</sun:page>

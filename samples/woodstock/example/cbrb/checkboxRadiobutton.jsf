@@ -1,0 +1,160 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.cbrb_title}">
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+    </sun:head>
+    <sun:body>
+	<sun:form id="form1">
+
+	  <!-- Masthead -->
+	  <sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	    productImageDescription="#{msgs.mastheadAltText}" 
+	    userInfo="test_user"
+	    serverInfo="test_server" />     
+		     
+	  <!-- Bread Crumb Component -->
+	  <sun:breadcrumbs id="breadcrumbs">
+	    <sun:hyperlink actionExpression="$methodExpression{#{CheckboxRadiobuttonBean.showExampleIndex}}" text="#{msgs.exampleTitle}"
+	      onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink text="#{msgs.cbrb_title}"/>
+	  </sun:breadcrumbs>
+		   
+	  <!-- Page Title -->
+	  <sun:title title="#{msgs.cbrb_title}" />
+
+	  <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+		   
+	    <!-- Use HTML table for layout.  Note that if we had included this
+		 content within the body of contentPageTitle, then we would need
+		 to wrap the HTML markup in the f:verbatim tag.  sun:markup could
+		 also be used but that is more heavyweight (slower). -->
+<f:verbatim>
+	    <table>
+	      <tr>
+		<td>
+</f:verbatim>
+		  <!-- Checkbox -->
+		  <sun:label id="CheckboxLabel" text="#{msgs.cbrb_checkboxLabel}"/>
+<f:verbatim>
+		</td>
+		<td>
+</f:verbatim>
+		  <sun:checkbox id="RedCheckbox" label="#{msgs.crcb_redCheckbox}"
+		    disabled="#{CheckboxRadiobuttonBean.redCBDisabled}" 
+		    selected="#{CheckboxRadiobuttonBean.redSelected}"/>
+<f:verbatim>
+		  </td>
+	      </tr>
+
+	      <!-- Blank row -->
+	      <tr><td colspan="2"> &nbsp; </td></tr>
+
+	      <!-- RadioButton -->
+	      <tr>
+		<td>
+</f:verbatim>
+		  <sun:label id="RadiobuttonLabel" text="#{msgs.cbrb_radiobuttonLabel}" />
+<f:verbatim>
+		</td>
+		<td>
+		  <div>
+</f:verbatim>
+		  <sun:radioButton id="rbServer" name="rbgrp" label="#{msgs.cbrb_radioButton1}"
+		    disabled="#{CheckboxRadiobuttonBean.serverRBDisabled}"
+		    selected="#{CheckboxRadiobuttonBean.serverSelected}"/>
+<f:verbatim>
+		  </div>
+		  <div>
+</f:verbatim>
+		  <sun:radioButton id="rbVolume" name="rbgrp" label="#{msgs.cbrb_radioButton2}"
+		    disabled="#{CheckboxRadiobuttonBean.volumeRBDisabled}"
+		    selected="#{CheckboxRadiobuttonBean.volumeSelected}"/>
+<f:verbatim>
+		  </div>
+		  <div>
+</f:verbatim>
+		  <sun:radioButton id="rbPool" name="rbgrp" label="#{msgs.cbrb_radioButton3}"
+		    disabled="#{CheckboxRadiobuttonBean.poolRBDisabled}"
+		    selected="#{CheckboxRadiobuttonBean.poolSelected}"/>
+<f:verbatim>
+		  </div>
+		</td>
+	      </tr>
+
+	      <!-- Blank row -->
+	      <tr><td colspan="2"> &nbsp; </td></tr>
+
+	      <!-- RadioButton Images-->
+	      <tr>
+		<td>
+</f:verbatim>
+		  <sun:label id="RadiobuttonImagesLabel" text="#{msgs.cbrb_radiobuttonImagesLabel}" />
+<f:verbatim>
+		</td>
+		<td>
+		  <div>
+</f:verbatim>
+		  <sun:radioButton id="rbimServer" name="rbimgrp" label="#{msgs.cbrb_radioButton1}"
+		    imageURL="/images/tree_server.gif"
+		    disabled="#{CheckboxRadiobuttonBean.serverImageRBDisabled}"                              
+		    selected="#{CheckboxRadiobuttonBean.serverImageSelected}"/>
+<f:verbatim>
+		  </div>
+		  <div>
+</f:verbatim>
+		  <sun:radioButton id="rbimVolume" name="rbimgrp" label="#{msgs.cbrb_radioButton2}"
+		    imageURL="/images/volumegroup_tree.gif"
+		    disabled="#{CheckboxRadiobuttonBean.volumeImageRBDisabled}"
+		    selected="#{CheckboxRadiobuttonBean.volumeImageSelected}"/>
+<f:verbatim>
+		  </div>
+		  <div>
+</f:verbatim>
+		  <sun:radioButton id="rbimPool" name="rbimgrp" label="#{msgs.cbrb_radioButton3}"
+		    imageURL="/images/pool_tree.gif"
+		    disabled="#{CheckboxRadiobuttonBean.poolImageRBDisabled}"                               
+		    selected="#{CheckboxRadiobuttonBean.poolImageSelected}"/>
+<f:verbatim>
+		  </div>
+		</td>
+	      </tr>
+	    </table>
+
+	    <br/>
+</f:verbatim>
+
+	    <!-- Reset Button -->
+	    <sun:button id="ResetButton" text="#{msgs.cbrb_resetButtonLabel}"
+	      immediate="#{true}"
+	      actionListenerExpression="$methodExpression{#{CheckboxRadiobuttonBean.resetActionListener}, true}" />
+
+	    <!-- Submit Button -->
+	    <sun:button id="SubmitButton" text="#{msgs.cbrb_submitButtonLabel}"
+	      actionExpression="$methodExpression{showCBRBResults}" />
+
+	    <!-- Test Case Menu -->
+	    <sun:dropDown id="TestCaseMenu" immediate="#{true}"
+	      submitForm="#{true}"
+	      forgetValue="#{true}"
+	      items="#{CheckboxRadiobuttonBean.testCaseOptions}"
+	      actionListenerExpression="$methodExpression{#{CheckboxRadiobuttonBean.testCaseActionListener}, true}" />
+		       
+	  </sun:markup>
+	</sun:form>
+      </sun:body> 
+  </sun:html>  
+</sun:page>

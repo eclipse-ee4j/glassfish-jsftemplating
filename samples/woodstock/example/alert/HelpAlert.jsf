@@ -1,0 +1,50 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.alert_helpWindowTitle}" >
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form"> 
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+	 
+      <!-- Content Page Title -->
+      <sun:title id="title" title="#{msgs.alert_helpWindowTitle}">              
+	<!facet "pageButtonsBottom">
+	  <sun:button id="closeButton"
+	      text="#{msgs.alert_close}"
+	      immediate="#{true}"
+	      primary="#{true}"               
+	      onClick="window.close()" />   
+	</facet>
+								     
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">            
+	  <sun:staticText id="staticText"
+	     escape="#{false}"  
+	     text="#{msgs.alert_helpWindowText}" />
+	</sun:markup>
+      </sun:title>             
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<title>JSFT-Facelets &lt;-&gt; Facelets</title>
+<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	vertical-align: center;
+}
+
+#Container {
+	
+}
+
+table {
+	border: 1px solid #444;
+	border-width: 0 0 1px 1px;
+	vertical-align: left;
+	margin: 1em auto;
+}
+
+td,th {
+	padding: .25em 1em;
+	border: 1px solid #444;
+	border-width: 1px 1px 0 0;
+}
+
+caption {
+	font-weight: bold;
+	font-size: 120%;
+}
+</style>
+</head>
+<body>
+<table cellspacing="0"
+	summary="Comparing JSFT(Facelets-Syntax) with Facelets">
+
+	<caption>JSFT-Facelets &lt;-&gt; Facelets</caption>
+	<thead>
+		<tr>
+			<th>JSFT [*.jsf]</th>
+			<th>Facelets [*.flt]</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="composition.jsf">Composition</a></td>
+			<td><a href="composition.flt">Composition</a></td>
+			<td>Demonstrates the use of &lt;ui:composition&gt;</td>
+		</tr>
+		<tr>
+			<td><a href="decorate.jsf">Decorate</a></td>
+			<td><a href="decorate.flt">Decorate</a></td>
+			<td>Demonstrates the use of &lt;ui:decorate&gt;</td>
+		</tr>
+		<tr>
+			<th colspan="3">Incompatibility Testcases</th>
+		</tr>
+		<tr>
+			<td><a href="e_define1.jsf">Define1</a></td>
+			<td><a href="e_define1.flt">Define1</a></td>
+			<td>Demonstrates a incompatibility if a ui:define contains an
+			ui:insert with the same name</td>
+		</tr>
+		<tr>
+			<td><a href="e_define2.jsf">Define2</a></td>
+			<td><a href="e_define2.flt">Define2</a></td>
+			<td>Demonstrates content rendered in jsft that is not rendered
+			in facelets + usage of the "wrong" define</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

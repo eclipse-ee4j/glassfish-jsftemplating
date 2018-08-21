@@ -1,0 +1,119 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <sun:html>
+	 <sun:head id="propertyhead" title="JSF Editor Tool">
+	     "<style type="text/css">\n
+	     ".monosel option {font-family: monospace;}\n
+	     ".monosel select option {font-family: monospace;}\n
+	     "</style>
+	 </sun:head>
+	 <sun:body>
+	     <sun:form id="propertyForm">
+ <!-- OK and Cancel button -->
+
+		 <!-- PropertySheet .... -->
+		 <sun:propertySheet id="propertySheet" jumpLinks="#{PropertySheetBean.jumpLink}"
+				   requiredFields="#{PropertySheetBean.requiredLabel}">
+
+		    <!-- Page Name -->
+		   <sun:propertySheetSection id="propertSectionTextField" label="JSF Editor Tool - Step 2">
+		       <sun:property id="propertyPageName"  label="Page Name:" labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			<sun:image id="space" url="/theme/com/sun/web/ui/suntheme/images/other/dot.gif"
+				  width="$int{27}" height="$int{1}"/>
+			<sun:staticText id="pageName"  text="#{pagename}"
+				      />
+		       </sun:property>
+		    <!-- Parent Name -->
+		      <sun:property id="propertyParentName" label="Parent:" labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			<event>
+			  <!beforeEncode
+			    getPageComponentNames(pageName="#{pagename}" displayNames=>$attribute{disp} qualifiedNames=>$attribute{long});
+			    getSunOptions(labels="$attribute{disp}", values="$attribute{long}", options=>$attribute{opts});
+
+			  />
+			</event>
+			<sun:listbox id="parentName" styleClass="monosel" value="#{requestScope.parentName}" items="#{requestScope.opts}" required="#{true}" >
+			</sun:listbox>
+
+		    <!-- Component Type -->
+			<sun:listbox id="componentType" value="#{requestScope.componentType}" items="$attribute{types}" required="#{true}" label="Component Type" >
+			   <!beforeCreate
+			      getGlobalComponentTypeInformation(ids=>$attribute{ids});
+			      getSunOptions(labels="$attribute{ids}", values="$attribute{ids}", options=>$attribute{types});
+			    />
+			</sun:listbox>
+			"<br />
+			<sun:button id="refresh" primary="#{false}" text="Refresh" />
+
+		       </sun:property>
+		    <!-- ID Name -->
+		       <sun:property id="propertyIdField" label="ID:" labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			<sun:image id="space" url="/theme/com/sun/web/ui/suntheme/images/other/dot.gif"
+				  width="$int{27}" height="$int{1}"/>
+			<sun:textField id="ID" value="#{requestScope.ID}" columns="$int{80}" />
+		       </sun:property>
+		    <!-- Label Prop -->
+		       <sun:property id="propertyLabelField" label="Label:" labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			<sun:image id="space" url="/theme/com/sun/web/ui/suntheme/images/other/dot.gif"
+				  width="$int{27}" height="$int{1}"/>
+			<sun:textField id="labelProp" value="#{requestScope.labelProp}" columns="$int{80}" />
+		       </sun:property>
+		    <!-- Text Prop -->
+		       <sun:property id="propertyTextField" label="Text:" labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			<sun:image id="space" url="/theme/com/sun/web/ui/suntheme/images/other/dot.gif"
+				  width="$int{27}" height="$int{1}"/>
+			<sun:textField id="textProp" value="#{requestScope.textProp}" columns="$int{80}" />
+		       </sun:property>
+		    </sun:propertySheetSection>
+
+		    <sun:propertySheetSection id="propertSectionProperties" label="Additional Properties">
+			<!-- Properties -->
+			<sun:property id="propertiesField"  labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			  <sun:editableList id="editList" fieldLabel="Name=Value" listLabel="Properties Entered" />
+			</sun:property>
+
+			<!-- Hidden Field -->
+			<sun:property id="propertyHiddenField"  labelAlign="right" noWrap="#{true}" overlapLabel="#{false}">
+			  <sun:hidden id="hiddenPageName"  value="#{requestScope.pagename}" />
+			</sun:property>
+		       "<br /><br />
+		       <sun:helpInline id="fieldHelp" type="field" text="#{msgs.editablelist_helpText}" />
+		   </sun:propertySheetSection>
+
+		 </sun:propertySheet>
+
+		 <sun:panelGroup id="pageButtonsGroupBottom">
+		   <sun:button id="prevButton" primary="#{true}" text="Previous"  >
+			 <!command
+			    navigate(page="/jsfToolStep1.jsf");
+			 />
+		   </sun:button>
+		   <sun:button id="addButton" primary="#{true}" text="Add">
+			 <!command
+			     addLayoutComponentToPage(
+				 pageName="#{pagename}"
+				 parent="#{parentName}"
+				 type="#{componentType}"
+				 id="#{ID}"
+				 label="#{labelProp}"
+				 text="#{textProp}"
+				 #nvps="addremove.selectedList"
+			     );
+			 />
+		   </sun:button>
+		 </sun:panelGroup>
+	     </sun:form>
+	 </sun:body>
+     </sun:html>
+ </sun:page>

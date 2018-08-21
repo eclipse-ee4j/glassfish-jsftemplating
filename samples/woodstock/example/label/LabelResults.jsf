@@ -1,0 +1,61 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.label_resultsTitle}" >
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+    </sun:head>
+    <sun:body>
+      <sun:form id="form1">
+
+	<!-- Masthead -->
+	<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	  productImageDescription="#{msgs.mastheadAltText}" 
+	  userInfo="test_user"
+	  serverInfo="test_server" />     
+		     
+	<!-- Bread Crumb Component -->
+	<sun:breadcrumbs id="breadcrumbs">
+	  <sun:hyperlink actionExpression="$methodExpression{#{ButtonBean.showExampleIndex}}" text="#{msgs.exampleTitle}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink actionExpression="$methodExpression{#{LabelBean.showLabel}}" text="#{msgs.label_title}"
+	    onMouseOver="javascript:window.status='#{msgs.label_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink text="#{msgs.label_resultsTitle}"/>
+	</sun:breadcrumbs>
+		   
+	<!-- Page Title -->
+	<sun:title title="#{msgs.label_resultsTitle}"
+	  helpText="#{msgs.label_resultsHelpText}">
+	  <!facet "pageButtonsTop">  
+	    <!-- Back Button -->
+	    <sun:button id="BackButton"
+	      text="#{msgs.label_backButton}" 
+	      actionExpression="$methodExpression{#{LabelBean.showLabel}}" />               
+	  </facet>
+	</sun:title>
+
+	<!-- Results pizza order in form of text messages -->
+"	<br/>
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+	  <sun:staticText id="pizzaResult" text="#{LabelBean.pizza}" />
+"	  <br/>
+	  <sun:staticText id="whereResult" text="#{LabelBean.where}" />
+	</sun:markup>
+
+      </sun:form>
+    </sun:body> 
+  </sun:html>  
+</sun:page>

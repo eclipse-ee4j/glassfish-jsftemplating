@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+
+    Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<!DOCTYPE project [
+]>
+
+<!-- Build file for JSFTemplating apps -->
+<project name="exampleapp" default="build" basedir=".">
+
+    <!-- Set properties -->
+    <property file="build.properties" />
+
+    <path id="dependencies">
+	<pathelement location="${servlet-api.jar}" />
+	<pathelement location="${jsf-api.jar}" />
+	<pathelement location="${el-api.jar}" />
+	<pathelement location="${webui-jsf.jar}" />
+	<pathelement location="${dataprovider.jar}" />
+	<pathelement location="${jsftemplating.jar}" />
+	<pathelement location="${jsftemplating-dt.jar}" />
+	<pathelement location="${jsftemplating-dynafaces.jar}" />
+    </path>
+
+
+    <path id="javadoc-dependencies">
+	<pathelement location="${servlet-api.jar}" />
+	<pathelement location="${jsf-api.jar}" />
+	<pathelement location="${el-api.jar}" />
+	<pathelement location="${webui-jsf.jar}" />
+	<pathelement location="${dataprovider.jar}" />
+	<pathelement location="${jsftemplating.jar}" />
+	<pathelement location="${jsftemplating-dt.jar}" />
+    </path>
+
+    <target name="init" description="sets ant to execute">
+        <condition property="execute.ant" value="${ant.home}/bin/ant.bat" else="${ant.home}/bin/ant">
+                <os family="windows" />
+        </condition>
+        <echo message="Using ${execute.ant}" />
+        <echo message="java.home=${java.home}"/>
+        <echo message="ant.home=${ant.home}" />
+        <exec dir="." executable="${execute.ant}" failonerror="true" failifexecutionfails="true">
+            <!-- We do this to add the ant-apt.jar to the lib path -->
+            <arg line="-version" />
+        </exec>
+    </target>
+
+    <target name="build" depends="createwar" />
+    
+    <target name="all" depends="build, javadoc" />
+    
+    <target name="compile" depends="init">
+	<mkdir dir="${build}/." />
+        <echo message="using: ${execute.ant}" />
+	<apt	srcdir="${src}"
+		fork="true"
+		destdir="${build}/."
+		debug="${compile.debug}"
+		deprecation="${compile.deprecation}"
+		excludes="**/annotation/**"
+		optimize="${compile.optimize}">
+		<classpath refid="dependencies" />
+	</apt>
+    </target>
+
+    <target name="jar" depends="compile">
+	<jar jarfile="${app.jar}" update="true">
+            <fileset dir="${build}" includes="**/*.class, **/*.map" />
+            <zipfileset dir="${src}"
+			prefix="" 
+			includes="**/*.properties" />
+	</jar>
+	<jar jarfile="${app-src.jar}" update="true">
+            <fileset dir="${src}" includes="**/*.java" />
+	</jar>
+	<copy file="${jsftemplating.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${jsftemplating-dynafaces.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${webui-jsf.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${webui-jsf-suntheme.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${dataprovider.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${json.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${dojo.jar}" todir="${WEB-INF_lib}/." />
+	<copy file="${prototype.jar}" todir="${WEB-INF_lib}/." />
+    </target>
+
+    <target name="javadoc" depends="compile">
+	<!-- Generate javadoc -->
+	<javadoc destdir="${javadoc}"
+		private="no"
+		author="true"
+		version="true"
+		use="true"
+		windowtitle="Templating for JavaServer Faces Technology (https://jsftemplating.dev.java.net)"
+		serialwarn="false">
+	    <doctitle><![CDATA[<h1>A '<a href="https://jsftemplating.dev.java.net">Templating for JavaServer Faces Technology</a>' application.</h1>]]></doctitle>
+	    <footer><![CDATA[<a href="https://jsftemplating.dev.java.net">https://jsftemplating.dev.java.net</a>]]></footer>
+
+    	    <fileset dir="${src}">
+		<include name="**/*.java" />
+	    </fileset>
+
+	    <classpath refid="javadoc-dependencies" />
+	</javadoc>
+    </target>
+
+    <target name="createwar" depends="jar">
+	<echo message="Creating '${war.name}'." />
+	<jar jarfile="${war.name}" update="true">
+            <fileset dir="${docroot}" includes="**/*.jsf, **/*.jsp, **/*.inc, **/*.gif, **/*.png, **/*.jpg, **/*.js, WEB-INF/web.xml, WEB-INF/faces-config.xml, WEB-INF/lib/*.jar" />
+	</jar>
+    </target>
+
+
+    <target name="clean">
+	<!-- Delete the build / dist directories ;-->
+	<delete dir="${build}" />
+	<delete dir="${javadoc}" />
+	<delete file="${app.jar}" />
+	<delete file="${war.name}" />
+	<delete file="${WEB-INF_lib}/jsftemplating.jar" />
+	<delete file="${WEB-INF_lib}/jsftemplating-dynafaces-0.1.jar" />
+	<delete file="${WEB-INF_lib}/webui-jsf.jar" />
+	<delete file="${WEB-INF_lib}/webui-jsf-suntheme.jar" />
+	<delete file="${WEB-INF_lib}/dataprovider.jar" />
+	<delete file="${WEB-INF_lib}/json.jar" />
+	<delete file="${dest-dojo.jar}" />
+	<delete file="${dest-prototype.jar}" />
+    </target>
+</project>

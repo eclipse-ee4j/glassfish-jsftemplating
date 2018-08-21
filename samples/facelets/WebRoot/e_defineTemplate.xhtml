@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/core">
+    <head/>
+    <body>
+        <ui:define name="foo3">
+                foo3 defined in e_defineTemplate.xhtml
+        </ui:define>
+        <br />
+        <ui:insert name="foo2">
+                foo2 is not defined!
+        </ui:insert>
+        <br />
+        <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            _uacct="UA-822917-3";
+            urchinTracker();
+        </script>
+    </body>
+</html>

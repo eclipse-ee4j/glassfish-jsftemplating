@@ -1,0 +1,119 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+    <sun:html>
+	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<sun:head id="popupUploaderHead" title="#{msgs.uploaderPopup_title}">
+	  <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+	</sun:head>
+
+	<sun:body>
+				   
+	<sun:form id="uploaderFormPopup">
+				   
+		<!-- Masthead -->
+		<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+			    productImageDescription="#{msgs.mastheadAltText}" 
+			    userInfo="test_user"
+			    serverInfo="test_server" />     
+		 
+		<!-- Bread Crumb Component -->
+		<sun:breadcrumbs id="breadcrumbs">
+		    <sun:hyperlink id="exampleIndex"
+				  text="#{msgs.index_title}"
+				  toolTip="#{msgs.index_title}"
+				  actionExpression="$methodExpression{#{ChooserUploaderBean.showExampleIndex}}" 
+				  onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true" />
+		    <sun:hyperlink id="fileExample" actionExpression="$methodExpression{#{ChooserUploaderBean.showUploaderIndex}}" text="#{msgs.chooserUploader_title}"
+				  onMouseOver="javascript:window.status='#{msgs.chooserUploader_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true" 
+				  toolTip="#{msgs.chooserUploader_title}"  /> 
+		    <sun:hyperlink id="uploaderPopup" text="#{msgs.uploaderPopup_title}"/>
+		</sun:breadcrumbs>
+		
+		<!-- Alert for validator exception. -->
+		<sun:alert id="popupUploaderAlert" rendered="#{ChooserUploaderBean.errorsOnPage}" type="error" 
+			    summary="#{ChooserUploaderBean.summaryMsg}"> 
+		     <sun:message for="uploaderFormPopup:dirPath" showDetail="#{true}"/>
+		     <sun:message for="uploaderFormPopup:upload" showDetail="#{true}"/>
+		</sun:alert>
+		  
+		<!-- Page Title -->
+		<sun:title id="uploaderContentPage" title="#{msgs.uploaderPopup_title}" />
+	       
+		<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+<f:verbatim>
+		<table><tr><td></td></tr>
+		<tr style="height:20px"><td>
+		</td></tr>
+						
+		<!-- Text Field for user input -->
+		<tr><td>
+</f:verbatim>
+		    <sun:label id="labelId" for="upload" text="#{msgs.uploader_uploadLabel}"/>                           
+		    <sun:image id="space" url="/theme/com/sun/webui/jsf/suntheme/images/other/dot.gif"
+			      width="$int{67}" height="$int{1}"/>
+		    <sun:upload id="upload"  
+			       uploadedFile = "#{ChooserUploaderBean.uploadedFile}"
+			       required="#{true}"/>
+<f:verbatim>
+		 </td></tr>
+		 <tr style="height:20px"><td></td></tr>
+			   
+		 <!-- File Uploader -->
+		 <tr><td>
+</f:verbatim>
+		    <sun:textField id="dirPath" columns="$int{38}"  
+				 text="#{ChooserUploaderBean.uploadPath}" label="#{msgs.uploader_textFieldlabel}"
+				 toolTip="#{msgs.uploader_textFieldTooltip}" >
+		       <f:validator validatorId="dirValidator"/>
+		    </sun:textField>
+		<f:verbatim><![CDATA[ &nbsp; ]]></f:verbatim>
+
+		<!--Select Folder button - opens folder chooser in popup window. -->
+		    <sun:button primary="#{true}"  text="#{msgs.uploader_buttonTextFolder}" id="folder"  
+			       onClick="javascript: var win = window.open('../chooseruploader/folderChooserPopup.jsf',
+					'folderchooserPopup','height=630,width=750,top='+((screen.height-(screen.height/1.618))-(500/2))
+					+ ', left='+((screen.width-650)/2)+',scrollbars,resizable');win.focus();return false" 
+				toolTip="#{msgs.uploader_folderButtonToolTip}"/>
+<f:verbatim>
+		 </td></tr>
+		 <tr style="height:20px"><td></td></tr>
+		 <tr><td>
+</f:verbatim>
+		<!-- File Uploader Button -->
+		    <sun:button primary="#{true}"  text="#{msgs.uploader_uploadButtonCaption}" id="button"  
+			       actionExpression="$methodExpression{#{ChooserUploaderBean.writeFile}}"
+			       toolTip="#{msgs.uploader_uploadButtonToolTip}"/>
+<f:verbatim>
+		 </td></tr>
+					     
+		 <!-- File Chooser Link -->
+		  <tr><td>
+</f:verbatim>
+		    <sun:label id="textLabel1" text="#{msgs.uploader_fileChooserText1}"/>
+		    
+		    <!-- File Chooser hyper link - opens file chooser in a popup window.-->
+		    <sun:hyperlink  id="popupFile" text="#{msgs.uploader_fileChooserLink}" toolTip="#{msgs.uploader_fileChooserLinkTooltip}" 
+				   onClick="javascript: var win = window.open('../chooseruploader/fileChooserPopup.jsf',
+					    'filechooserPopup','height=630,width=750,top='+((screen.height-(screen.height/1.618))-(500/2))
+					    + ', left='+((screen.width-650)/2)+',scrollbars,resizable'); win.focus(); return false" />
+		    <sun:label id="textLabel2" text="#{msgs.uploader_fileChooserText2}" />
+"		  </td></tr></table>
+		  </sun:markup>
+			    
+	    </sun:form>
+	</sun:body>
+    </sun:html>
+</sun:page>

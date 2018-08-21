@@ -1,0 +1,34 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<!-- Filter Panel -->
+<sun:textField id="customFilter"
+    columns="$int{50}"
+    label="#{msgs.table_customFilterLabel}"
+    labelLevel="$int{2}"
+    onKeyPress="if (event.keyCode==13) {var e=document.getElementById('form1:table1:filterPanel:submit'); if (e != null) e.click(); return false}"
+    text="#{TableBean.groupA.filter.customFilter}"/>
+<sun:markup tag="div" styleClass="#{themeStyles.TABLE_PANEL_BUTTON_DIV}">
+  <sun:button id="submit"
+      actionExpression="$methodExpression{#{TableBean.groupA.filter.applyCustomFilter}}"
+      mini="#{true}"
+      primary="#{true}"
+      text="#{msgs.table_ok}"/>
+  <sun:button id="cancel"
+      mini="#{true}"
+      onClick="toggleFilterPanel(); return false"
+      text="#{msgs.table_cancel}"/>
+</sun:markup>
+
+<!-- Note: If the user presses the enter key while the text field has focus,
+     the page will be submitted incorrectly, unless we capture the onKeyPress
+     event and invoke the click method of the submit button. -->

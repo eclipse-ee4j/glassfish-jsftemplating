@@ -1,0 +1,188 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.label_title}">
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+    </sun:head>
+    <sun:body>
+      <sun:form id="form1">
+
+	<!-- Masthead -->
+	<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	  productImageDescription="#{msgs.mastheadAltText}" 
+	  userInfo="test_user"
+	  serverInfo="test_server" />     
+		     
+	<!-- Bread Crumb Component -->
+	<sun:breadcrumbs id="breadcrumbs">
+	  <sun:hyperlink actionExpression="$methodExpression{#{LabelBean.showExampleIndex}}" text="#{msgs.exampleTitle}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink text="#{msgs.label_title}"/>
+	</sun:breadcrumbs>
+
+	<!-- Alert -->
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+"	  <br/>
+	  <sun:messageGroup showDetail="#{false}" rendered="#{LabelBean.messageGroupRendered}"/>
+	</sun:markup>
+
+	<sun:alert id="Alert"                
+	  summary="#{msgs.label_genericError}"
+	  type="error"               
+	  rendered="#{LabelBean.alertRendered}" >
+	</sun:alert>
+		   
+	<!-- Page Title -->
+	<sun:title title="#{msgs.label_title}">
+	  <!facet "pageHelp">
+	    <sun:helpInline id="inlinePageHelpText" type="page"
+	      text="#{msgs.label_pageHelp}">
+			 
+	      <!-- JavaHelp helpset for the full example app not available yet
+		   so we can't use sun:helpWindow.  Instead, we use a hyperlink
+		   to a popup window.
+	      <sun:helpWindow id="pageHelpLink" windowTitle="#{msgs.help_windowTitle}"
+		pageTitle="#{msgs.label_title}"
+		mastheadImageUrl="/images/example_primary_masthead.png"
+		mastheadImageDescription="help_mastheadAltText"           
+		toolTip="#{msgs.help_tooltip}"
+		helpFile="label.html"
+		linkIcon="#{true}"
+		linkText="#{msgs.label_morePageHelp}" />
+	      -->
+	      <sun:imageHyperlink id="pageHelpLink2"
+		icon="HREF_LINK"
+		target="help_window"
+		url="Help.jsf"
+		toolTip="#{msgs.label_helpTooltip}"
+		text="#{msgs.label_morePageHelp}"
+		onMouseOver="javascript:window.status='#{msgs.label_helpTooltip  }'; return true;"
+		onMouseOut="javascript: window.status=''; return true"
+		onClick="javascript: var win = window.open('','help_window','height=500,width=750,top='+((screen.height-(screen.height/1.618))-(500/2))+',left='+((screen.width-650)/2)+',resizable'); win.focus();"/>
+	    </sun:helpInline>
+	  </facet>
+	</sun:title>
+		   
+"	<br/>
+		   
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+	  <sun:legend id="legend" text="#{msgs.label_requiredLabel}" />
+	  <sun:label id="pizzaLabel" text="#{msgs.label_pizza}" labelLevel="$int{1}"/>
+		     
+	  <!-- Veggie toppings -->
+"	  <br/><br/>
+	  <sun:label id="veggieLabel" text="#{msgs.label_veggie}" labelLevel="$int{2}"
+	    style="padding-left:10px;"/>
+"	  <br/>
+	  <sun:checkbox id="oliveTopping" label="#{msgs.label_olives}"
+	    selected="#{LabelBean.oliveSelected}" style="padding-left:20px;" 
+	    validatorExpression="#{LabelBean.oliveValidator}"/>
+"	  <br/>
+	  <sun:checkbox id="mushroomTopping" label="#{msgs.label_mushrooms}"
+	    selected="#{LabelBean.mushroomSelected}" style="padding-left:20px;"
+	    validatorExpression="#{LabelBean.mushroomValidator}"/>
+"	  <br/>
+		       
+	  <!-- Meat toppings -->
+"	  <br/><br/>
+	  <sun:label id="meatLabel" text="#{msgs.label_meat}" labelLevel="$int{2}"
+	    style="padding-left:10px;"/>
+"	  <br/>
+	  <sun:checkbox id="pepperoniTopping" label="#{msgs.label_pepperoni}"
+	    selected="#{LabelBean.pepperoniSelected}" style="padding-left:20px;"
+	    validatorExpression="#{LabelBean.pepperoniValidator}"/>
+"	  <br/>
+	  <sun:checkbox id="sausageTopping" label="#{msgs.label_sausage}"
+	    selected="#{LabelBean.sausageSelected}" style="padding-left:20px;" 
+	    validatorExpression="#{LabelBean.sausageValidator}"/>
+"	  <br/>
+	  <sun:checkbox id="anchovieTopping" label="#{LabelBean.anchovieLabel}"
+	    selected="#{LabelBean.anchovieSelected}" style="padding-left:20px;" 
+	    validatorExpression="#{LabelBean.anchovieValidator}"/>
+	  
+"	  <br/><br/><br/>
+		     
+	  <!-- Labeled text input fields -->
+	  <!-- Use HTML table for layout.  Note that if we had included this
+	       content within the body of title, then we would need
+	       to wrap the HTML markup in the f:verbatim tag.  sun:markup could
+	       also be used but that is more heavyweight (slower). -->
+<f:verbatim>
+	  <table border="0">
+	  
+	    <!-- Phone number -->
+	    <tr>
+	      <td valign="top">
+</f:verbatim>
+		<sun:label id="phoneLabel" requiredIndicator="#{true}" for="phoneNum"
+		  style="padding-right:10px;"
+		  toolTip="#{msgs.label_phoneTooltip}"
+		  text="#{msgs.label_phoneNumber}"/>
+<f:verbatim>
+	      </td>
+	      <td>
+</f:verbatim>
+		<sun:textField id="phoneNum" required="#{true}"
+		  text="#{LabelBean.phone}"
+		  toolTip="#{msgs.label_phoneTooltip}"
+		  validatorExpression="#{LabelBean.phoneValidator}"/>
+<f:verbatim>
+	      </td>
+	    </tr>
+	    
+	    <!-- 1 blank row.  -->
+	    <tr><td colspan="2"> &nbsp; </td></tr>
+	    
+	    <!-- Delivery address -->
+	    <tr>
+	      <td valign="top">
+</f:verbatim>
+		<sun:label id="addressLabel" requiredIndicator="#{true}" for="address"
+		  style="padding-right:10px;"
+		  toolTip="#{msgs.label_addressTooltip}"
+		  text="#{msgs.label_address}"/>
+<f:verbatim>
+	      </td>
+	      <td>
+</f:verbatim>
+		<sun:textArea id="address" required="#{true}" columns="$int{25}" rows="$int{2}" 
+		  text="#{LabelBean.address}"
+		  toolTip="#{msgs.label_addressTooltip}"
+		  validatorExpression="#{LabelBean.addressValidator}"/>
+<f:verbatim>
+	      </td>
+	    </tr>
+	  </table>
+
+	  <br/><br/>
+	  
+</f:verbatim>
+	  <!-- Reset button is immediate because we want to bypass data validation and
+	       do not want the data to propagate to our model. -->
+	  <sun:button id="ResetButton" text="#{msgs.label_resetButton}" immediate="#{true}" 
+	     actionListenerExpression="$methodExpression{#{LabelBean.resetActionListener}, true}" />
+	     
+	  <!-- Order button is NOT immediate because we want to submit the page and
+	       and perform data validation.  If all data is valid, we want the model
+	       updated. -->
+	  <sun:button id="OrderButton" text="#{msgs.label_orderButton}" 
+	     actionExpression="$methodExpression{#{LabelBean.placeOrder}}"/>
+		       
+	</sun:markup>
+      </sun:form>
+    </sun:body> 
+  </sun:html>  
+</sun:page>

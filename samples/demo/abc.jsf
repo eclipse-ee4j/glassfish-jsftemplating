@@ -1,0 +1,38 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <sun:html>
+	<sun:head id="head" />
+	<sun:body>
+#include /header.inc
+	    <sun:form id="form">
+		"<p>&nbsp;</p>
+		<staticText value="#{foo}">
+		    <!beforeEncode
+			Test.getResponse(userInput="#{in}" response=>$pageSession{foo});
+		    />
+		</staticText>
+		"<br /><br />
+		<sun:textField id="in" value="#{pageSession.in}" />
+		"<br /><br />
+		<sun:button text="Go!" />
+		<sun:hyperlink text="cheat">
+		    <!command
+			setPageSessionAttribute(key="in" value="abc");
+		    />
+		</sun:hyperlink>
+	    </sun:form>
+#include /footer.inc
+	</sun:body>
+    </sun:html>
+</sun:page>

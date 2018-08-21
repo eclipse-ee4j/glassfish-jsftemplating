@@ -1,0 +1,79 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.addremove_resultsTitle}">
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form">                             
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+      
+      <!-- Breadcrumbs -->   
+      <sun:breadcrumbs id="breadcrumbs">
+	<sun:hyperlink id="indexPageLink"
+	    text="#{msgs.index_title}"
+	    toolTip="#{msgs.index_title}"
+	    actionExpression="$methodExpression{#{AddRemoveBean.showExampleIndex}}" 
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="exampleLink"
+	    text="#{msgs.addremove_title}"
+	    toolTip="#{msgs.addremove_title}"
+	    actionExpression="$methodExpression{#{AddRemoveBean.showAddRemoveExample}}"
+	    onMouseOver="javascript:window.status='#{msgs.addremove_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="resultsPageLink" text="#{msgs.addremove_resultsTitle}"/>
+      </sun:breadcrumbs>
+      
+      <!-- Content Page Title -->
+      <sun:title id="title"
+	  helpText="#{msgs.addremove_resultsHelpText}"
+	  title="#{msgs.addremove_resultsTitle}">
+								     
+	<!facet "pageButtonsTop">  
+	  <!-- Back Button -->
+	  <sun:button id="backButton"
+	      text="#{msgs.addremove_backButton}"
+	      immediate="#{true}"
+	      actionExpression="$methodExpression{showAddRemove}" />               
+	</facet>
+      </sun:title>
+      
+      <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+"	  <br />
+	  <!-- User Selections Table -->
+	  <sun:table id="table1" title="#{msgs.addremove_tableCaption}">
+	    <sun:tableRowGroup id="rowGroup1"
+		sourceData="#{AddRemoveBean.userData.dataProvider}"
+		sourceVar="data">                    
+	      <sun:tableColumn id="col1">                      
+		<sun:staticText text="#{data.value.label}" />
+	      </sun:tableColumn>                                    
+	    </sun:tableRowGroup>
+	  </sun:table>                                  
+      </sun:markup>
+	      
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

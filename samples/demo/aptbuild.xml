@@ -1,0 +1,41 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<!-- Build file for JSFTemplating -->
+<project name="JSFTemplating" default="build" basedir=".">
+    <taskdef name="apt" classname="org.apache.tools.ant.taskdefs.Apt" />
+
+    <!-- Set properties -->
+    <property file="build.properties" />
+
+    <!-- The "dependencies" path should exist in both build.xml files -->
+    <path id="dependencies">
+	<pathelement location="${servlet-api.jar}" />
+	<pathelement location="${jsf-api.jar}" />
+	<pathelement location="${el-api.jar}" />
+	<pathelement location="${jsftemplating.jar}" />
+	<pathelement location="${jsftemplating-dt.jar}" />
+	<pathelement location="${jsftemplating-dynafaces.jar}" />
+    </path>
+
+    <target name="compile">
+	<!-- Compile the java code from ${src} into ${build} -->
+	<apt	srcdir="${src}"
+		fork="true"
+		destdir="${build}/."
+		debug="${compile.debug}"
+		deprecation="${compile.deprecation}"
+		optimize="${compile.optimize}">
+	    <classpath refid="dependencies" />
+	</apt>
+    </target>
+</project>

@@ -1,0 +1,7 @@
+
+* Edit the build.properties files and change properties as necessary.
+
+* Type 'ant' to build.
+
+* The 'example' folder will be deployable in GlassFish.  You may need extra jar
+  files for non-Java EE 5 containers.

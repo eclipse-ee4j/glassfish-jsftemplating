@@ -1,0 +1,72 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:html id="html">  
+      <sun:head id="head" title="#{msgs.index_showCodeHeader}">                        
+	<sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+      </sun:head>
+      <sun:body id="body">
+	<sun:form id="form">                             
+	    
+	  <!-- Masthead -->
+	  <sun:masthead id="masthead"
+	     productImageURL="/images/example_primary_masthead.png"
+	     productImageHeight="$int{40}"
+	     productImageWidth="$int{188}"
+	     userInfo="test_user" 
+	     serverInfo="test_server"
+	     productImageDescription="#{msgs.mastheadAltText}" />
+	  
+	  <!-- Breadcrumbs -->   
+	  <sun:breadcrumbs id="breadcrumbs">
+	    <sun:hyperlink id="indexPageLink"
+	      actionExpression="$methodExpression{#{IndexBean.showIndex}}"
+	      text="#{msgs.index_title}"
+	      onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	      onMouseOut="javascript: window.status=''; return true" />
+	    <sun:hyperlink id="showCodeLink" text="#{msgs.index_showCodeHeader}"/>
+	  </sun:breadcrumbs>
+	  
+	  <!-- Content Page Title -->
+	  <sun:title id="contentPageTitle" title="#{msgs.index_showCodeHeader}" />
+	    
+	  <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+"	    <br />
+	    <sun:staticText id="text1"
+		style="font-weight:bold" 
+		text="#{msgs.index_file}" />                              
+			
+	    <!-- File Name -->
+	    <sun:staticText id="text2" 
+		style="font-family:monospace" 
+		text="#{ShowCodeBean.fileName}" />
+		
+"	    <br /><br />
+"	    <div style="border:solid 1px #C0C0C0;border-width:thin;width:auto;padding:2px;">
+"	      <div style="border:solid 1px ;border-width:thin;width:auto;padding:5px;">
+"		<pre>          
+		  <!-- Source Code -->          
+		  <sun:staticText id="Code"                 
+		     escape="#{false}"  
+		     text="#{ShowCodeBean.sourceCode}" />                       
+"		</pre>    
+"	      </div>
+"	    </div>          
+"	    <br /><br />                        
+	  </sun:markup>
+	   
+	</sun:form>
+      </sun:body>
+    </sun:html>  
+</sun:page>

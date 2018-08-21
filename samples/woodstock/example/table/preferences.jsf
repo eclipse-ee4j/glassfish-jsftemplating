@@ -1,0 +1,83 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.table_preferencesTitle}">
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />        
+      <sun:script url="js/preferences.js"/>
+    </sun:head>
+    <sun:body>
+      <sun:form id="form1">
+
+	<!-- Masthead -->
+	<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	  productImageDescription="#{msgs.mastheadAltText}" 
+	  userInfo="test_user"
+	  serverInfo="test_server" />     
+		       
+	<!-- Bread Crumb Component -->
+	<sun:breadcrumbs id="breadcrumbs">
+	  <sun:hyperlink actionExpression="$methodExpression{#{TableBean.showExampleIndex}}" text="#{msgs.exampleTitle}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink actionExpression="$methodExpression{#{TableBean.showTableIndex}}" text="#{msgs.table_title}"
+	    onMouseOver="javascript:window.status='#{msgs.table_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink text="#{msgs.table_preferencesTitle}"/>
+	</sun:breadcrumbs>
+
+	<sun:title title="#{msgs.table_preferencesTitle}"/>
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+
+	  <!-- Messages -->
+	  <sun:messageGroup showSummary="#{true}" showDetail="#{true}"/>
+"	  <br/>
+
+	  <!-- Preferences -->
+	  <sun:table id="table1"
+	    paginationControls="#{true}"
+	    preferencesPanelFocusId="form1:table1:preferencesPanel:rows_field"
+	    title="#{msgs.table_preferencesTitle}">
+	    <sun:tableRowGroup id="rowGroup1"
+	      rows="#{TableBean.groupA.preferences.rows}"
+	      sourceData="#{TableBean.groupA.names}"
+	      sourceVar="name">
+	      <sun:tableColumn id="col1"
+		alignKey="last" headerText="#{msgs.table_LastName}" rowHeader="#{true}">
+		<sun:staticText text="#{name.value.last}"/>
+	      </sun:tableColumn>
+	      <sun:tableColumn id="col2" alignKey="first" headerText="#{msgs.table_LastName}">
+		<sun:staticText text="#{name.value.first}"/>
+	      </sun:tableColumn>
+	    </sun:tableRowGroup>
+
+	    <!-- Preferences Panel -->
+	    <!facet "preferencesPanel">
+	      <sun:panelGroup id="preferencesPanel">
+#include "table/preferencesPanel.jsf"
+	      </sun:panelGroup>
+	    </facet>
+	  </sun:table>
+
+"	  <br/>
+	  <sun:staticText text="#{msgs.table_preferencesConcepts1}"/>
+
+"	  <br/><br/>
+	  <sun:staticText text="#{msgs.table_preferencesConcepts2}"/>
+
+	</sun:markup>
+      </sun:form>
+    </sun:body>
+  </sun:html>
+</sun:page>

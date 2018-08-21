@@ -1,0 +1,102 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+    <sun:html>
+	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<sun:head id="folderHead" title="#{msgs.folderChooser_title}">
+	  <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+	  <f:verbatim>
+	    <script type="text/javascript">
+		// This function is used to display a javascript alert 
+		// window when the Selected Folder field is empty.
+		function checkSelectedFolder(msg) {
+		    var selectedFolder = document.getElementById("folderForm:folderContent:folderChooser:folderChooser_selectedField").value;
+		    if (selectedFolder.length == 0) {
+			alert(msg);                                
+			return false;
+		    }
+		    return true;
+		}
+	    </script>
+	  </f:verbatim>
+	</sun:head>
+	<sun:body>
+	    <sun:form id="folderForm">
+	       
+	      <!-- Masthead -->
+	       <sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+		 productImageDescription="#{msgs.mastheadAltText}" 
+		 userInfo="test_user"
+		 serverInfo="test_server" secondary="#{true}"/>     
+		
+		<!-- Bread Crumb Component -->
+		<sun:breadcrumbs id="breadcrumbs">
+		    <sun:hyperlink id="exampleIndex"
+				  text="#{msgs.index_title}"
+				  toolTip="#{msgs.index_title}"
+				  actionExpression="$methodExpression{#{FolderChooserBean.showExampleIndex}}" 
+				  onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true"/> 
+		    <sun:hyperlink id="chooserExample" actionExpression="$methodExpression{#{FolderChooserBean.showUploaderIndex}}" text="#{msgs.chooserUploader_title}"
+				  onMouseOver="javascript:window.status='#{msgs.chooserUploader_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true" 
+				  toolTip="#{msgs.chooserUploader_title}" />                            
+		    <sun:hyperlink id="folderExample" text="#{msgs.folderChooser_title}"/>
+		</sun:breadcrumbs>
+	  
+"		<br />
+		<!-- Alert for validator exception. -->
+		<sun:alert id="folderChooserAlert" rendered="#{FolderChooserBean.errorsOnPage}" type="error" 
+				summary="#{FolderChooserBean.summaryMsg}">
+		    <sun:message for="folderChooser" showDetail="#{true}"/>                                                   
+		</sun:alert>                        
+		
+	     <!-- Page Title -->
+	     <sun:title title="#{msgs.folderChooser_title}" id="folderContent">
+	      <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">                                                                  
+					 
+	      <!-- Folder Chooser -->
+"		  <table><tr><td>
+		      <sun:fileChooser id="folderChooser"
+				      lookin="#{FolderChooserBean.lookin}"
+				      selected="#{FolderChooserBean.selected}"
+				      sortField="size" descending="#{true}" 
+				      multiple="#{false}" folderChooser="#{true}"/>
+"			    </td></tr>
+				       
+	      <!--  Folder Chooser button -->
+"			<tr><td> &nbsp;&nbsp;
+		<sun:label id="folder_label" text="#{msgs.folderChooser_choosefolderText}">
+		   <sun:staticText id="chosenFolder" text="#{FolderChooserBean.folderName}" />
+		</sun:label>
+"			    </td></tr>
+	       
+	      <!-- Selected Folder Path -->                         
+"			<tr><td>
+		   <sun:button id="file_button"
+			 primary="#{true}" 
+			 text="#{msgs.folderChooser_chooseButtonCaption}"
+			 toolTip="#{msgs.folderChooser_chooseButtonCaptionTooltip}"
+			 onClick="javascript: checkSelectedFolder('#{msgs.folderChooser_emptyFieldAlert}');"/>
+"			    </td></tr></table>
+	      </sun:markup>
+	     </sun:title>
+<f:verbatim>
+	     <script>
+		 document.getElementById("folderForm:folderContent:folderChooser").setChooseButton("folderForm:folderContent:file_button");
+	     </script>
+</f:verbatim>
+	    </sun:form>
+	</sun:body> 
+    </sun:html>  
+</sun:page>

@@ -1,0 +1,108 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.alert_inlineTitle}">
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form">                             
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+      
+      <!-- Breadcrumbs -->   
+      <sun:breadcrumbs id="breadcrumbs">
+	<sun:hyperlink id="indexPageLink"
+	    text="#{msgs.index_title}"
+	    toolTip="#{msgs.index_title}"
+	    actionExpression="$methodExpression{#{InlineAlertBean.showExampleIndex}}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="alertIndexLink"
+	    text="#{msgs.alert_title}"
+	    toolTip="#{msgs.alert_title}"
+	    actionExpression="$methodExpression{#{InlineAlertBean.showAlertIndex}}"
+	    onMouseOver="javascript:window.status='#{msgs.alert_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="inlineAlertLink" text="#{msgs.alert_inlineTitle}" />
+      </sun:breadcrumbs>
+	       
+      <!-- Alert -->
+      <sun:alert id="alert"                
+	  summary="#{InlineAlertBean.alertSummary}"
+	  detail="#{InlineAlertBean.alertDetail}"
+	  type="#{InlineAlertBean.alertType}"               
+	  rendered="#{InlineAlertBean.alertRendered}" >
+	 <!facet "alertLink">
+	      <sun:imageHyperlink id="imageLink"
+		  rendered="#{InlineAlertBean.linkRendered}"
+		  icon="HREF_LINK"
+		  target="help_window"
+		  url="HelpAlert.jsf"
+		  text="#{msgs.alert_helpLinkText}"
+		  toolTip="#{msgs.alert_helpLinkTooltip}"
+		  onMouseOver="javascript:window.status='#{msgs.alert_helpLinkMouseOver}'; return true;"
+		  onMouseOut="javascript: window.status=''; return true"
+		  onClick="javascript: var win = window.open('','help_window','height=500,width=750,top='+((screen.height-(screen.height/1.618))-(500/2))+',left='+((screen.width-650)/2)+',resizable'); win.focus();"/> 
+	 </facet>
+      </sun:alert>
+      
+      <!-- Content Page Title -->
+      <sun:title id="title"              
+	  title="#{msgs.alert_inlineTitle}"
+	  helpText="#{msgs.alert_line1Text}" > 
+	  
+	<!facet "pageButtonsBottom">
+	  <sun:panelGroup id="pageButtonsGroupBottom"> 
+	    <!-- OK Button -->                
+	    <sun:button id="okButton"                 
+	      text="#{msgs.alert_okButton}" 
+	      actionExpression="$methodExpression{#{InlineAlertBean.handleAction}}"
+	      primary="#{true}"
+	      disabled="#{InlineAlertBean.disabled}"
+	      actionListenerExpression="$methodExpression{#{InlineAlertBean.processButtonAction}, true}"/>
+
+	    <!-- Restart Button -->                
+	    <sun:button id="restartButton"                 
+	      text="#{msgs.alert_restartButton}" 
+	      actionExpression="$methodExpression{#{InlineAlertBean.restart}}"
+	      immediate="#{true}"/>                  
+	  </sun:panelGroup>
+	</facet>
+	
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">                                    
+	    <sun:markup tag="br" singleton="#{true}" /> 
+	    
+	    <!-- Number Entry Field -->
+	    <sun:textField id="numberTextField"
+		label="#{msgs.alert_guess}"
+		columns="$int{4}"
+		toolTip="#{msgs.alert_textFieldTitle}"
+		text="#{InlineAlertBean.fieldValue}"
+		required="#{true}"
+		validatorExpression="#{InlineAlertBean.validateFieldEntry}" /> 
+	</sun:markup>          
+	
+      </sun:title>                     
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

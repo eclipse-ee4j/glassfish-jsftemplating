@@ -1,0 +1,817 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<!initPage
+    // Setup variables for use in tests.
+    setPageSessionAttribute(key="psTrue" value="true");
+    setPageSessionAttribute(key="psFalse" value="false");
+    setPageSessionAttribute(key="psELTrue" value="#{true}");
+    setPageSessionAttribute(key="psELFalse" value="#{false}");
+    setAttribute(key="emptyString" value="");
+    setAttribute(key="helloString" value="hello");
+    setAttribute(key="zero" value="$int{0}");
+    setAttribute(key="thirteen" value="$int{13}");
+    setAttribute(key="nine" value="$int{9}");
+    setAttribute(key="minusNine" value="$int{-9}");
+/>
+
+<f:verbatim>
+<html>
+    <head>
+	<title>if() test</title>
+	<style type="text/css">
+.true {color: #22AA22; font-weight: bold;}
+.false {color: #AA2222; font-weight: bold;}
+	</style>
+    </head>
+    <body>
+
+	<h2>Testing if's</h2>
+	<p> The Test name will be appear the same color as the expected result
+	    of the test.  For example, <span class="true">Test1</span> looks
+	    like that if the result of <span class="true">Test1</span> is
+	    expected to be <span class="true">true</span>. This lets you easily
+	    check for evaluation errors.</p>
+
+	<h3>Variables:</h3>
+	
+	<p> <b>&#36;pageSession{psTrue}</b> == "true"<br />
+	    <b>&#36;pageSession{psFalse}</b> == "false"<br />
+	    <b>&#36;pageSession{psELTrue}</b> == "&#35;{true}"<br />
+	    <b>&#36;pageSession{psELFalse}</b> == "&#35;{false}"<br />
+	    <b>&#35;{null}</b> == (null)<br />
+	    <b>&#35;{requestScope.emptyString}</b> == ""<br />
+	    <b>&#35;{requestScope.helloString}</b> == "hello"<br />
+	    <b>&#35;{requestScope.zero}</b> == 0<br />
+	    <b>&#35;{requestScope.thirteen}</b> == 13<br />
+	    <b>&#35;{requestScope.minusNine}</b> == -9<br />
+	    </p>
+</f:verbatim>
+
+"<br /><span class="true">Test1:</span> if (true):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (true) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test2:</span> if (false):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (false) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test3:</span> if (!true):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!true) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test4:</span> if (!false):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!false) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test5:</span> if (\#{true}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{true}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test6:</span> if (\#{false}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{false}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test7:</span> if (!\#{true}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{true}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test8:</span> if (!\#{false}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{false}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test9:</span> if ('\#{true}'):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ('#{true}') {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test10:</span> if ('\#{false}'):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ('#{false}') {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test11:</span> if ('!\#{true}'):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ('!#{true}') {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test12:</span> if ('!\#{false}'):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ('!#{false}') {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+// $pageSession{} tests...
+"<br /><span class="true">Test13:</span> if ("\$pageSession{psTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("$pageSession{psTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test14:</span> if (\$pageSession{psTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ($pageSession{psTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test15:</span> if ("!\$pageSession{psTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!$pageSession{psTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test16:</span> if (!\$pageSession{psTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!$pageSession{psTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test17:</span> if ("\$pageSession{psFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("$pageSession{psFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test18:</span> if (\$pageSession{psFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ($pageSession{psFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test19:</span> if ("!\$pageSession{psFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!$pageSession{psFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test20:</span> if (!\$pageSession{psFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!$pageSession{psFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test21:</span> if ("\$pageSession{psELTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("$pageSession{psELTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test22:</span> if (\$pageSession{psELTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ($pageSession{psELTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test23:</span> if ("!\$pageSession{psELTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!$pageSession{psELTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test24:</span> if (!\$pageSession{psELTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!$pageSession{psELTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test25:</span> if ("\$pageSession{psELFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("$pageSession{psELFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test26:</span> if (\$pageSession{psELFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ($pageSession{psELFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test27:</span> if ("!\$pageSession{psELFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!$pageSession{psELFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test28:</span> if (!\$pageSession{psELFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!$pageSession{psELFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test29:</span> if ("\#{pageSession.psTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("#{pageSession.psTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test30:</span> if (\#{pageSession.psTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{pageSession.psTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test31:</span> if ("!\#{pageSession.psTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!#{pageSession.psTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test32:</span> if (!\#{pageSession.psTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{pageSession.psTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test33:</span> if ("\#{pageSession.psFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("#{pageSession.psFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test34:</span> if (\#{pageSession.psFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{pageSession.psFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test35:</span> if ("!\#{pageSession.psFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!#{pageSession.psFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test36:</span> if (!\#{pageSession.psFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{pageSession.psFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test37:</span> if ("\#{pageSession.psELTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("#{pageSession.psELTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test38:</span> if (\#{pageSession.psELTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{pageSession.psELTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test39:</span> if ("!\#{pageSession.psELTrue}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!#{pageSession.psELTrue}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test40:</span> if (!\#{pageSession.psELTrue}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{pageSession.psELTrue}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test41:</span> if ("\#{pageSession.psELFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("#{pageSession.psELFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test42:</span> if (\#{pageSession.psELFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{pageSession.psELFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test43:</span> if ("!\#{pageSession.psELFalse}"):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if ("!#{pageSession.psELFalse}") {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test44:</span> if (!\#{pageSession.psELFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{pageSession.psELFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test45:</span> if (\#{requestScope.emptyString}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.emptyString}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test46:</span> if (!\#{requestScope.emptyString}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{requestScope.emptyString}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test47:</span> if (\#{requestScope.helloString}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.helloString}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test48:</span> if (!\#{requestScope.helloString}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{requestScope.helloString}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test49:</span> if (\#{requestScope.zero}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.zero}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test50:</span> if (!\#{requestScope.zero}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{requestScope.zero}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test51:</span> if (\#{requestScope.thirteen}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.thirteen}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test52:</span> if (!\#{requestScope.thirteen}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{requestScope.thirteen}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test53:</span> if (\#{requestScope.minusNine}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.minusNine}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test54:</span> if (!\#{requestScope.minusNine}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{requestScope.minusNine}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test55:</span> if (\#{requestScope.minusNine}<\#{requestScope.zero}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.minusNine}<#{requestScope.zero}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test56:</span> if (\#{requestScope.minusNine}>\#{requestScope.zero}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.minusNine}>#{requestScope.zero}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test57:</span> if (\#{requestScope.minusNine}=\#{requestScope.zero}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.minusNine}=#{requestScope.zero}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test58:</span> if (\#{requestScope.minusNine}=\#{requestScope.minusNine}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.minusNine}=#{requestScope.minusNine}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test59:</span> if (\#{requestScope.nine}>\#{requestScope.thirteen}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.nine}>#{requestScope.thirteen}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test60:</span> if (\#{requestScope.nine}<\#{requestScope.thirteen}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.nine}<#{requestScope.thirteen}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test61:</span> if (\#{requestScope.hello}<\#{pageSession.psFalse}):
+"Current impl does not support String comparison for '<' or '>', only integer.  This would throw a NumberFormatException.
+<!--
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.hello}<#{pageSession.psFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+-->
+
+"<br /><span class="false">Test62:</span> if (\#{requestScope.hello}=\#{pageSession.psFalse}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.hello}=#{pageSession.psFalse}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test63:</span> if (\#{requestScope.hello}=\#{pageSession.hello}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{requestScope.hello}=#{pageSession.hello}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="false">Test64:</span> if (\#{null}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (#{null}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><span class="true">Test65:</span> if (!\#{null}):
+<staticText value="<span class='#{foo}'>#{foo}</span>">
+    <!beforeEncode
+	setAttribute(key="foo" value="false");
+	if (!#{null}) {
+	    setAttribute(key="foo" value="true");
+	}
+    />
+</staticText>
+
+"<br /><br /><b>For the remaining tests, no test result means <span class="false">false</span></b>
+
+"<br /><span class="false">Test66:</span> &lt;!if \#{emptyString}&gt;:
+<!if #{emptyString}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test67:</span> &lt;!if !\#{emptyString}&gt;:
+<!if !#{emptyString}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test68:</span> &lt;!if \#{helloString}&gt;:
+<!if #{helloString}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test69:</span> &lt;!if !\#{helloString}&gt;:
+<!if !#{helloString}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test70:</span> &lt;!if !\#{null}&gt;:
+<!if !#{null}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test71:</span> &lt;!if \#{null}&gt;:
+<!if #{null}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test72:</span> &lt;!if \#{pageSession.psELTrue}&gt;:
+<!if #{pageSession.psELTrue}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test73:</span> &lt;!if !\#{pageSession.psELTrue}&gt;:
+<!if !#{pageSession.psELTrue}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test74:</span> &lt;!if \#{pageSession.psELFalse}&gt;:
+<!if #{pageSession.psELFalse}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test75:</span> &lt;!if !\#{pageSession.psELFalse}&gt;:
+<!if !#{pageSession.psELFalse}>
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test76:</span> &lt;if condition="\#{pageSession.psELTrue}"&gt;:
+<if condition="#{pageSession.psELTrue}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test77:</span> &lt;if condition="!\#{pageSession.psELTrue}"&gt;:
+<if condition="!#{pageSession.psELTrue}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test78:</span> &lt;if condition="\#{pageSession.psELFalse}"&gt;:
+<if condition="#{pageSession.psELFalse}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test79:</span> &lt;if condition="!\#{pageSession.psELFalse}"&gt;:
+<if condition="!#{pageSession.psELFalse}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><br /><b>The following tests are not valid b/c quotes (")'s are not supported by the &lt;!if&gt; component.  The results are shown anyway, however.</b>
+
+"<br /><span class="true">Test80:</span> &lt;!if "\#{pageSession.psELTrue}"&gt;:
+<!if "#{pageSession.psELTrue}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="false">Test81:</span> &lt;!if "!\#{pageSession.psELTrue}"&gt;:
+"Current impl throws an exception b/c after ! operator is excuted values are left on the stack.
+<!--
+<!if "!#{pageSession.psELTrue}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+-->
+
+"<br /><span class="false">Test82:</span> &lt;!if "\#{pageSession.psELFalse}"&gt;:
+<!if "#{pageSession.psELFalse}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+
+"<br /><span class="true">Test83:</span> &lt;!if "!\#{pageSession.psELFalse}"&gt;:
+"Current impl throws an exception b/c after ! operator is excuted values are left on the stack.
+<!--
+<!if "!#{pageSession.psELFalse}">
+    <staticText value="<span class='true'>true</span>" />
+</if>
+-->
+
+<f:verbatim>
+    </body>
+</html>
+</f:verbatim>

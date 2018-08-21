@@ -1,0 +1,137 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.field_title}">                
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form">                                                              
+    
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+      
+      <!-- Breadcrumbs -->   
+      <sun:breadcrumbs id="breadcrumbs">
+	<sun:hyperlink id="indexLink"
+	    text="#{msgs.index_title}"
+	    toolTip="#{msgs.index_title}"
+	    actionExpression="$methodExpression{#{TextInputBean.showExampleIndex}}" 
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="exampleLink" text="#{msgs.field_title}"/>
+      </sun:breadcrumbs>
+      
+      <!-- Content Page Title -->
+      <sun:title id="title" title="#{msgs.field_title}" /> 
+
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+<f:verbatim>
+	  <br />
+	  <table border="0">                
+	    <tr>
+	      <td valign="top">              
+</f:verbatim>
+		<sun:label id="textFieldLabel" 
+		    for="textField"
+		    style="padding-right:10px;"
+		    text="#{msgs.field_textFieldLabel}" />                      
+<f:verbatim>
+	      </td>
+	      <td>         
+</f:verbatim>
+		<!-- Text Field --> 
+		<sun:textField id="textField"                    
+		    text="#{TextInputBean.textFieldValue}"                      
+		    disabled="#{TextInputBean.textFieldDisabled}"                    
+		    toolTip="#{msgs.field_textFieldTitle}" />                                     
+<f:verbatim>
+	      </td>
+	    </tr>
+	    <tr><td colspan="3"> &nbsp; </td></tr>
+	    <tr>
+	      <td valign="top">                  
+</f:verbatim>
+		<sun:label id="passwordLabel"
+		    for="password"
+		    style="padding-right:10px;"
+		    text="#{msgs.field_passwordLabel}" />                     
+<f:verbatim>
+	      </td>
+	      <td>                  
+</f:verbatim>
+		<!-- Password Field -->              
+		<sun:passwordField id="password"                                       
+		    password="#{TextInputBean.passwordValue}" 
+		    disabled="#{TextInputBean.passwordDisabled}"                    
+		    toolTip="#{msgs.field_passwordTitle}" />                
+<f:verbatim>
+	      </td>
+	    </tr>
+	    <tr><td colspan="3"> &nbsp; </td></tr>
+	    <tr>
+	      <td valign="top">                                    
+</f:verbatim>
+		<sun:label id="textAreaLabel"
+		    for="textArea" 
+		    text="#{msgs.field_textAreaLabel}" />                      
+"	      </td><td>                  
+		<!-- TextArea Field -->              
+		<sun:textArea id="textArea"                      
+		    text="#{TextInputBean.textAreaValue}"
+		    rows="$int{4}"
+		    columns="$int{20}"
+		    disabled="#{TextInputBean.textAreaDisabled}"                     
+		    toolTip="#{msgs.field_textAreaTitle}" />
+<f:verbatim>
+	      </td>
+	    </tr>
+	    <tr><td colspan="3"> &nbsp; </td></tr>
+	  </table>        
+</f:verbatim>
+	  
+	  <sun:panelGroup id="pageActionsGroup" block="#{true}" style="padding:25px 0px 0px 0px;">
+	  
+	    <!-- Submit Button -->            
+	    <sun:button id="submitButton"                       
+		text="#{msgs.field_submitButton}"                     
+		actionExpression="$methodExpression{showTextInputResults}" />                            
+		
+	    <!-- Preset Button -->
+	    <sun:button id="presetButton"              
+		immediate="#{true}"
+		text="#{msgs.field_presetFieldsButton}"
+		actionListenerExpression="$methodExpression{#{TextInputBean.presetFields}, true}"/> 
+	  
+	    <!-- Test Case Menu -->                     
+	    <sun:dropDown id="testCaseMenu"  
+		immediate="#{true}"
+		submitForm="#{true}"
+		forgetValue="#{true}"
+		toolTip="#{msgs.field_dropDownToolTip}"
+		items="#{TextInputBean.testCaseOptions}"
+		actionListenerExpression="$methodExpression{#{TextInputBean.processMenuSelection}, true}" />             
+	  </sun:panelGroup>     
+	</sun:markup>            
+		
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

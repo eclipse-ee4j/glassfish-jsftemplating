@@ -1,0 +1,74 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.field_resultsPageTitle}">                        
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head> 
+  <sun:body id="body">
+    <sun:form id="form">                             
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />
+      
+      <!-- Breadcrumbs -->   
+      <sun:breadcrumbs id="breadcrumbs">
+	<sun:hyperlink id="indexPageLink" 
+	    text="#{msgs.index_title}"
+	    toolTip="#{msgs.index_title}"
+	    actionExpression="$methodExpression{#{TextInputBean.showExampleIndex}}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="examplePageLink"
+	    text="#{msgs.field_title}"
+	    toolTip="#{msgs.field_title}"
+	    actionExpression="$methodExpression{showTextInput}"
+	    onMouseOver="javascript:window.status='#{msgs.field_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	<sun:hyperlink id="resultsPageLink" text="#{msgs.field_resultsPageTitle}"/>
+      </sun:breadcrumbs>
+      
+      <!-- Content Page Title -->
+      <sun:title id="title"              
+	  title="#{msgs.field_resultsPageTitle}"
+	  helpText="#{msgs.field_resultsPageHelpText}" >
+
+	<!-- Back Button -->
+	<!facet "pageButtonsTop">                
+	  <sun:button id="backButton"
+	      text="#{msgs.field_backButton}"   
+	      immediate="#{true}"
+	      actionExpression="$methodExpression{showTextInput}" />               
+	</facet>            
+      </sun:title> 
+		
+      <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+"	  <br />              
+	  <sun:staticText id="textFieldState" text="#{TextInputBean.textFieldResult}" />             
+"	  <br />                                      
+	  <sun:staticText id="passwordState" text="#{TextInputBean.passwordResult}" />                                           
+"	  <br />                           
+	  <sun:staticText id="textAreaState" text="#{TextInputBean.textAreaResult}" />                        
+      </sun:markup>
+	      
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

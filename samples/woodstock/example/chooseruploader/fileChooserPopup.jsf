@@ -1,0 +1,59 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+    <sun:html>
+	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<sun:head id="filePopupHead" title="#{msgs.fileChooserPopup_title}">
+	</sun:head>
+	<sun:body>
+	    <sun:form id="fileFormPopup">
+
+	       <!-- Masthead -->
+	       <sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+		 productImageDescription="#{msgs.mastheadAltText}" 
+		 userInfo="test_user"
+		 serverInfo="test_server" secondary="#{true}"/>     
+	       
+"	       <br />
+	       <!-- Alert for validator exception. -->
+	       <sun:alert id="popupFileChooserAlert" rendered="#{ChooserUploaderBean.errorsOnPage}" type="error" 
+			       summary="#{ChooserUploaderBean.summaryMsg}">                              
+		     <sun:message for="fileChooser" showDetail="#{true}"/>
+	       </sun:alert>
+	     
+	       <!-- Page Title -->
+	       <sun:title id="filePopupContent" title="#{msgs.fileChooserPopup_title}">                       
+		 <sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">                         
+					  
+		 <!-- File Chooser -->
+		 <f:verbatim><![CDATA[<table><tr><td>]]></f:verbatim>
+		   <sun:fileChooser id="fileChooser"
+				lookin="#{ChooserUploaderBean.fileChooserLookin}"
+				selected="#{ChooserUploaderBean.selected}"
+			       sortField="size" descending="#{true}" 
+				multiple="#{true}"  folderChooser="#{false}"/>
+		 <f:verbatim><![CDATA[</td></tr>]]></f:verbatim>
+					 
+		 <!--  Close button -->
+		 <f:verbatim><![CDATA[<tr><td>]]></f:verbatim>
+			<sun:button id="close"
+			     text="#{msgs.fileChooserPopup_closeButtonCaption}" 
+			     toolTip="#{msgs.fileChooserPopup_closeButtonTooltip}"
+			     onClick="window.close();"/>
+		 <f:verbatim><![CDATA[</td></tr></table>]]></f:verbatim>
+		 </sun:markup>
+	      </sun:title>
+	    </sun:form>
+	</sun:body> 
+    </sun:html>  
+</sun:page>

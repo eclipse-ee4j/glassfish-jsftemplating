@@ -1,0 +1,95 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+  <sun:html>
+    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <sun:head title="#{msgs.table_filterTitle}">
+      <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />        
+      <sun:script url="js/filter.js"/>
+    </sun:head>
+    <sun:body>
+      <sun:form id="form1">
+
+	<!-- Masthead -->
+	<sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+	  productImageDescription="#{msgs.mastheadAltText}" 
+	  userInfo="test_user"
+	  serverInfo="test_server" />     
+		       
+	<!-- Bread Crumb Component -->
+	<sun:breadcrumbs id="breadcrumbs">
+	  <sun:hyperlink actionExpression="$methodExpression{#{TableBean.showExampleIndex}}" text="#{msgs.exampleTitle}"
+	    onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink actionExpression="$methodExpression{#{TableBean.showTableIndex}}" text="#{msgs.table_title}"
+	    onMouseOver="javascript:window.status='#{msgs.table_breadcrumbMouseOver}'; return true;"
+	    onMouseOut="javascript: window.status=''; return true" />
+	  <sun:hyperlink text="#{msgs.table_filterTitle}"/>
+	</sun:breadcrumbs>
+
+	<sun:title title="#{msgs.table_filterTitle}"/>
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">
+
+	  <!-- Messages -->
+	  <sun:messageGroup showSummary="#{true}" showDetail="#{true}"/>
+"	  <br/>
+
+	  <!-- Filter -->
+	  <sun:table id="table1"
+	    filterPanelFocusId="form1:table1:filterPanel:customFilter_field"
+	    filterText="#{TableBean.groupA.filter.filterText}"
+	    paginateButton="#{true}"
+	    paginationControls="#{true}"
+	    title="#{msgs.table_filterTitle}">
+	    <sun:tableRowGroup id="rowGroup1"
+	      binding="#{TableBean.groupA.tableRowGroup}"
+	      rows="$int{5}"
+	      sourceData="#{TableBean.groupA.names}"
+	      sourceVar="name">
+	      <sun:tableColumn id="col1"
+		alignKey="last" headerText="#{msgs.table_LastName}" rowHeader="#{true}">
+		<sun:staticText text="#{name.value.last}"/>
+	      </sun:tableColumn>
+	      <sun:tableColumn id="col2" alignKey="first" headerText="#{msgs.table_FirstName}">
+		<sun:staticText text="#{name.value.first}"/>
+	      </sun:tableColumn>
+	    </sun:tableRowGroup>
+
+	    <!-- Filter -->
+	    <!facet "filter">
+	      <sun:dropDown submitForm="#{true}" id="filter"
+	actionExpression="$methodExpression{#{TableBean.groupA.filter.applyBasicFilter}}" 
+		items="#{TableBean.groupA.filter.filterOptions}"
+		onChange="if (filterMenuChanged() == false) return false"
+		selected="#{TableBean.groupA.filter.basicFilter}"/>
+	    </facet>
+
+	    <!-- Filter Panel -->
+	    <!facet "filterPanel">
+	      <sun:panelGroup id="filterPanel">
+#include "table/filterPanel.jsf"
+	      </sun:panelGroup>
+	    </facet>
+	  </sun:table>
+
+"	  <br/><br/>
+	  <sun:staticText text="#{msgs.table_filterConcepts1}"/>
+
+"	  <br/><br/>
+	  <sun:staticText text="#{msgs.table_filterConcepts2}"/>
+
+	</sun:markup>
+      </sun:form>
+    </sun:body>
+  </sun:html>
+</sun:page>

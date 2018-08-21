@@ -1,0 +1,104 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page >
+    <sun:html>
+	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<sun:head id="fileChooserHead" title="#{msgs.fileChooser_title}">
+	  <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+	  <f:verbatim>
+	    <script type="text/javascript">
+		// This function is used to display a javascript alert 
+		// window when the Selected Files field is empty.
+		function checkSelectedFile(msg) {
+		    var selectedFile = document.getElementById("fileForm:chooserContentPage:fileChooser:fileChooser_selectedField").value;
+		    if (selectedFile.length == 0) {
+			alert(msg);                                
+			return false;
+		    }
+		    return true;
+		}
+	    </script>
+	  </f:verbatim>
+	</sun:head>
+	<sun:body>
+	    <sun:form id="fileForm">
+
+	       <!-- Masthead -->
+	       <sun:masthead id="Masthead" productImageURL="/images/example_primary_masthead.png"
+		 productImageDescription="#{msgs.mastheadAltText}" 
+		 userInfo="test_user"
+		 serverInfo="test_server" />     
+	       
+		<!-- Bread Crumb Component -->
+		<sun:breadcrumbs id="breadcrumbs">
+		    <sun:hyperlink id="exampleIndex"
+				  text="#{msgs.index_title}"
+				  toolTip="#{msgs.index_title}"
+				  actionExpression="$methodExpression{#{FileChooserBean.showExampleIndex}}" 
+				  onMouseOver="javascript:window.status='#{msgs.index_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true" />
+		    <sun:hyperlink id="chooserIndex" actionExpression="$methodExpression{#{FileChooserBean.showUploaderIndex}}" text="#{msgs.chooserUploader_title}"
+				  onMouseOver="javascript:window.status='#{msgs.chooserUploader_breadcrumbMouseOver}'; return true;"
+				  onMouseOut="javascript: window.status=''; return true" 
+				  toolTip="#{msgs.chooserUploader_title}" />                             
+		    <sun:hyperlink id="fileChooserIndex" text="#{msgs.fileChooser_title}"/>
+		</sun:breadcrumbs>
+	       
+"		<br />
+		<!-- Alert for validator exception. -->
+		<sun:alert id="fileChooserAlert" rendered="#{FileChooserBean.errorsOnPage}" type="error" 
+				summary="#{FileChooserBean.summaryMsg}">
+		    <sun:message for="fileChooser" showDetail="#{true}"/>                                                   
+		</sun:alert>
+		
+	       <!-- Page Title -->
+	       <sun:title id="chooserContentPage" title="#{msgs.fileChooser_title}">                                                                    
+		<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}"> 
+		    
+		<!-- File Chooser -->
+"		<table><tr><td>
+		<sun:fileChooser id="fileChooser"
+				      lookin="#{FileChooserBean.lookin}"
+				      selected="#{FileChooserBean.selected}"
+				      sortField="size" descending="#{true}" 
+				      multiple="#{true}"  folderChooser="#{false}"/>                                                   
+"		</td></tr>
+					  
+		<!--  Select File(s) Path  -->
+"		<tr><td>&nbsp;&nbsp;
+		    <sun:label id="file_label" text="#{msgs.fileChooser_chooseFileText}">
+			<sun:staticText
+				id="chosenFile"
+				text="#{FileChooserBean.fileName}" />
+			</sun:label>
+"		</td></tr>
+					   
+		<!-- Choose File Button -->
+"	    <tr><td>
+		     <sun:button id="file_button"
+			      primary="#{true}" 
+			      text="#{msgs.fileChooser_chooseButtonCaption}"
+			      toolTip="#{msgs.fileChooser_chooseButtonCaptionTooltip}"
+			      onClick="javascript: checkSelectedFile('#{msgs.fileChooser_emptyFieldAlert}');"/>
+"		</td></tr></table>
+		</sun:markup>
+	    </sun:title>
+<f:verbatim>
+	    <script>
+	       document.getElementById("fileForm:chooserContentPage:fileChooser").setChooseButton("fileForm:chooserContentPage:file_button");
+	    </script>
+</f:verbatim>
+	    </sun:form>
+	</sun:body> 
+    </sun:html>  
+</sun:page>

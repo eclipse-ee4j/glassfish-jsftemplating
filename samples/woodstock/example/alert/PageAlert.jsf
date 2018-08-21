@@ -1,0 +1,63 @@
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+<sun:page>
+<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<sun:html id="html">  
+  <sun:head id="head" title="#{msgs.alert_fullpageTitle}" >
+    <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
+  </sun:head>
+  <sun:body id="body">
+    <sun:form id="form">                             
+	
+      <!-- Masthead -->
+      <sun:masthead id="masthead"
+	 productImageURL="/images/example_primary_masthead.png"
+	 productImageHeight="$int{40}"
+	 productImageWidth="$int{188}"
+	 userInfo="test_user" 
+	 serverInfo="test_server"
+	 productImageDescription="#{msgs.mastheadAltText}" />           
+      
+      <!-- Content Page Title -->
+      <sun:title id="ContentPageTitle" >                                                                                                                      
+	<sun:markup tag="div" styleClass="#{themeStyles.CONTENT_MARGIN}">                
+	  
+	  <!-- Page Alert -->
+	  <sun:pageAlert id="pageAlert" 
+	      title="#{PageAlertBean.alertTitle}"
+	      detail="#{PageAlertBean.alertDetail}"
+	      type="#{PageAlertBean.alertType}"
+	      escape="#{false}">                  
+	    <!facet "pageAlertButtons">
+	      <sun:panelGroup id="pageButtonsGroupBottom"> 
+		<sun:button id="tryAgainButton" 
+		    immediate="#{true}"
+		    text="#{msgs.alert_tryAgain}"
+		    primary="#{true}"
+		    toolTip="#{msgs.alert_tryAgainToolTip}" 
+		    actionExpression="$methodExpression{#{PageAlertBean.showPageAlertExample}}" />                        
+		<sun:button id="backButton"
+		    immediate="#{true}"
+		    text="#{msgs.alert_backToExample}"
+		    toolTip="#{msgs.alert_backToExampleToolTip}"
+		    actionExpression="$methodExpression{#{PageAlertBean.showExampleIndex}}" />                       
+	      </sun:panelGroup> 
+	    </facet> 
+	  </sun:pageAlert>
+	  
+	</sun:markup>          
+      </sun:title>           
+    </sun:form>
+  </sun:body>
+</sun:html>  
+</sun:page>

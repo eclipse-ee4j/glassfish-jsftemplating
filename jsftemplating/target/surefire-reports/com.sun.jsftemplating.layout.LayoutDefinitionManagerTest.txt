@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: com.sun.jsftemplating.layout.LayoutDefinitionManagerTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 16.108 sec <<< FAILURE! - in com.sun.jsftemplating.layout.LayoutDefinitionManagerTest
+testReadGlobalComponentTypes(com.sun.jsftemplating.layout.LayoutDefinitionManagerTest)  Time elapsed: 16.045 sec  <<< FAILURE!
+java.lang.AssertionError: java.net.NoRouteToHostException: No route to host
+	at org.junit.Assert.fail(Assert.java:88)
+	at com.sun.jsftemplating.layout.LayoutDefinitionManagerTest.testReadGlobalComponentTypes(LayoutDefinitionManagerTest.java:49)
+

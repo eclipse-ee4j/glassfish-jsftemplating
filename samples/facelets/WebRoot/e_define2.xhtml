@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+<!--
+
+    Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v. 1.0, which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+        <ui:composition template="e_define2b.xhtml">
+            <ui:define name="foo3">
+                foo3: defined in e_define2.xhtml
+            </ui:define>
+            <ui:define name="foo2">
+	            <ui:insert name="foo3">
+	                no foo3 defined
+	            </ui:insert>
+            </ui:define>
+
+
+        </ui:composition>
+    </body>
+</html>
