@@ -78,7 +78,7 @@ System.out.println("Faclets performance " + fileName + " (" + iterations + "), l
 
     @Test
     public void testSpeed() {
-	timeTest("./speed-s.xhtml", 500);
+	timeTest("./speed-s.xhtml", 1);
 //	timeTest(new URL("file:"),".speed-m.xhtml", 500);
 //	timeTest(new URL("file:"),".speed-l.xhtml", 500);
 //	timeTest(new URL("file:"),".speed-xl.xhtml", 500);
