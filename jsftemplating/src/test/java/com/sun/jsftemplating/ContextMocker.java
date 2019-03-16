@@ -49,7 +49,6 @@ public class ContextMocker extends FacesContext {
 
   static ContextMocker _ctx = new ContextMocker();
   public static void init(){
-      System.out.println("ContextMocker.init");
     setCurrentInstance(_ctx);
   }
 
