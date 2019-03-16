@@ -844,6 +844,9 @@ public abstract class LayoutDefinitionManager {
 
 	// Store the results in application scope...
 	FacesContext ctx = FacesContext.getCurrentInstance();
+        if(ctx == null){
+            System.out.println("#### FacesContext is null!");
+        }
 	ctx.getExternalContext().getApplicationMap().put(HD_MAP, handlers);
 
 	// return the complete Map

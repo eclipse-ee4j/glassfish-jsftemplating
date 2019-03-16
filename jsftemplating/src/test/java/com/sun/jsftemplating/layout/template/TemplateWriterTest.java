@@ -16,10 +16,12 @@
 
 package com.sun.jsftemplating.layout.template;
 
+import com.sun.jsftemplating.ContextMocker;
 import com.sun.jsftemplating.layout.descriptors.LayoutDefinition;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,7 +32,12 @@ public class TemplateWriterTest {
      *	<p> </p>
      */
   private final ClassLoader cl = TemplateWriterTest.class.getClassLoader();
-  
+
+  @Before
+  public void init(){
+    ContextMocker.init();
+  }
+
     @Test
     public void testWrite1() {
 	try {
