@@ -1,0 +1,54 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM('H H * * *')
+    }
+    tools {
+        jdk 'oracle-jdk8-latest'
+        maven 'apache-maven-latest'
+    }
+    environment {
+        MVN = 'mvn -B -q -Dmaven.test.failure.ignore=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+        REPO='git@github.com:eclipse-ee4j/glassfish-jsftemplating.git'
+        SECRET_FILE_ID='f674f09b-d14f-4bb0-8a50-5ccadad63f6b'
+        SECURITY_FILE_ID='20f53510-8847-4bb4-a158-16e5a301d8a7'
+        CONFIG_FILE_ID='53b417e5-6ee8-4435-84ca-144d92b837e8'
+        CREDENTIALS_ID='ce0848cb-a7c1-4259-8f02-ded5f8143fdc'
+        BUILD_BRANCH='master'
+    }
+    stages {
+        stage('Fetch from git') {
+            steps {
+                git(branch: BUILD_BRANCH, credentialsId: CREDENTIALS_ID, url: REPO)
+            }
+        }
+        stage('Nightly Build') {
+            steps {
+                withCredentials([file(credentialsId: SECRET_FILE_ID, variable: 'KEYRING')]) {
+                    configFileProvider([configFile(fileId: SECURITY_FILE_ID, targetLocation: '/home/jenkins/.m2/')]) {
+
+                        //# Workaround: GPG initialization
+                        sh("gpg --batch --import ${KEYRING}")
+                        sh '''
+                        for fpr in $(gpg --list-keys --with-colons  | awk -F: '/fpr:/ {print $10}' | sort -u);
+                        do
+                            echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key $fpr trust;
+                        done
+                       '''
+                        configFileProvider([configFile(fileId: CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_XML')]) {
+                            sh "$MVN -s $MAVEN_SETTINGS_XML clean install"
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts allowEmptyArchive: true, artifacts: '**/target/**.jar', fingerprint: true, onlyIfSuccessful: true
+                    junit allowEmptyResults: true, testResults:'**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+    }
+}
