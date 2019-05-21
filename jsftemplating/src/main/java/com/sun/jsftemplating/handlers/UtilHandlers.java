@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019 Payara Services Ltd.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -303,6 +304,9 @@ public class UtilHandlers {
 	)
     public static void mapPut(HandlerContext context) {
 	Map map = (Map) context.getInputValue("map");
+        if (map == null) {
+            throw new HandlerException(context.getHandler().getInputValue("map") + " resolved to null");
+        }
 	Object key = context.getInputValue("key");
 	Object value = context.getInputValue("value");
 	map.put(key, value);
