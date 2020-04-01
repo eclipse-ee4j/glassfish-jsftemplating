@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Distribution License v. 1.0, which is available at
@@ -18,13 +18,13 @@ package com.sun.webui.jsf.example.label;
 
 import java.io.Serializable;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.validator.ValidatorException;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.ActionEvent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.validator.ValidatorException;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.application.FacesMessage.Severity;
+import jakarta.faces.event.ValueChangeEvent;
+import jakarta.faces.event.ActionEvent;
         
 import com.sun.webui.jsf.model.Option;
 import com.sun.webui.jsf.component.Checkbox;

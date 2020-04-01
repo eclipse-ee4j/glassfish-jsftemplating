@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Distribution License v. 1.0, which is available at
@@ -15,12 +15,12 @@ import java.io.Serializable;
 import com.sun.webui.jsf.component.DropDown;
 import com.sun.webui.jsf.component.TextField;
 import com.sun.webui.jsf.model.Option;
-import javax.faces.component.UIComponent;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.event.ActionEvent;
+import jakarta.faces.event.AbortProcessingException;
+import jakarta.faces.component.UIViewRoot;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.application.FacesMessage;
 
 import com.sun.webui.jsf.example.common.MessageUtil;
 

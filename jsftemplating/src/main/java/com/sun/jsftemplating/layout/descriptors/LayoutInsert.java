@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -24,8 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 
 /**
@@ -71,7 +71,7 @@ public class LayoutInsert extends LayoutElementBase {
      *	    not supplied, or not found.  If this is encountered outside the
      *	    context of a composition, it will render its body content also.</p>
      *
-     * @see LayoutElementBase#encodeThis(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
+     * @see LayoutElementBase#encodeThis(jakarta.faces.context.FacesContext, jakarta.faces.component.UIComponent)
      */
     @Override
     protected boolean encodeThis(FacesContext context, UIComponent component) throws IOException {

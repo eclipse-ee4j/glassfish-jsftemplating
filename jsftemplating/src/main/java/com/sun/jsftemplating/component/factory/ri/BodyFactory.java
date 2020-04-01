@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2009, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -16,8 +16,8 @@
 
 package com.sun.jsftemplating.component.factory.ri;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
@@ -64,10 +64,10 @@ public class BodyFactory extends ComponentFactoryBase {
      *	    <code>faces-config.xml</code> file mapping to the UIComponent class
      *	    to use for this <code>UIComponent</code>.</p>
      */
-    public static final String COMPONENT_TYPE	= "javax.faces.Output";
+    public static final String COMPONENT_TYPE	= "jakarta.faces.Output";
 
     /**
      *	<p> The default RendererType to set on the newly created component.</p>
      */
-    public static final String RENDERER_TYPE	= "javax.faces.Body";
+    public static final String RENDERER_TYPE	= "jakarta.faces.Body";
 }

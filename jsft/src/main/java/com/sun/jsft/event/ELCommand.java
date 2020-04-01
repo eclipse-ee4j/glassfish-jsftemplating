@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
  * Portions Copyright (c) 2011 Ken Paulsen
  *
  * This program and the accompanying materials are made available under the
@@ -20,11 +20,11 @@ package com.sun.jsft.event;
 import com.sun.jsft.util.Util;
 
 import java.util.List;
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
+import jakarta.el.ELContext;
+import jakarta.el.ExpressionFactory;
+import jakarta.el.ValueExpression;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AbortProcessingException;
 
 
 /**

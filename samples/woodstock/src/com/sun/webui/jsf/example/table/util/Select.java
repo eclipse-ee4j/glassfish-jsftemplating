@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Distribution License v. 1.0, which is available at
@@ -17,8 +17,8 @@ import com.sun.data.provider.RowKey;
 import com.sun.data.provider.TableDataProvider;
 import com.sun.webui.jsf.event.TableSelectPhaseListener;
 
-import javax.faces.context.FacesContext;
-import javax.el.ValueExpression;
+import jakarta.faces.context.FacesContext;
+import jakarta.el.ValueExpression;
 
 // This class provides functionality for select tables.
 //

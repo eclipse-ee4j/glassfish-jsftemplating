@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2008, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -20,10 +20,10 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIViewRoot;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ValueChangeEvent;
 
 import com.sun.jsftemplating.layout.LayoutDefinitionException;
 import com.sun.jsftemplating.layout.LayoutDefinitionManager;
@@ -44,7 +44,7 @@ import com.sun.jsftemplating.util.LogUtil;
  *
  *  @author Ken Paulsen	(ken.paulsen@sun.com)
  */
-public class ValueChangeListener implements javax.faces.event.ValueChangeListener, Serializable {
+public class ValueChangeListener implements jakarta.faces.event.ValueChangeListener, Serializable {
 
     /**
      *	<p> Constructor.  It is not recommended this constructor be used,

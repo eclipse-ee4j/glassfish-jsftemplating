@@ -40,18 +40,18 @@
 		    <tr><th>value for "<code>type</code>" tag attribute</th>
 			<th>Type of event sent to listener method</th></tr>
 		    <tr><td>preRenderComponent</td>
-			<td>javax.faces.event.PreRenderComponentEvent</td></tr>
+			<td>jakarta.faces.event.PreRenderComponentEvent</td></tr>
 		    <tr><td>postAddToView</td>
-			<td>javax.faces.event.PostAddToViewEvent</td></tr>
+			<td>jakarta.faces.event.PostAddToViewEvent</td></tr>
 		    <tr><td>preValidate</td>
-			<td>javax.faces.event.PreValidateEvent</td></tr>
+			<td>jakarta.faces.event.PreValidateEvent</td></tr>
 		    <tr><td>postValidate</td>
-			<td>javax.faces.event.PostValidateEvent</td></tr>
+			<td>jakarta.faces.event.PostValidateEvent</td></tr>
 		</table>
 
 		<p> In addition to these values, the fully qualified class
 		    name of any java class that extends
-		    <code>javax.faces.event.ComponentSystemEvent</code> may be
+		    <code>jakarta.faces.event.ComponentSystemEvent</code> may be
 		    used as the value of the "type" attribute.</p>
 
 		<p> The listener that is registered will dipatch to the

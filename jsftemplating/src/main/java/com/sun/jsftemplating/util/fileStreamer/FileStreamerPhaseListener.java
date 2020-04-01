@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -26,15 +26,15 @@ import java.io.IOException;
 import java.util.BitSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.FacesException;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.faces.FacesException;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.ResponseWriter;
+import jakarta.faces.event.PhaseEvent;
+import jakarta.faces.event.PhaseId;
+import jakarta.faces.event.PhaseListener;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *  <p>	<code>FileStreamerPhaseListener</code> provides a
@@ -195,7 +195,7 @@ public class FileStreamerPhaseListener implements PhaseListener {
 
     /**
      * <p>Returns the URL pattern of the
-     * {@link javax.faces.webapp.FacesServlet} that
+     * {@link jakarta.faces.webapp.FacesServlet} that
      * is executing the current request.  If there are multiple
      * URL patterns, the value returned by
      * <code>HttpServletRequest.getServletPath()</code> and
@@ -203,11 +203,11 @@ public class FileStreamerPhaseListener implements PhaseListener {
      * used to determine which mapping to return.</p>
      * If no mapping can be determined, it most likely means
      * that this particular request wasn't dispatched through
-     * the {@link javax.faces.webapp.FacesServlet}.
+     * the {@link jakarta.faces.webapp.FacesServlet}.
      *
      * @param context the {@link FacesContext} of the current request
      *
-     * @return the URL pattern of the {@link javax.faces.webapp.FacesServlet}
+     * @return the URL pattern of the {@link jakarta.faces.webapp.FacesServlet}
      *         or <code>null</code> if no mapping can be determined
      *
      * @throws NullPointerException if <code>context</code> is null
@@ -228,8 +228,8 @@ public class FileStreamerPhaseListener implements PhaseListener {
             String servletPath = null;
             String pathInfo = null;
 
-            // first check for javax.servlet.forward.servlet_path
-            // and javax.servlet.forward.path_info for non-null
+            // first check for jakarta.servlet.forward.servlet_path
+            // and jakarta.servlet.forward.path_info for non-null
             // values.  if either is non-null, use this
             // information to generate determine the mapping.
 
@@ -256,7 +256,7 @@ public class FileStreamerPhaseListener implements PhaseListener {
     }
 
     /**
-     * <p>Return the appropriate {@link javax.faces.webapp.FacesServlet} mapping
+     * <p>Return the appropriate {@link jakarta.faces.webapp.FacesServlet} mapping
      * based on the servlet path of the current request.</p>
      *
      * @param servletPath the servlet path of the request
