@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Distribution License v. 1.0, which is available at
@@ -12,8 +12,8 @@ package com.sun.webui.jsf.example.index;
 
 import com.sun.jsftemplating.util.FileUtil;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.component.UIComponent;
 
 import com.sun.webui.jsf.example.common.MessageUtil;
 import com.sun.webui.jsf.example.index.JavaHtmlConverter;
@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Serializable;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * Backing bean for the show code page.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -172,5 +172,5 @@ public class ClasspathEntityResolver implements EntityResolver2 {
     public static final String	LOGGER_NAME	= "javax.enterpise.system.tools.admin.guiframework";
 
     private static final Class [] STRING_ARG = new Class[] {String.class};
-    private static final Class FACES_CONTEXT = Util.noExceptionLoadClass("javax.faces.context.FacesContext");
+    private static final Class FACES_CONTEXT = Util.noExceptionLoadClass("jakarta.faces.context.FacesContext");
 }

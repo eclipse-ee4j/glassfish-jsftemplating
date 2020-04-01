@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
  * Portions Copyright (c) 2011 Ken Paulsen
  *
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.faces.event.AbortProcessingException;
+import jakarta.faces.event.AbortProcessingException;
 
 
 /**

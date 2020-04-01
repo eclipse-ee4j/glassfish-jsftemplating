@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Distribution License v. 1.0, which is available at
@@ -26,7 +26,7 @@ import com.sun.webui.jsf.component.TableRowGroup;
  * layout. The resulting table will use methods already defined in TableBean.
  *
  * Note that we must implement java.io.Serializable or
- * javax.faces.component.StateHolder in case client-side
+ * jakarta.faces.component.StateHolder in case client-side
  * state saving is used, or if server-side state saving is
  * used with a distributed system.
  */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -31,21 +31,21 @@ import java.util.Stack;
 import java.util.Set;
 import java.util.HashSet;
 
-import javax.faces.FactoryFinder;
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
-import javax.faces.application.StateManager.SerializedView;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.faces.FactoryFinder;
+import jakarta.faces.application.StateManager;
+import jakarta.faces.application.ViewHandler;
+import jakarta.faces.application.StateManager.SerializedView;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIViewRoot;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.ResponseWriter;
+import jakarta.faces.render.RenderKit;
+import jakarta.faces.render.RenderKitFactory;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.sun.jsftemplating.el.PageSessionResolver;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
@@ -64,6 +64,8 @@ import com.sun.jsftemplating.util.UIComponentTypeConversion;
 import com.sun.jsftemplating.util.fileStreamer.Context;
 import com.sun.jsftemplating.util.fileStreamer.FacesStreamerContext;
 import com.sun.jsftemplating.util.fileStreamer.FileStreamer;
+import jakarta.faces.push.PushContext;
+import static java.util.Objects.requireNonNull;
 
 
 // FIXME: Things to consider:
@@ -824,6 +826,11 @@ public class LayoutViewHandler extends ViewHandler {
 	return _oldViewHandler.getResourceURL(context, path);
     }
 
+    @Override
+    public String getWebsocketURL(FacesContext context, String channel) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
     /**
      *	<p> Return a URL suitable for rendering (after optional encoding
      *	    performed by the <code>encodeActionURL()</code> method of
@@ -858,7 +865,7 @@ public class LayoutViewHandler extends ViewHandler {
      * and subsequent requests from the current client.</p>
      *
      * <p>The default return value is
-     * <code>javax.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.
+     * <code>jakarta.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.
      * </p>
      *
      * @param	context	<code>FacesContext</code> for the current request.

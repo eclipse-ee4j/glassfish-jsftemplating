@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
  * Portions Copyright (c) 2011 Ken Paulsen
  *
  * This program and the accompanying materials are made available under the
@@ -26,9 +26,9 @@ package com.sun.jsft.commands;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.faces.component.UIComponent;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ApplicationScoped;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.bean.ManagedBean;
+import jakarta.faces.bean.ApplicationScoped;
 
 
 /**
