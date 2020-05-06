@@ -32,7 +32,7 @@
     <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <description>JSFTemplating is to work with JavaServer Faces technology to make building pages and components easier. It is used to define the layout of an example component.</description>
+    <description>JSFTemplating is to work with Jakarta Faces technology to make building pages and components easier. It is used to define the layout of an example component.</description>
     <licenses>
         <license>
             <name>EPL 2.0</name>
