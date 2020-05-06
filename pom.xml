@@ -27,7 +27,7 @@
         <relativePath />
     </parent>
 
-    <groupId>com.sun.jsftemplating</groupId>
+    <groupId>org.glassfish.jsftemplating</groupId>
     <artifactId>jsftemplating-parent</artifactId>
     <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
