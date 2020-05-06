@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2014, 2018 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2014, 2020 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
     terms of the Eclipse Public License v. 2.0, which is available at
@@ -17,14 +17,64 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>com.sun.jsftemplating</groupId>
+        <groupId>org.glassfish.jsftemplating</groupId>
         <artifactId>jsftemplating-parent</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>jsftemplating</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.faces</groupId>
+            <artifactId>jakarta.faces-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.woodstock.dependlibs</groupId>
+            <artifactId>dataprovider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jsftemplating</groupId>
+            <artifactId>jsft</artifactId>
+            <version>${project.version}</version>
+            <!-- marking as optional because jsftemplating.jar repackages jsft.jar -->
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jsftemplating</groupId>
+            <artifactId>jsftemplating-dt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -39,10 +89,10 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                          <excludeTransitive>true</excludeTransitive>
-                          <includeArtifactIds>jsft</includeArtifactIds>
-                          <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                          <excludes>META-INF/MANIFEST.MF</excludes>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeArtifactIds>jsft</includeArtifactIds>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <excludes>META-INF/MANIFEST.MF</excludes>
                         </configuration>
                     </execution>
                 </executions>
@@ -70,54 +120,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>jakarta.faces</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>jakarta.faces</groupId>
-          <artifactId>jakarta.faces-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.el</groupId>
-            <artifactId>jakarta.el-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.woodstock.dependlibs</groupId>
-            <artifactId>dataprovider</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jsftemplating</groupId>
-            <artifactId>jsft</artifactId>
-            <version>${project.version}</version>
-            <!--
-                marking as optional 
-                because jsftemplating.jar repackages jsft.jar 
-            -->
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jsftemplating</groupId>
-            <artifactId>jsftemplating-dt</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 </project>
