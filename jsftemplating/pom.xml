@@ -109,10 +109,10 @@
                         </goals>
                         <configuration>
                             <instructions>
-                                <Bundle-Name>com.sun.jsftemplating</Bundle-Name>
+                                <Bundle-Name>org.glassfish.jsftemplating</Bundle-Name>
                                 <excludeDependencies>jakarta.faces</excludeDependencies>
-                                <Import-Package>com.sun.data.provider.*;resolution:=optional;password=GlassFish,!com.sun.jsftemplating.annotation.*,jakarta.servlet.*;version="[3.0,5)",*</Import-Package>
-                                <Export-Package>!com.sun.jsftemplating.annotation.*,!com.sun.data.*,com.sun.jsftemplating.*;version=${project.osgi.version}</Export-Package>
+                                <Import-Package>com.sun.data.provider.*;resolution:=optional;password=GlassFish,!org.glassfish.jsftemplating.annotation.*,jakarta.servlet.*;version="[3.0,5)",*</Import-Package>
+                                <Export-Package>!org.glassfish.jsftemplating.annotation.*,!com.sun.data.*,org.glassfish.jsftemplating.*;version=${project.osgi.version}</Export-Package>
                             </instructions>
                         </configuration>
                     </execution>

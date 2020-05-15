@@ -28,7 +28,7 @@
 
     <tag>
 	<tag-name>event</tag-name>
-	<handler-class>com.sun.jsft.facelets.EventHandler</handler-class>
+	<handler-class>org.glassfish.jsft.facelets.EventHandler</handler-class>
 	<attribute>
 	    <description><![CDATA[
 		<p> Name of the event for which to install a listener. The
@@ -68,7 +68,7 @@
     <tag>
 	<tag-name>deferredFragment</tag-name>
 	<component>
-	    <component-type>com.sun.jsft.component.fragment.DeferredFragment</component-type>
+	    <component-type>org.glassfish.jsft.component.fragment.DeferredFragment</component-type>
 	</component>
     </tag>
 

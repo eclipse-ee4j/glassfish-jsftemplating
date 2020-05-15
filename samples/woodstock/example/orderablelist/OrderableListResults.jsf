@@ -11,7 +11,7 @@
 -->
 
 <sun:page>
-<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+<f:loadBundle basename="org.glassfish.webui.jsf.example.resources.Resources" var="msgs" />
 <sun:html id="html">  
   <sun:head id="head" title="#{msgs.orderablelist_resultsTitle}" >
     <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />

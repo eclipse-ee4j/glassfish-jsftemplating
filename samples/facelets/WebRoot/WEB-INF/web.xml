@@ -22,7 +22,7 @@
         <param-value>.xhtml</param-value>
     </context-param>
     <context-param>
-        <param-name>com.sun.jsftemplating.DEBUG</param-name>
+        <param-name>org.glassfish.jsftemplating.DEBUG</param-name>
         <param-value>true</param-value>
     </context-param>
     <context-param>
@@ -34,7 +34,7 @@
     	<param-value>*.flt;*.xhtml</param-value>
     </context-param>
     <context-param>
-        <param-name>com.sun.jsftemplating.VIEW_MAPPINGS</param-name>
+        <param-name>org.glassfish.jsftemplating.VIEW_MAPPINGS</param-name>
         <param-value>*.jsf</param-value>
     </context-param>
 

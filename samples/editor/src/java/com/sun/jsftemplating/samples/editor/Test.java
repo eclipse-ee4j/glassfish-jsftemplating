@@ -8,13 +8,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-package com.sun.jsftemplating.samples.editor;
+package org.glassfish.jsftemplating.samples.editor;
 
 import java.util.*;
-import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
-import com.sun.jsftemplating.layout.descriptors.LayoutDefinition;
-import com.sun.jsftemplating.layout.descriptors.LayoutElement;
-import com.sun.jsftemplating.layout.LayoutDefinitionManager;
+import org.glassfish.jsftemplating.layout.descriptors.LayoutComponent;
+import org.glassfish.jsftemplating.layout.descriptors.LayoutDefinition;
+import org.glassfish.jsftemplating.layout.descriptors.LayoutElement;
+import org.glassfish.jsftemplating.layout.LayoutDefinitionManager;
 
 public class Test {
     

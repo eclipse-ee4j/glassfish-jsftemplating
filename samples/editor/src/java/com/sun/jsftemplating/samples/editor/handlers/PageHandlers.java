@@ -17,21 +17,21 @@
  * and open the template in the editor.
  */
 
-package com.sun.jsftemplating.samples.editor.handlers;
+package org.glassfish.jsftemplating.samples.editor.handlers;
 
-import com.sun.jsftemplating.annotation.Handler;
-import com.sun.jsftemplating.annotation.HandlerInput;
-import com.sun.jsftemplating.annotation.HandlerOutput;
-import com.sun.jsftemplating.layout.LayoutDefinitionException;
-import com.sun.jsftemplating.layout.LayoutDefinitionManager;
-import com.sun.jsftemplating.layout.descriptors.ComponentType;
-import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
-import com.sun.jsftemplating.layout.descriptors.LayoutDefinition;
-import com.sun.jsftemplating.layout.descriptors.LayoutElement;
-import com.sun.jsftemplating.layout.descriptors.handler.HandlerContext;
-import com.sun.jsftemplating.layout.template.TemplateWriter;
-import com.sun.jsftemplating.util.LayoutElementUtil;
-import com.sun.jsftemplating.util.FileUtil;
+import org.glassfish.jsftemplating.annotation.Handler;
+import org.glassfish.jsftemplating.annotation.HandlerInput;
+import org.glassfish.jsftemplating.annotation.HandlerOutput;
+import org.glassfish.jsftemplating.layout.LayoutDefinitionException;
+import org.glassfish.jsftemplating.layout.LayoutDefinitionManager;
+import org.glassfish.jsftemplating.layout.descriptors.ComponentType;
+import org.glassfish.jsftemplating.layout.descriptors.LayoutComponent;
+import org.glassfish.jsftemplating.layout.descriptors.LayoutDefinition;
+import org.glassfish.jsftemplating.layout.descriptors.LayoutElement;
+import org.glassfish.jsftemplating.layout.descriptors.handler.HandlerContext;
+import org.glassfish.jsftemplating.layout.template.TemplateWriter;
+import org.glassfish.jsftemplating.util.LayoutElementUtil;
+import org.glassfish.jsftemplating.util.FileUtil;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

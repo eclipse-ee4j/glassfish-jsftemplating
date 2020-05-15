@@ -11,7 +11,7 @@
 -->
 
 <sun:page>
-  <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+  <f:loadBundle basename="org.glassfish.webui.jsf.example.resources.Resources" var="msgs" />
   <sun:html>  
     <sun:head title="#{msgs.label_helpWindowTitle}" />                        
     <sun:body>

@@ -10,10 +10,10 @@
 
 package org.example.handlers;
 
-import com.sun.jsftemplating.annotation.Handler;
-import com.sun.jsftemplating.annotation.HandlerInput;
-import com.sun.jsftemplating.annotation.HandlerOutput;
-import com.sun.jsftemplating.layout.descriptors.handler.HandlerContext;
+import org.glassfish.jsftemplating.annotation.Handler;
+import org.glassfish.jsftemplating.annotation.HandlerInput;
+import org.glassfish.jsftemplating.annotation.HandlerOutput;
+import org.glassfish.jsftemplating.layout.descriptors.handler.HandlerContext;
 
 
 /**

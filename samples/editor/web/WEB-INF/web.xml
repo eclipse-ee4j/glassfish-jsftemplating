@@ -19,12 +19,12 @@
      </context-param>
       
   <context-param>
-    <param-name>com.sun.jsftemplating.DEBUG</param-name>
+    <param-name>org.glassfish.jsftemplating.DEBUG</param-name>
     <param-value>true</param-value>
   </context-param>
   
   <context-param>
-    <param-name>com.sun.webui.jsf.DEFAULT_THEME</param-name>
+    <param-name>org.glassfish.webui.jsf.DEFAULT_THEME</param-name>
     <param-value>suntheme</param-value>
   </context-param>
     <servlet>

@@ -12,7 +12,7 @@
 
 <sun:page>
     <sun:html>
-	<f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+	<f:loadBundle basename="org.glassfish.webui.jsf.example.resources.Resources" var="msgs" />
 	<sun:head id="filePopupHead" title="#{msgs.fileChooserPopup_title}">
 	</sun:head>
 	<sun:body>

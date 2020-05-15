@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import com.sun.jsftemplating.util.fileStreamer.ContentSource;
-import com.sun.jsftemplating.util.fileStreamer.Context;
+import org.glassfish.jsftemplating.util.fileStreamer.ContentSource;
+import org.glassfish.jsftemplating.util.fileStreamer.Context;
 
 
 /**

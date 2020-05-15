@@ -17,7 +17,7 @@
 	id="WebApp_ID" version="2.5">
 
   <context-param>
-    <param-name>com.sun.jsftemplating.DEBUG</param-name>
+    <param-name>org.glassfish.jsftemplating.DEBUG</param-name>
     <param-value>true</param-value>
   </context-param>
   <context-param>

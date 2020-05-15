@@ -12,7 +12,7 @@
 
 <sun:page >
   <sun:html>
-    <f:loadBundle basename="com.sun.webui.jsf.example.resources.Resources" var="msgs" />
+    <f:loadBundle basename="org.glassfish.webui.jsf.example.resources.Resources" var="msgs" />
     <sun:head title="#{msgs.table_paginatedTableTitle}" >
       <sun:link rel="shortcut icon" url="/images/favicon.ico" type="image/x-icon" />
     </sun:head>

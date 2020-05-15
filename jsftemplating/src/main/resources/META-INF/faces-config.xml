@@ -30,8 +30,8 @@
 
     <application>
         <!-- -->
-	<view-handler>com.sun.jsftemplating.layout.LayoutViewHandler</view-handler>
-	<variable-resolver>com.sun.jsftemplating.el.PageSessionResolver</variable-resolver>
+	<view-handler>org.glassfish.jsftemplating.layout.LayoutViewHandler</view-handler>
+	<variable-resolver>org.glassfish.jsftemplating.el.PageSessionResolver</variable-resolver>
         <!-- -->
         <locale-config>
           <default-locale>en</default-locale>
@@ -39,60 +39,60 @@
     </application>
 
     <component>
-	<component-type>com.sun.jsftemplating.EventComponent</component-type>
-	<component-class>com.sun.jsftemplating.component.EventComponent</component-class>
+	<component-type>org.glassfish.jsftemplating.EventComponent</component-type>
+	<component-class>org.glassfish.jsftemplating.component.EventComponent</component-class>
     </component>
     <component>
-	<component-type>com.sun.jsftemplating.If</component-type>
-	<component-class>com.sun.jsftemplating.component.If</component-class>
+	<component-type>org.glassfish.jsftemplating.If</component-type>
+	<component-class>org.glassfish.jsftemplating.component.If</component-class>
     </component>
     <component>
-	<component-type>com.sun.jsftemplating.While</component-type>
-	<component-class>com.sun.jsftemplating.component.While</component-class>
+	<component-type>org.glassfish.jsftemplating.While</component-type>
+	<component-class>org.glassfish.jsftemplating.component.While</component-class>
     </component>
     <component>
-	<component-type>com.sun.jsftemplating.ForEach</component-type>
-	<component-class>com.sun.jsftemplating.component.ForEach</component-class>
+	<component-type>org.glassfish.jsftemplating.ForEach</component-type>
+	<component-class>org.glassfish.jsftemplating.component.ForEach</component-class>
     </component>
     <component>
-	<component-type>com.sun.jsftemplating.AjaxRequest</component-type>
-	<component-class>com.sun.jsftemplating.component.AjaxRequest</component-class>
+	<component-type>org.glassfish.jsftemplating.AjaxRequest</component-type>
+	<component-class>org.glassfish.jsftemplating.component.AjaxRequest</component-class>
     </component>
     <component>
-	<component-type>com.sun.jsftemplating.StaticText</component-type>
-	<component-class>com.sun.jsftemplating.component.StaticText</component-class>
+	<component-type>org.glassfish.jsftemplating.StaticText</component-type>
+	<component-class>org.glassfish.jsftemplating.component.StaticText</component-class>
     </component>
 
     <render-kit>
 	<renderer>
-	    <component-family>com.sun.jsftemplating.EventComponent</component-family>
-	    <renderer-type>com.sun.jsftemplating.EventComponent</renderer-type>
-	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
+	    <component-family>org.glassfish.jsftemplating.EventComponent</component-family>
+	    <renderer-type>org.glassfish.jsftemplating.EventComponent</renderer-type>
+	    <renderer-class>org.glassfish.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
 	<renderer>
-	    <component-family>com.sun.jsftemplating.If</component-family>
-	    <renderer-type>com.sun.jsftemplating.If</renderer-type>
-	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
+	    <component-family>org.glassfish.jsftemplating.If</component-family>
+	    <renderer-type>org.glassfish.jsftemplating.If</renderer-type>
+	    <renderer-class>org.glassfish.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
 	<renderer>
-	    <component-family>com.sun.jsftemplating.While</component-family>
-	    <renderer-type>com.sun.jsftemplating.While</renderer-type>
-	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
+	    <component-family>org.glassfish.jsftemplating.While</component-family>
+	    <renderer-type>org.glassfish.jsftemplating.While</renderer-type>
+	    <renderer-class>org.glassfish.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
 	<renderer>
-	    <component-family>com.sun.jsftemplating.ForEach</component-family>
-	    <renderer-type>com.sun.jsftemplating.ForEach</renderer-type>
-	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
+	    <component-family>org.glassfish.jsftemplating.ForEach</component-family>
+	    <renderer-type>org.glassfish.jsftemplating.ForEach</renderer-type>
+	    <renderer-class>org.glassfish.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
 	<renderer>
-	    <component-family>com.sun.jsftemplating.AjaxRequest</component-family>
-	    <renderer-type>com.sun.jsftemplating.AjaxRequest</renderer-type>
-	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
+	    <component-family>org.glassfish.jsftemplating.AjaxRequest</component-family>
+	    <renderer-type>org.glassfish.jsftemplating.AjaxRequest</renderer-type>
+	    <renderer-class>org.glassfish.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
 	<renderer>
-	    <component-family>com.sun.jsftemplating.StaticText</component-family>
-	    <renderer-type>com.sun.jsftemplating.StaticText</renderer-type>
-	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
+	    <component-family>org.glassfish.jsftemplating.StaticText</component-family>
+	    <renderer-type>org.glassfish.jsftemplating.StaticText</renderer-type>
+	    <renderer-class>org.glassfish.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
     </render-kit>
 
@@ -102,8 +102,8 @@
 	    capable of dispatching "command" handlers.
 	</description>
         <managed-bean-name>lfCommand</managed-bean-name>
-        <managed-bean-class>com.sun.jsftemplating.layout.event.CommandActionListener</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
-    </managed-bean>
+        <managed-bean-class>org.glassfish.jsftemplating.layout.event.CommandActionListener</managed-bean-class>
+    
+        <managed-bean-scope>application</managed-bean-scope></managed-bean>
 
 </faces-config>

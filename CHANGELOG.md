@@ -35,7 +35,7 @@ Relaxed OSGi import for javax.servlet.* to "[3.0,5)"
 - Move the build system to Maven 3.x
 - Updated the Annotation Processor to JSR 169 in order to support JSK8 (APT has
  been removed effectively in JDK8).
-- refactored events and task to match the state of com.sun.jsft in version 2.1.0.
+- refactored events and task to match the state of org.glassfish.jsft in version 2.1.0.
 
 ## 2.1.0
 

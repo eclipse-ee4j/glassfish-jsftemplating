@@ -201,7 +201,7 @@
                     <configuration>
                         <forkCount>0</forkCount>
                         <systemPropertyVariables>
-                            <propertyName>com.sun.jsftemplating.DEBUG</propertyName>
+                            <propertyName>org.glassfish.jsftemplating.DEBUG</propertyName>
                             <buildDirectory>true</buildDirectory>
                         </systemPropertyVariables>
                     </configuration>

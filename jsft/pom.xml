@@ -54,10 +54,10 @@
                         <configuration>
                             <Export-Package>*;version="${project.osgi.version}"</Export-Package>
                             <Import-Package>
-                                com.sun.jsft.commands;version="${project.osgi.version}",
-                                com.sun.jsft.event;version="${project.osgi.version}",
-                                com.sun.jsft.facelets;version="${project.osgi.version}",
-                                com.sun.jsft.util;version="${project.osgi.version}",
+                                org.glassfish.jsft.commands;version="${project.osgi.version}",
+                                org.glassfish.jsft.event;version="${project.osgi.version}",
+                                org.glassfish.jsft.facelets;version="${project.osgi.version}",
+                                org.glassfish.jsft.util;version="${project.osgi.version}",
                                 jakarta.el;version="[2.1.2,4.0)",
                                 jakarta.faces;version="[2.0.0,3.0)",
                                 jakarta.faces.application;version="[2.0.0,3.0)",
