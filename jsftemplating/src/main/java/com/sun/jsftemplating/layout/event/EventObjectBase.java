@@ -20,54 +20,60 @@ import java.util.EventObject;
 
 import jakarta.faces.component.UIComponent;
 
-
 /**
- *  <p>	This class serves as the base class for <code>EventObject</code>s in
- *	this package.</p>
+ * <p>
+ * This class serves as the base class for <code>EventObject</code>s in this package.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class EventObjectBase extends EventObject implements UIComponentHolder {
     private static final long serialVersionUID = 1L;
 
     /**
-     *	<p> This constructor should not be used.</p>
+     * <p>
+     * This constructor should not be used.
+     * </p>
      */
     private EventObjectBase() {
-	super(null);
+        super(null);
     }
 
     /**
-     *	<p> This constructor is protected to avoid direct instantiation, one
-     *	    of the sub-classes of this class should be used instead.</p>
+     * <p>
+     * This constructor is protected to avoid direct instantiation, one of the sub-classes of this class should be used
+     * instead.
+     * </p>
      *
-     *	@param	component   The <code>UIComponent</code> associated with this
-     *			    <code>EventObject</code>.
+     * @param component The <code>UIComponent</code> associated with this <code>EventObject</code>.
      */
     protected EventObjectBase(UIComponent component) {
-	super(component);
+        super(component);
     }
 
     /**
-     *	<p> This constructor should only be used when a
-     *	    <code>UIComponent</code> is not available.</p>
+     * <p>
+     * This constructor should only be used when a <code>UIComponent</code> is not available.
+     * </p>
      */
     protected EventObjectBase(Object obj) {
-	super(obj);
+        super(obj);
     }
 
     /**
-     *	<P> This method returns the <code>UIComponent</code> held by the
-     *	    <code>Object</code> implementing this interface (or null if the
-     *	    event source is not a UIComponent).</p>
+     * <P>
+     * This method returns the <code>UIComponent</code> held by the <code>Object</code> implementing this interface (or null
+     * if the event source is not a UIComponent).
+     * </p>
      *
-     *	@return The <code>UIComponent</code>.
+     * @return The <code>UIComponent</code>.
      */
+    @Override
     public UIComponent getUIComponent() {
-	Object source = getSource();
-	if (source instanceof UIComponent) {
-	    return (UIComponent) getSource();
-	}
-	return null;
+        Object source = getSource();
+        if (source instanceof UIComponent) {
+            return (UIComponent) getSource();
+        }
+        return null;
     }
 }

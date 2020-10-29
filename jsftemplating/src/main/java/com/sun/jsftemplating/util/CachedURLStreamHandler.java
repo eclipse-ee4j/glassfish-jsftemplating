@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2009, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -23,29 +23,33 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
 /**
- *  <p>	This class enables a <code>URLConnection</code> to be returned when
- *	<code>openConnection(URL)</code> is called which is capable of reading
- *	from a <code>T</code> object.</p>
+ * <p>
+ * This class enables a <code>URLConnection</code> to be returned when <code>openConnection(URL)</code> is called which
+ * is capable of reading from a <code>T</code> object.
+ * </p>
  */
 public class CachedURLStreamHandler<T> extends URLStreamHandler {
 
     /**
-     *	<p> This constructor stores the given <code>T</code> object, which
-     *	    will be used by the {@link CachedURLConnection} which is created
-     *	    when openConnection is called.  It stores this as a
-     *	    <em>WeakReference</em>, so it will be garbage collected if no
-     *	    other "strong" references refer to it!</p>
+     * <p>
+     * This constructor stores the given <code>T</code> object, which will be used by the {@link CachedURLConnection} which
+     * is created when openConnection is called. It stores this as a <em>WeakReference</em>, so it will be garbage collected
+     * if no other "strong" references refer to it!
+     * </p>
      */
     public CachedURLStreamHandler(T obj) {
-	this.weakRef = new WeakReference<T>(obj);
+        this.weakRef = new WeakReference<>(obj);
     }
 
     /**
-     *	<p> This method creates a new {@link CachedURLConnection} associated with
-     *	    the <code>T</code> object given when the constructor was called.</p>
+     * <p>
+     * This method creates a new {@link CachedURLConnection} associated with the <code>T</code> object given when the
+     * constructor was called.
+     * </p>
      */
+    @Override
     protected URLConnection openConnection(URL url) throws IOException {
-	return new CachedURLConnection<T>(url, weakRef);
+        return new CachedURLConnection<>(url, weakRef);
     }
 
     private WeakReference<T> weakRef = null;

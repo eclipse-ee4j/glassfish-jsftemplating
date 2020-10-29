@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -16,26 +16,26 @@
 
 package com.sun.jsftemplating.layout.event;
 
-
-
 /**
- *  <p>	This event is fired for each page accessed during each request.  This
- *	may be fired during the UIComponent tree creation time, while restoring
- *	the View, when forwarding to a new page, or when simply accessing a
- *	page via Java code.</p>
+ * <p>
+ * This event is fired for each page accessed during each request. This may be fired during the UIComponent tree
+ * creation time, while restoring the View, when forwarding to a new page, or when simply accessing a page via Java
+ * code.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class InitPageEvent extends EventObjectBase implements UIComponentHolder {
     private static final long serialVersionUID = 1L;
 
     /**
-     *	<p> Constructor.</p>
+     * <p>
+     * Constructor.
+     * </p>
      *
-     *	@param	component   The <code>UIComponent</code> associated with this
-     *			    <code>EventObject</code> (likely null).
+     * @param component The <code>UIComponent</code> associated with this <code>EventObject</code> (likely null).
      */
     public InitPageEvent(Object component) {
-	super(component);
+        super(component);
     }
 }

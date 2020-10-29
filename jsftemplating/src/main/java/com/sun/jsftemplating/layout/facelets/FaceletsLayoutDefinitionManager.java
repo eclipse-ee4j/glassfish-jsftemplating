@@ -16,6 +16,9 @@
 
 package com.sun.jsftemplating.layout.facelets;
 
+import java.io.IOException;
+import java.net.URL;
+
 import com.sun.jsftemplating.annotation.FormatDefinition;
 import com.sun.jsftemplating.layout.LayoutDefinitionException;
 import com.sun.jsftemplating.layout.LayoutDefinitionManager;
@@ -23,11 +26,7 @@ import com.sun.jsftemplating.layout.descriptors.LayoutDefinition;
 import com.sun.jsftemplating.layout.template.TemplateParser;
 import com.sun.jsftemplating.util.FileUtil;
 
-import java.io.IOException;
-import java.net.URL;
-
 import jakarta.faces.context.FacesContext;
-
 
 /**
  *
@@ -38,7 +37,7 @@ import jakarta.faces.context.FacesContext;
 public class FaceletsLayoutDefinitionManager extends LayoutDefinitionManager {
 
     /**
-     *	Default Constructor.
+     * Default Constructor.
      */
     public FaceletsLayoutDefinitionManager() {
         super();
@@ -47,21 +46,21 @@ public class FaceletsLayoutDefinitionManager extends LayoutDefinitionManager {
     @Override
     public boolean accepts(String key) {
         boolean accept = false;
-	URL url = null;
-	try {
-	    url = FileUtil.searchForFile(key, defaultSuffix);
-	} catch (IOException ex) {
-	    // Ignore this b/c we're just trying to detect if we're the right
-	    // LDM... if we're here, probably we're not.
-	}
+        URL url = null;
+        try {
+            url = FileUtil.searchForFile(key, defaultSuffix);
+        } catch (IOException ex) {
+            // Ignore this b/c we're just trying to detect if we're the right
+            // LDM... if we're here, probably we're not.
+        }
         if (url == null) {
             return false;
         }
 
         // Eventually, we may want this check to be configurable via a
-	// context-param...
-	if (url.getPath().contains(".xhtml")) {
-	    accept = true;
+        // context-param...
+        if (url.getPath().contains(".xhtml")) {
+            accept = true;
         } else {
             // Use the TemplateParser to help us read the file to see if it is a
             // valid XML-format file
@@ -72,7 +71,7 @@ public class FaceletsLayoutDefinitionManager extends LayoutDefinitionManager {
                 parser.readUntil("=\"http://java.sun.com/jsf/facelets\"", true);
             } catch (Exception ex) {
                 // Didn't work...
-		accept = false;
+                accept = false;
             } finally {
                 parser.close();
             }
@@ -82,35 +81,34 @@ public class FaceletsLayoutDefinitionManager extends LayoutDefinitionManager {
     }
 
     /**
-     *  <p> This method is responsible for finding the requested
-     *      {@link LayoutDefinition} for the given <code>key</code>.</p>
+     * <p>
+     * This method is responsible for finding the requested {@link LayoutDefinition} for the given <code>key</code>.
+     * </p>
      *
-     *  @param  key     Key identifying the desired {@link LayoutDefinition}.
+     * @param key Key identifying the desired {@link LayoutDefinition}.
      *
-     *  @return         The requested {@link LayoutDefinition}.
+     * @return The requested {@link LayoutDefinition}.
      */
+    @Override
     public LayoutDefinition getLayoutDefinition(String key) throws LayoutDefinitionException {
-	// Make sure we found the url
-	URL url = null;
-	try {
-	    url = FileUtil.searchForFile(key, defaultSuffix);
-	} catch (IOException ex) {
-	    throw new LayoutDefinitionException(
-		    "Unable to locate '" + key + "'", ex);
-	}
-	if (url == null) {
-	    throw new LayoutDefinitionException(
-		    "Unable to locate '" + key + "'");
-	}
+        // Make sure we found the url
+        URL url = null;
+        try {
+            url = FileUtil.searchForFile(key, defaultSuffix);
+        } catch (IOException ex) {
+            throw new LayoutDefinitionException("Unable to locate '" + key + "'", ex);
+        }
+        if (url == null) {
+            throw new LayoutDefinitionException("Unable to locate '" + key + "'");
+        }
 
-	// Read the template file
-	LayoutDefinition ld = null;
-	try {
-	    ld  = new FaceletsLayoutDefinitionReader(key, url).read();
-	} catch (IOException ex) {
-	    throw new LayoutDefinitionException(
-		"Unable to process '" + url.toString() + "'.", ex);
-	}
+        // Read the template file
+        LayoutDefinition ld = null;
+        try {
+            ld = new FaceletsLayoutDefinitionReader(key, url).read();
+        } catch (IOException ex) {
+            throw new LayoutDefinitionException("Unable to process '" + url.toString() + "'.", ex);
+        }
 
         // Dispatch "initPage" handlers
         ld.dispatchInitPageHandlers(FacesContext.getCurrentInstance(), ld);
@@ -120,43 +118,45 @@ public class FaceletsLayoutDefinitionManager extends LayoutDefinitionManager {
     }
 
     /**
-     *  <p> This method returns an instance of this LayoutDefinitionManager.
-     *      The object returned is a singleton (only 1 instance will be
-     *      created per application).</p>
+     * <p>
+     * This method returns an instance of this LayoutDefinitionManager. The object returned is a singleton (only 1 instance
+     * will be created per application).
+     * </p>
      *
-     *  @return <code>FaceletsLayoutDefinitionManager</code> instance
+     * @return <code>FaceletsLayoutDefinitionManager</code> instance
      */
     public static LayoutDefinitionManager getInstance() {
-	return getInstance(FacesContext.getCurrentInstance());
+        return getInstance(FacesContext.getCurrentInstance());
     }
 
     /**
-     *	<p> This method provides access to the application-scoped instance
-     *	    of the <code>FaceletsLayoutDefinitionManager</code>.</p>
+     * <p>
+     * This method provides access to the application-scoped instance of the <code>FaceletsLayoutDefinitionManager</code>.
+     * </p>
      *
-     *	@param	ctx The <code>FacesContext</code> (may be null).
+     * @param ctx The <code>FacesContext</code> (may be null).
      */
     public static LayoutDefinitionManager getInstance(FacesContext ctx) {
-	if (ctx == null) {
-	    ctx = FacesContext.getCurrentInstance();
-	}
-	FaceletsLayoutDefinitionManager instance = null;
-	if (ctx != null) {
-	    instance = (FaceletsLayoutDefinitionManager)
-		ctx.getExternalContext().getApplicationMap().get(FLDM_INSTANCE);
-	}
-	if (instance == null) {
-	    instance = new FaceletsLayoutDefinitionManager();
-	    if (ctx != null) {
-		ctx.getExternalContext().getApplicationMap().put(
-			FLDM_INSTANCE, instance);
-	    }
-	}
+        if (ctx == null) {
+            ctx = FacesContext.getCurrentInstance();
+        }
+        FaceletsLayoutDefinitionManager instance = null;
+        if (ctx != null) {
+            instance = (FaceletsLayoutDefinitionManager) ctx.getExternalContext().getApplicationMap().get(FLDM_INSTANCE);
+        }
+        if (instance == null) {
+            instance = new FaceletsLayoutDefinitionManager();
+            if (ctx != null) {
+                ctx.getExternalContext().getApplicationMap().put(FLDM_INSTANCE, instance);
+            }
+        }
         return instance;
     }
 
     /**
-     *	<p> Application scope key for an instance of this class.</p>
+     * <p>
+     * Application scope key for an instance of this class.
+     * </p>
      */
     private static final String FLDM_INSTANCE = "__jsft_FaceletsLDM";
 

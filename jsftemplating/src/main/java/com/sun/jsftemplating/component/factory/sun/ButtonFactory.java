@@ -16,61 +16,64 @@
 
 package com.sun.jsftemplating.component.factory.sun;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-
 import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	This factory is responsible for instantiating a <code>Button
- *	UIComponent</code>.</p>
+ * <p>
+ * This factory is responsible for instantiating a <code>Button
+ *	UIComponent</code>.
+ * </p>
  *
- *  <p>	The {@link com.sun.jsftemplating.layout.descriptors.ComponentType}
- *	id for this factory is: "sun:button".</p>
+ * <p>
+ * The {@link com.sun.jsftemplating.layout.descriptors.ComponentType} id for this factory is: "sun:button".
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 @UIComponentFactory("sun:button")
 public class ButtonFactory extends ComponentFactoryBase {
 
     /**
-     *	<p> This is the factory method responsible for creating the
-     *	    <code>UIComponent</code>.</p>
+     * <p>
+     * This is the factory method responsible for creating the <code>UIComponent</code>.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	descriptor  The {@link LayoutComponent} descriptor associated
-     *			    with the requested <code>UIComponent</code>.
-     *	@param	parent	    The parent <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>
+     * @param descriptor The {@link LayoutComponent} descriptor associated with the requested <code>UIComponent</code>.
+     * @param parent The parent <code>UIComponent</code>
      *
-     *	@return	The newly created <code>Button</code>.
+     * @return The newly created <code>Button</code>.
      */
+    @Override
     public UIComponent create(FacesContext context, LayoutComponent descriptor, UIComponent parent) {
-	// Create the UIComponent
-	UIComponent comp = createComponent(context, COMPONENT_TYPE, descriptor, parent);
+        // Create the UIComponent
+        UIComponent comp = createComponent(context, COMPONENT_TYPE, descriptor, parent);
 
-	// Default to primary button
-	if (descriptor.getOption("primary") == null) {
-	    // Use ValueBinding vs. property so we don't set the local value
-	    // flag which will hide any future VB that is set on the component
-	    comp.setValueBinding("primary",
-		    context.getApplication().createValueBinding("#{true}"));
-	}
+        // Default to primary button
+        if (descriptor.getOption("primary") == null) {
+            // Use ValueBinding vs. property so we don't set the local value
+            // flag which will hide any future VB that is set on the component
+            comp.setValueBinding("primary", context.getApplication().createValueBinding("#{true}"));
+        }
 
-	// Set all the attributes / properties
-	setOptions(context, descriptor, comp);
+        // Set all the attributes / properties
+        setOptions(context, descriptor, comp);
 
-	// Return the value
-	return comp;
+        // Return the value
+        return comp;
 
     }
 
     /**
-     *	<p> The <code>UIComponent</code> type that must be registered in the
-     *	    <code>faces-config.xml</code> file mapping to the UIComponent class
-     *	    to use for this <code>UIComponent</code>.</p>
+     * <p>
+     * The <code>UIComponent</code> type that must be registered in the <code>faces-config.xml</code> file mapping to the
+     * UIComponent class to use for this <code>UIComponent</code>.
+     * </p>
      */
-    public static final String COMPONENT_TYPE	= "com.sun.webui.jsf.Button";
+    public static final String COMPONENT_TYPE = "com.sun.webui.jsf.Button";
 }

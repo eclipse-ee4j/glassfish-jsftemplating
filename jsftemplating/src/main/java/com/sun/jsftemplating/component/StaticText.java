@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -16,32 +16,41 @@
 
 package com.sun.jsftemplating.component;
 
-
 /**
- *  <p>	This <code>UIComponent</code> produces static text output.</p>
+ * <p>
+ * This <code>UIComponent</code> produces static text output.
+ * </p>
  *
- *  @author Ken Paulsen (ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class StaticText extends TemplateComponentBase {
+
     /**
-     *	<p> Constructor for <code>StaticText</code>.</p>
+     * <p>
+     * This is the location of the XML file that declares the layout for the StaticText. (/jsftemplating/staticText.xml)
+     * </p>
+     */
+    public static final String LAYOUT_KEY = "/jsftemplating/staticText.xml";
+
+    /**
+     * <p>
+     * Constructor for <code>StaticText</code>.
+     * </p>
      */
     public StaticText() {
-	super();
-	setRendererType("com.sun.jsftemplating.StaticText");
-	setLayoutDefinitionKey(LAYOUT_KEY);
+        super();
+        setRendererType("com.sun.jsftemplating.StaticText");
+        setLayoutDefinitionKey(LAYOUT_KEY);
     }
 
     /**
-     *	<p> Return the family for this component.</p>
+     * <p>
+     * Return the family for this component.
+     * </p>
      */
+    @Override
     public String getFamily() {
-	return "com.sun.jsftemplating.StaticText";
+        return "com.sun.jsftemplating.StaticText";
     }
 
-    /**
-     *	<p> This is the location of the XML file that declares the layout for
-     *	    the StaticText. (/jsftemplating/staticText.xml)</p>
-     */
-    public static final String	LAYOUT_KEY  =	"/jsftemplating/staticText.xml";
 }

@@ -16,76 +16,78 @@
 
 package com.sun.jsftemplating.component;
 
+import com.sun.jsftemplating.layout.descriptors.LayoutDefinition;
+
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 
-import com.sun.jsftemplating.layout.descriptors.LayoutDefinition;
-
-
 /**
- *  <p>	This interface defines additional methods in addition to those defined
- *	by UIComponent that are needed to work with a TemplateRenderer.</p>
+ * <p>
+ * This interface defines additional methods in addition to those defined by UIComponent that are needed to work with a
+ * TemplateRenderer.
+ * </p>
  *
- *  <p>	JSF did not define an interface for UIComponent, so I cannot extend an
- *	interface here.  This means that casting is needed to use UIComponent
- *	features from a TemplateComponent.</p>
+ * <p>
+ * JSF did not define an interface for UIComponent, so I cannot extend an interface here. This means that casting is
+ * needed to use UIComponent features from a TemplateComponent.
+ * </p>
  *
- *  <p>	If you need to have a <code>NamingContainer</code>, do not forget to
- *	implement that interface in addition to this interface.</p>
+ * <p>
+ * If you need to have a <code>NamingContainer</code>, do not forget to implement that interface in addition to this
+ * interface.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface TemplateComponent extends ChildManager {
 
     /**
-     *	This method will find the request child UIComponent by id.  If it is
-     *	not found, it will attempt to create it if it can find a LayoutElement
-     *	describing it.
+     * This method will find the request child UIComponent by id. If it is not found, it will attempt to create it if it can
+     * find a LayoutElement describing it.
      *
-     *	@param	context	    The FacesContext
-     *	@param	id	    The UIComponent id to search for
+     * @param context The FacesContext
+     * @param id The UIComponent id to search for
      *
-     *	@return	The requested UIComponent
+     * @return The requested UIComponent
      */
-    public UIComponent getChild(FacesContext context, String id);
+    UIComponent getChild(FacesContext context, String id);
 
     /**
-     *	This method returns the LayoutDefinition associated with this component.
+     * This method returns the LayoutDefinition associated with this component.
      *
-     *	@param	context	The FacesContext
+     * @param context The FacesContext
      *
-     *	@return	LayoutDefinition associated with this component.
+     * @return LayoutDefinition associated with this component.
      */
-    public LayoutDefinition getLayoutDefinition(FacesContext context);
+    LayoutDefinition getLayoutDefinition(FacesContext context);
 
     /**
-     *	This method returns the LayoutDefinitionKey for this component.
+     * This method returns the LayoutDefinitionKey for this component.
      *
-     *	@return	key	The key to use in the LayoutDefinitionManager
+     * @return key The key to use in the LayoutDefinitionManager
      */
-    public String getLayoutDefinitionKey();
+    String getLayoutDefinitionKey();
 
     /**
-     *	This method sets the LayoutDefinition key for this component.
+     * This method sets the LayoutDefinition key for this component.
      *
-     *	@param	key The key to use in the LayoutDefinitionManager
+     * @param key The key to use in the LayoutDefinitionManager
      */
-    public void setLayoutDefinitionKey(String key);
+    void setLayoutDefinitionKey(String key);
 
     /**
-     *	<p> This method returns the value of the requested field.  It should
-     *	    first check the value of <code>field</code> passed in, it should
-     *	    return that value if set.  Next, it should check to see if there
-     *	    is a <code>ValueExpression</code> matching
-     *	    <code>attributeName</code> and return that value, if it exists.
-     *	    If neither of the first 2 cases yielded a result,
-     *	    <code>defaultValue</code> is returned.</p>
+     * <p>
+     * This method returns the value of the requested field. It should first check the value of <code>field</code> passed
+     * in, it should return that value if set. Next, it should check to see if there is a <code>ValueExpression</code>
+     * matching <code>attributeName</code> and return that value, if it exists. If neither of the first 2 cases yielded a
+     * result, <code>defaultValue</code> is returned.
+     * </p>
      *
-     *	@param	field		The field which may contain the value.
-     *	@param	attributeName	The <code>ValueExpression</code> name.
-     *	@param	defaultValue	The default value.
+     * @param field The field which may contain the value.
+     * @param attributeName The <code>ValueExpression</code> name.
+     * @param defaultValue The default value.
      *
-     *	@return	The value of the property.
+     * @return The value of the property.
      */
-    public <V> V getPropertyValue(V field, String attributeName, V defaultValue);
+    <V> V getPropertyValue(V field, String attributeName, V defaultValue);
 }

@@ -18,104 +18,99 @@ package com.sun.jsftemplating.layout.descriptors;
 
 import java.io.IOException;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-
 import com.sun.jsftemplating.el.PermissionChecker;
 import com.sun.jsftemplating.layout.LayoutDefinitionManager;
 import com.sun.jsftemplating.layout.event.AfterLoopEvent;
 import com.sun.jsftemplating.layout.event.BeforeLoopEvent;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	This class defines a LayoutWhile {@link LayoutElement}.  The
- *	LayoutWhile provides the functionality necessary to iteratively
- *	display a portion of the layout tree.  The condition is a boolean
- *	equation and may use "$...{...}" type expressions to substitute
- *	values.</p>
+ * <p>
+ * This class defines a LayoutWhile {@link LayoutElement}. The LayoutWhile provides the functionality necessary to
+ * iteratively display a portion of the layout tree. The condition is a boolean equation and may use "$...{...}" type
+ * expressions to substitute values.
+ * </p>
  *
- *  @see com.sun.jsftemplating.el.VariableResolver
- *  @see com.sun.jsftemplating.el.PermissionChecker
+ * @see com.sun.jsftemplating.el.VariableResolver
+ * @see com.sun.jsftemplating.el.PermissionChecker
  *
- *  @author Ken Paulsen (ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class LayoutWhile extends LayoutIf {
     private static final long serialVersionUID = 1L;
 
     /**
-     *	Constructor
+     * Constructor
      */
     public LayoutWhile(LayoutElement parent, String condition) {
-	super(parent, condition,
-	    LayoutDefinitionManager.getGlobalComponentType(null, "while"));
+        super(parent, condition, LayoutDefinitionManager.getGlobalComponentType(null, "while"));
     }
 
-
     /**
-     *	<p> This method always returns true.  The condition is checked in
-     *	    {@link #shouldContinue(UIComponent)} instead of here because
-     *	    the {@link #encode(FacesContext, UIComponent)} method
-     *	    evaluates the condition and calls the super.  Performing the check
-     *	    here would cause the condition to be evaluated twice.</p>
+     * <p>
+     * This method always returns true. The condition is checked in {@link #shouldContinue(UIComponent)} instead of here
+     * because the {@link #encode(FacesContext, UIComponent)} method evaluates the condition and calls the super. Performing
+     * the check here would cause the condition to be evaluated twice.
+     * </p>
      *
-     *	@param	context	    The FacesContext
-     *	@param	component   The UIComponent
+     * @param context The FacesContext
+     * @param component The UIComponent
      *
-     *	@return	true
+     * @return true
      */
+    @Override
     public boolean encodeThis(FacesContext context, UIComponent component) {
-	return true;
+        return true;
     }
 
     /**
-     *	<p> This method returns true if the condition of this LayoutWhile is
-     *	    met, false otherwise.  This provides the functionality for
-     *	    iteratively displaying a portion of the layout tree.</p>
+     * <p>
+     * This method returns true if the condition of this LayoutWhile is met, false otherwise. This provides the
+     * functionality for iteratively displaying a portion of the layout tree.
+     * </p>
      *
-     *	@param	component   The UIComponent
+     * @param component The UIComponent
      *
-     *	@return	true if children are to be rendered, false otherwise.
+     * @return true if children are to be rendered, false otherwise.
      */
     protected boolean shouldContinue(UIComponent component) {
-	PermissionChecker checker =
-	    new PermissionChecker(this, component,
-		(String) getOption("condition"));
-	return checker.hasPermission();
+        PermissionChecker checker = new PermissionChecker(this, component, (String) getOption("condition"));
+        return checker.hasPermission();
     }
 
     /**
-     *	<p> This implementation overrides the parent <code>encode</code>
-     *	    method.  It does this to cause the encode process to loop while
-     *	    {@link #shouldContinue(UIComponent)} returns
-     *	    true.  Currently there is no infinite loop checking, so be
-     *	    careful.</p>
+     * <p>
+     * This implementation overrides the parent <code>encode</code> method. It does this to cause the encode process to loop
+     * while {@link #shouldContinue(UIComponent)} returns true. Currently there is no infinite loop checking, so be careful.
+     * </p>
      *
-     *	@param	context	    The FacesContext
-     *	@param	component   The UIComponent
+     * @param context The FacesContext
+     * @param component The UIComponent
      */
+    @Override
     public void encode(FacesContext context, UIComponent component) throws IOException {
-	dispatchHandlers(context, BEFORE_LOOP,
-	    new BeforeLoopEvent((UIComponent) component));
-	while (shouldContinue(component)) {
-	    super.encode(context, component);
-	}
-	dispatchHandlers(context, AFTER_LOOP,
-	    new AfterLoopEvent((UIComponent) component));
+        dispatchHandlers(context, BEFORE_LOOP, new BeforeLoopEvent(component));
+        while (shouldContinue(component)) {
+            super.encode(context, component);
+        }
+        dispatchHandlers(context, AFTER_LOOP, new AfterLoopEvent(component));
     }
 
     /**
-     *	<p> This is the event "type" for
-     *	    {@link com.sun.jsftemplating.layout.descriptors.handler.Handler}
-     *	    elements to be invoked after this LayoutWhile is processed
-     *	    (outside loop).</p>
+     * <p>
+     * This is the event "type" for {@link com.sun.jsftemplating.layout.descriptors.handler.Handler} elements to be invoked
+     * after this LayoutWhile is processed (outside loop).
+     * </p>
      */
-     public static final String AFTER_LOOP =	"afterLoop";
+    public static final String AFTER_LOOP = "afterLoop";
 
     /**
-     *	<p> This is the event "type" for
-     *	    {@link com.sun.jsftemplating.layout.descriptors.handler.Handler}
-     *	    elements to be invoked before this LayoutWhile is processed
-     *	    (outside loop).</p>
+     * <p>
+     * This is the event "type" for {@link com.sun.jsftemplating.layout.descriptors.handler.Handler} elements to be invoked
+     * before this LayoutWhile is processed (outside loop).
+     * </p>
      */
-     public static final String BEFORE_LOOP =	"beforeLoop";
+    public static final String BEFORE_LOOP = "beforeLoop";
 }

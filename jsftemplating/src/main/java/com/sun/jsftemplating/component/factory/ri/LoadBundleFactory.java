@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-
 import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.EventComponent;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
@@ -31,68 +28,70 @@ import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
 import com.sun.jsftemplating.layout.descriptors.handler.Handler;
 import com.sun.jsftemplating.layout.descriptors.handler.HandlerDefinition;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	When using JSP as the view technology for JSF, you not only have
- *	components but also JSP tags that interact with JSF.  In JSFTemplating
- *	the recommended approach to doing this is to use handlers.  This
- *	offers a clean way to execute arbitrary Java code.  While that is still
- *	the recommendation, this class is provided for added flexibility.  The
- *	purpose of this class is to read a ResourceBundle and make it available
- *	to the page.  The better approach would be to use the
- *	{@link com.sun.jsftemplating.handlers.ScopeHandlers#setResourceBundle}
- *	handler.</p>
+ * <p>
+ * When using JSP as the view technology for JSF, you not only have components but also JSP tags that interact with JSF.
+ * In JSFTemplating the recommended approach to doing this is to use handlers. This offers a clean way to execute
+ * arbitrary Java code. While that is still the recommendation, this class is provided for added flexibility. The
+ * purpose of this class is to read a ResourceBundle and make it available to the page. The better approach would be to
+ * use the {@link com.sun.jsftemplating.handlers.ScopeHandlers#setResourceBundle} handler.
+ * </p>
  *
- *  <p>	The &gt;f:loadBundle&lt; tag does not represent a component, so this
- *	handler does not create a component, it returns the <code>parent</code>
- *	(which is passed in) after configuring the
- *	<code>ResourceBundle</code>.</p>
+ * <p>
+ * The &gt;f:loadBundle&lt; tag does not represent a component, so this handler does not create a component, it returns
+ * the <code>parent</code> (which is passed in) after configuring the <code>ResourceBundle</code>.
+ * </p>
  *
- *  <p>	The {@link com.sun.jsftemplating.layout.descriptors.ComponentType}
- *	id for this factory is: "f:loadBundle".  It requires a
- *	<code>basename</code> and a <code>var</code> property to be passed
- *	in.  Optionally the <code>locale</code> can be passed in (this is not
- *	a feature of the JSF version, but an extra feature supported by the
- *	handler in JSFTemplating.</p>
+ * <p>
+ * The {@link com.sun.jsftemplating.layout.descriptors.ComponentType} id for this factory is: "f:loadBundle". It
+ * requires a <code>basename</code> and a <code>var</code> property to be passed in. Optionally the <code>locale</code>
+ * can be passed in (this is not a feature of the JSF version, but an extra feature supported by the handler in
+ * JSFTemplating.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 @UIComponentFactory("f:loadBundle")
 public class LoadBundleFactory extends ComponentFactoryBase {
 
     /**
-     *	<p> This is the factory method loads a <code>ResourceBundle</code>.</p>
+     * <p>
+     * This is the factory method loads a <code>ResourceBundle</code>.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	descriptor  The {@link LayoutComponent} descriptor.
-     *	@param	parent	    The parent <code>UIComponent</code> (not used)
+     * @param context The <code>FacesContext</code>
+     * @param descriptor The {@link LayoutComponent} descriptor.
+     * @param parent The parent <code>UIComponent</code> (not used)
      *
-     *	@return	<code>parent</code>.
+     * @return <code>parent</code>.
      */
+    @Override
     public UIComponent create(FacesContext context, LayoutComponent descriptor, UIComponent parent) {
-	// Create an Event component for this
-	EventComponent event = new EventComponent();
-	if (parent != null) {
-	    addChild(context, descriptor, parent, event);
-	}
+        // Create an Event component for this
+        EventComponent event = new EventComponent();
+        if (parent != null) {
+            addChild(context, descriptor, parent, event);
+        }
 
-	// Get the inputs
-	String baseName = (String) descriptor.getEvaluatedOption(context, "basename", parent);
-	String var = (String) descriptor.getEvaluatedOption(context, "var", parent);
-	Locale locale = (Locale) descriptor.getEvaluatedOption(context, "locale", parent);
+        // Get the inputs
+        String baseName = (String) descriptor.getEvaluatedOption(context, "basename", parent);
+        String var = (String) descriptor.getEvaluatedOption(context, "var", parent);
+        Locale locale = (Locale) descriptor.getEvaluatedOption(context, "locale", parent);
 
-	// Create a handler (needed to execute code each time displayed)...
-	HandlerDefinition def = LayoutDefinitionManager.
-		getGlobalHandlerDefinition("setResourceBundle");
-	Handler handler = new Handler(def);
-	handler.setInputValue("bundle", baseName);
-	handler.setInputValue("key", var);
-	handler.setInputValue("locale", locale);
-	List<Handler> handlers = new ArrayList<Handler>();
-	handlers.add(handler);
-	event.getAttributes().put("beforeEncode", handlers);
+        // Create a handler (needed to execute code each time displayed)...
+        HandlerDefinition def = LayoutDefinitionManager.getGlobalHandlerDefinition("setResourceBundle");
+        Handler handler = new Handler(def);
+        handler.setInputValue("bundle", baseName);
+        handler.setInputValue("key", var);
+        handler.setInputValue("locale", locale);
+        List<Handler> handlers = new ArrayList<>();
+        handlers.add(handler);
+        event.getAttributes().put("beforeEncode", handlers);
 
-	// Return (parent)
-	return event;
+        // Return (parent)
+        return event;
     }
 }

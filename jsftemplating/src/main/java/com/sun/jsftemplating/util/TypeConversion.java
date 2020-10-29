@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -16,18 +16,20 @@
 
 package com.sun.jsftemplating.util;
 
-
 /**
- *  <p>	An object that can convert a value to a different type.</p>
+ * <p>
+ * An object that can convert a value to a different type.
+ * </p>
  *
- *  @author	Todd Fast, todd.fast@sun.com
- *  @author	Mike Frisino, michael.frisino@sun.com
+ * @author Todd Fast, todd.fast@sun.com
+ * @author Mike Frisino, michael.frisino@sun.com
  */
 public interface TypeConversion {
 
     /**
-     *	<p> Converts the provided value to the type represented by the
-     *	    implementor if this interface.</p>
+     * <p>
+     * Converts the provided value to the type represented by the implementor if this interface.
+     * </p>
      */
-    public Object convertValue(Object value);
+    Object convertValue(Object value);
 }

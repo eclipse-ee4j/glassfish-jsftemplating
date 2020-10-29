@@ -18,12 +18,18 @@ package com.sun.jsftemplating.handlers;
 /**
  * This exception is thrown if there is an error when processing a
  * {@link com.sun.jsftemplating.layout.descriptors.handler.Handler}
+ *
  * @author jonathan coustick
  */
 public class HandlerException extends RuntimeException {
-    
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public HandlerException(String message) {
         super(message);
     }
-    
+
 }

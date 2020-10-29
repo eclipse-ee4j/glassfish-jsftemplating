@@ -25,131 +25,145 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
 
-
 /**
- *  <p>	This abstract class provides base functionality for components that
- *	work in conjunction with the
- *	{@link com.sun.jsftemplating.renderer.TemplateRenderer} and would like
- *	to provide <code>UIInput</code> functionality.  It provides a default
- *	implementation of the {@link TemplateComponent} interface.</p>
+ * <p>
+ * This abstract class provides base functionality for components that work in conjunction with the
+ * {@link com.sun.jsftemplating.renderer.TemplateRenderer} and would like to provide <code>UIInput</code> functionality.
+ * It provides a default implementation of the {@link TemplateComponent} interface.
+ * </p>
  *
- *  @see    com.sun.jsftemplating.renderer.TemplateRenderer
- *  @see    com.sun.jsftemplating.component.TemplateComponent
- *  @see    com.sun.jsftemplating.component.TemplateComponentHelper
+ * @see com.sun.jsftemplating.renderer.TemplateRenderer
+ * @see com.sun.jsftemplating.component.TemplateComponent
+ * @see com.sun.jsftemplating.component.TemplateComponentHelper
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public abstract class TemplateInputComponentBase extends UIInput implements TemplateComponent {
 
     /**
-     *	<p> This method will find the request child <code>UIComponent</code>
-     *	    by id.  If it is not found, it will attempt to create it if it can
-     *	    find a {@link LayoutElement} describing it.</p>
-     *
-     *	@param	context	    The <code>FacesContext</code>.
-     *	@param	id	    The <code>UIComponent</code> id to find.
-     *
-     *	@return	The requested <code>UIComponent</code>.
+     * <p>
+     * Our <code>TemplateComponentHelper</code>. We initialize it on access b/c we want to ensure it exists, if it is
+     * serialized it won't exist if we init it here or in the constructor.
+     * </p>
      */
+    private transient TemplateComponentHelper _helper;
+
+    /**
+     * <p>
+     * This method will find the request child <code>UIComponent</code> by id. If it is not found, it will attempt to create
+     * it if it can find a {@link LayoutElement} describing it.
+     * </p>
+     *
+     * @param context The <code>FacesContext</code>.
+     * @param id The <code>UIComponent</code> id to find.
+     *
+     * @return The requested <code>UIComponent</code>.
+     */
+    @Override
     public UIComponent getChild(FacesContext context, String id) {
-	return getHelper().getChild(this, context, id);
+        return getHelper().getChild(this, context, id);
     }
 
-
     /**
-     *	<p> This method will find the request child <code>UIComponent</code> by
-     *	    id (the id is obtained from the given {@link LayoutComponent}).  If
-     *	    it is not found, it will attempt to create it from the supplied
-     *	    {@link LayoutElement}.</p>
+     * <p>
+     * This method will find the request child <code>UIComponent</code> by id (the id is obtained from the given
+     * {@link LayoutComponent}). If it is not found, it will attempt to create it from the supplied {@link LayoutElement}.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>.
-     *	@param	descriptor  The {@link LayoutElement} describing the <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>.
+     * @param descriptor The {@link LayoutElement} describing the <code>UIComponent</code>
      *
-     *	@return	The requested <code>UIComponent</code>.
+     * @return The requested <code>UIComponent</code>.
      */
+    @Override
     public UIComponent getChild(FacesContext context, LayoutComponent descriptor) {
-	return getHelper().getChild(this, context, descriptor);
+        return getHelper().getChild(this, context, descriptor);
     }
 
     /**
-     *	<p> This method returns the {@link LayoutDefinition} associated with
-     *	    this component.</p>
+     * <p>
+     * This method returns the {@link LayoutDefinition} associated with this component.
+     * </p>
      *
-     *	@param	context	The <code>FacesContext</code>.
+     * @param context The <code>FacesContext</code>.
      *
-     *	@return	{@link LayoutDefinition} associated with this component.
+     * @return {@link LayoutDefinition} associated with this component.
      */
+    @Override
     public LayoutDefinition getLayoutDefinition(FacesContext context) {
-	return getHelper().getLayoutDefinition(context);
+        return getHelper().getLayoutDefinition(context);
     }
 
     /**
-     *	<p> This method saves the state for this component.  It relies on the
-     *	    superclass to save its own sate, this method will invoke
-     *	    super.saveState().</p>
+     * <p>
+     * This method saves the state for this component. It relies on the superclass to save its own sate, this method will
+     * invoke super.saveState().
+     * </p>
      *
-     *	@param	context	The <code>FacesContext</code>.
+     * @param context The <code>FacesContext</code>.
      *
-     *	@return The serialized state.
+     * @return The serialized state.
      */
+    @Override
     public Object saveState(FacesContext context) {
-	return getHelper().saveState(context, super.saveState(context));
+        return getHelper().saveState(context, super.saveState(context));
     }
 
     /**
-     *	<p> This method restores the state for this component.  It will invoke
-     *	    the superclass to restore its state.</p>
+     * <p>
+     * This method restores the state for this component. It will invoke the superclass to restore its state.
+     * </p>
      *
-     *	@param	context	The <code>FacesContext</code>.
-     *	@param	state	The serialized state.
+     * @param context The <code>FacesContext</code>.
+     * @param state The serialized state.
      */
+    @Override
     public void restoreState(FacesContext context, Object state) {
-	super.restoreState(context, getHelper().restoreState(context, state));
+        super.restoreState(context, getHelper().restoreState(context, state));
     }
 
     /**
-     *	<p> This method returns the {@link LayoutDefinition} key for this
-     *	    component.</p>
+     * <p>
+     * This method returns the {@link LayoutDefinition} key for this component.
+     * </p>
      *
-     *	@return	The key to use in the {@link LayoutDefinitionManager}.
+     * @return The key to use in the {@link LayoutDefinitionManager}.
      */
+    @Override
     public String getLayoutDefinitionKey() {
-	return getHelper().getLayoutDefinitionKey();
+        return getHelper().getLayoutDefinitionKey();
     }
-
 
     /**
-     *	<p> This method sets the {@link LayoutDefinition} key for this
-     *	    component.</p>
+     * <p>
+     * This method sets the {@link LayoutDefinition} key for this component.
+     * </p>
      *
-     *	@param	key The key to use in the {@link LayoutDefinitionManager}.
+     * @param key The key to use in the {@link LayoutDefinitionManager}.
      */
+    @Override
     public void setLayoutDefinitionKey(String key) {
-	getHelper().setLayoutDefinitionKey(key);
+        getHelper().setLayoutDefinitionKey(key);
     }
 
+    @Override
     public <V> V getPropertyValue(V field, String attributeName, V defaultValue) {
         return getHelper().getAttributeValue(this, field, attributeName, defaultValue);
     }
 
     /**
-     *	<p> This method retrieves the {@link TemplateComponentHelper} used by
-     *	    this class to help implement the {@link TemplateComponent}
-     *	    interface.</p>
+     * <p>
+     * This method retrieves the {@link TemplateComponentHelper} used by this class to help implement the
+     * {@link TemplateComponent} interface.
+     * </p>
      *
-     *	@return	The {@link TemplateComponentHelper} for this component.
+     * @return The {@link TemplateComponentHelper} for this component.
      */
     protected TemplateComponentHelper getHelper() {
-	if (_helper == null) {
-	    _helper = new TemplateComponentHelper();
-	}
-	return _helper;
+        if (_helper == null) {
+            _helper = new TemplateComponentHelper();
+        }
+        return _helper;
     }
 
-    /**
-     *	<p> Our <code>TemplateComponentHelper</code>.  We initialize it on
-     *	    access b/c we want to ensure it exists, if it is serialized it
-     *	    won't exist if we init it here or in the constructor.</p>
-     */
-    private transient TemplateComponentHelper _helper = null;
 }

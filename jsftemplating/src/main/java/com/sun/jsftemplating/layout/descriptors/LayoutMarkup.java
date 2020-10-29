@@ -19,134 +19,140 @@ package com.sun.jsftemplating.layout.descriptors;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.context.ResponseWriter;
-
 import com.sun.jsftemplating.component.ComponentUtil;
 import com.sun.jsftemplating.layout.descriptors.handler.Handler;
 import com.sun.jsftemplating.layout.descriptors.handler.HandlerContext;
 import com.sun.jsftemplating.layout.descriptors.handler.HandlerDefinition;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.ResponseWriter;
 
 /**
- *  <p>	This class defines a LayoutMarkup.  A LayoutMarkup provides a means to
- *	start a markup tag and associate the current UIComponent with it for
- *	tool support.  It also has the benefit of properly closing the markup
- *	tag for you.</p>
+ * <p>
+ * This class defines a LayoutMarkup. A LayoutMarkup provides a means to start a markup tag and associate the current
+ * UIComponent with it for tool support. It also has the benefit of properly closing the markup tag for you.
+ * </p>
  *
- *  @author Ken Paulsen (ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class LayoutMarkup extends LayoutElementBase implements LayoutElement {
     private static final long serialVersionUID = 1L;
 
     /**
-     *	<p> Constructor.</p>
+     * <p>
+     * Constructor.
+     * </p>
      */
     public LayoutMarkup(LayoutElement parent, String tag, String type) {
-	super(parent, tag);
-	_tag = tag;
-	_type = type;
+        super(parent, tag);
+        _tag = tag;
+        _type = type;
 
-	// Add "afterEncode" handler to close the tag (if there is a close tag)
-	if (!type.equals(TYPE_OPEN)) {
-	    ArrayList<Handler> handlers = new ArrayList<Handler>();
-	    handlers.add(afterEncodeHandler);
-	    setHandlers(AFTER_ENCODE, handlers);
-	}
+        // Add "afterEncode" handler to close the tag (if there is a close tag)
+        if (!type.equals(TYPE_OPEN)) {
+            ArrayList<Handler> handlers = new ArrayList<>();
+            handlers.add(afterEncodeHandler);
+            setHandlers(AFTER_ENCODE, handlers);
+        }
     }
 
     /**
      *
      */
     public String getTag() {
-	return _tag;
+        return _tag;
     }
 
     /**
      *
      */
     public String getType() {
-	return _type;
+        return _type;
     }
 
     /**
-     *	<p> This method displays the text described by this component.  If the
-     *	    text includes an EL expression, it will be evaluated.  It returns
-     *	    true to render children.</p>
+     * <p>
+     * This method displays the text described by this component. If the text includes an EL expression, it will be
+     * evaluated. It returns true to render children.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	component   The <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>
+     * @param component The <code>UIComponent</code>
      *
-     *	@return	false
+     * @return false
      */
+    @Override
     protected boolean encodeThis(FacesContext context, UIComponent component) throws IOException {
-	if (getType().equals(TYPE_CLOSE)) {
-	    return true;
-	}
+        if (getType().equals(TYPE_CLOSE)) {
+            return true;
+        }
 
-	// Get the ResponseWriter
-	ResponseWriter writer = context.getResponseWriter();
+        // Get the ResponseWriter
+        ResponseWriter writer = context.getResponseWriter();
 
-	// Render...
-	Object value = resolveValue(context, component, getTag());
-	if (value != null) {
-	    writer.startElement(value.toString(), component);
-	}
+        // Render...
+        Object value = resolveValue(context, component, getTag());
+        if (value != null) {
+            writer.startElement(value.toString(), component);
+        }
 
-	// Always render children
-	return true;
+        // Always render children
+        return true;
     }
 
     /**
-     *	<p> This handler takes care of closing the tag.</p>
+     * <p>
+     * This handler takes care of closing the tag.
+     * </p>
      *
-     *	@param	context	The HandlerContext.
+     * @param context The HandlerContext.
      */
     public static void afterEncodeHandler(HandlerContext context) throws IOException {
-	FacesContext ctx = context.getFacesContext();
-	ResponseWriter writer = ctx.getResponseWriter();
-	LayoutMarkup markup = (LayoutMarkup) context.getLayoutElement();
-	Object value = ComponentUtil.getInstance(ctx).resolveValue(ctx,
-		markup, (UIComponent) context.getEventObject().getSource(),
-		markup.getTag());
-	if (value != null) {
-	    writer.endElement(value.toString());
-	}
+        FacesContext ctx = context.getFacesContext();
+        ResponseWriter writer = ctx.getResponseWriter();
+        LayoutMarkup markup = (LayoutMarkup) context.getLayoutElement();
+        Object value = ComponentUtil.getInstance(ctx).resolveValue(ctx, markup, (UIComponent) context.getEventObject().getSource(), markup.getTag());
+        if (value != null) {
+            writer.endElement(value.toString());
+        }
     }
 
     /**
      *
      */
-    public static final HandlerDefinition afterEncodeHandlerDef =
-	new HandlerDefinition("_markupAfterEncode");
+    public static final HandlerDefinition afterEncodeHandlerDef = new HandlerDefinition("_markupAfterEncode");
 
     /**
      *
      */
-    public static final Handler afterEncodeHandler =
-	new Handler(afterEncodeHandlerDef);
+    public static final Handler afterEncodeHandler = new Handler(afterEncodeHandlerDef);
 
     static {
-	afterEncodeHandlerDef.setHandlerMethod(
-		LayoutMarkup.class.getName(), "afterEncodeHandler");
+        afterEncodeHandlerDef.setHandlerMethod(LayoutMarkup.class.getName(), "afterEncodeHandler");
     }
 
     /**
-     *	<p> This markup type writes out both the opening and closing tags.</p>
+     * <p>
+     * This markup type writes out both the opening and closing tags.
+     * </p>
      */
-    public static final String TYPE_BOTH   =	"both";
+    public static final String TYPE_BOTH = "both";
 
     /**
-     *	<p> This markup type writes out the closing tag.</p>
+     * <p>
+     * This markup type writes out the closing tag.
+     * </p>
      */
-    public static final String TYPE_CLOSE   =	"close";
+    public static final String TYPE_CLOSE = "close";
 
     /**
-     *	<p> This markup type writes out the opening tag.</p>
+     * <p>
+     * This markup type writes out the opening tag.
+     * </p>
      */
-    public static final String TYPE_OPEN   =	"open";
+    public static final String TYPE_OPEN = "open";
 
-    private String _tag   = null;
-    private String _type   = null;
+    private String _tag = null;
+    private String _type = null;
 }

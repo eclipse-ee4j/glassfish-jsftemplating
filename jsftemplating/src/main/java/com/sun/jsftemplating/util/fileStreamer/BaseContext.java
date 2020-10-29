@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -20,82 +20,99 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
- *  <p> This class provides a base implemention of {@link Context} to
- *	implement code that is likely to be needed by most {@link Context}
- *	implementations.</p>
+ * <p>
+ * This class provides a base implemention of {@link Context} to implement code that is likely to be needed by most
+ * {@link Context} implementations.
+ * </p>
  */
 public abstract class BaseContext implements Context {
 
     /**
-     *	Constructor.
+     * Constructor.
      */
     protected BaseContext() {
     }
 
     /**
-     *	<p> This method may be used to manage arbitrary information between the
-     *	    code invoking the {@link FileStreamer} and the
-     *	    <code>ContentSource</code>.  This method retrieves an attribute.</p>
+     * <p>
+     * This method may be used to manage arbitrary information between the code invoking the {@link FileStreamer} and the
+     * <code>ContentSource</code>. This method retrieves an attribute.
+     * </p>
      *
-     *	<p> See individual {@link ContentSource} implementations for more
-     *	    details on supported / required attributes.</p>
+     * <p>
+     * See individual {@link ContentSource} implementations for more details on supported / required attributes.
+     * </p>
      */
+    @Override
     public Object getAttribute(String name) {
-	if (name == null) {
-	    return null;
-	}
+        if (name == null) {
+            return null;
+        }
 
-	// Return the value (if any)
-	return _att.get(name);
+        // Return the value (if any)
+        return _att.get(name);
     }
 
     /**
-     *	<p> This provides access to all attributes in this Context.</p>
+     * <p>
+     * This provides access to all attributes in this Context.
+     * </p>
      *
-     *	<p> See individual {@link ContentSource} implementations for more
-     *	    details on supported / required attributes.</p>
+     * <p>
+     * See individual {@link ContentSource} implementations for more details on supported / required attributes.
+     * </p>
      */
+    @Override
     public Set<String> getAttributeKeys() {
-	return _att.keySet();
+        return _att.keySet();
     }
 
     /**
-     *	<p> This method may be used to manage arbitrary information between the
-     *	    code invoking the {@link FileStreamer} and the
-     *	    <code>ContentSource</code>.  This method sets an attribute.</p>
+     * <p>
+     * This method may be used to manage arbitrary information between the code invoking the {@link FileStreamer} and the
+     * <code>ContentSource</code>. This method sets an attribute.
+     * </p>
      *
-     *	<p> See individual {@link ContentSource} implementations for more
-     *	    details on supported / required attributes.</p>
+     * <p>
+     * See individual {@link ContentSource} implementations for more details on supported / required attributes.
+     * </p>
      */
+    @Override
     public void setAttribute(String name, Object value) {
-	if (name != null) {
-	    _att.put(name, value);
-	}
+        if (name != null) {
+            _att.put(name, value);
+        }
     }
 
     /**
-     *	<p> This method may be used to manage arbitrary information between the
-     *	    coding invoking the {@link FileStreamer} and the
-     *	    <code>ContentSource</code>.  This method removes an attribute.</p>
+     * <p>
+     * This method may be used to manage arbitrary information between the coding invoking the {@link FileStreamer} and the
+     * <code>ContentSource</code>. This method removes an attribute.
+     * </p>
      *
-     *	<p> See individual {@link ContentSource} implementations for more
-     *	    details on supported / required attributes.</p>
+     * <p>
+     * See individual {@link ContentSource} implementations for more details on supported / required attributes.
+     * </p>
      */
+    @Override
     public void removeAttribute(String name) {
-	_att.remove(name);
+        _att.remove(name);
     }
 
     /**
-     *	<p> Application scope key for allowed paths.</p>
+     * <p>
+     * Application scope key for allowed paths.
+     * </p>
      */
-    protected static final String   ALLOWED_PATHS_KEY   =   "__jsft_AllowPath";
+    protected static final String ALLOWED_PATHS_KEY = "__jsft_AllowPath";
 
     /**
-     *	<p> Application scope key for denied paths.</p>
+     * <p>
+     * Application scope key for denied paths.
+     * </p>
      */
-    protected static final String   DENIED_PATHS_KEY   =   "__jsft_DenyPath";
+    protected static final String DENIED_PATHS_KEY = "__jsft_DenyPath";
 
-    private Map<String, Object> _att	    = new HashMap<String, Object>();
+    private Map<String, Object> _att = new HashMap<>();
 }

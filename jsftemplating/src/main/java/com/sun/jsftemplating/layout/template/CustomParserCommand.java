@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -18,26 +18,27 @@ package com.sun.jsftemplating.layout.template;
 
 import java.io.IOException;
 
-
 /**
- *  <p>	This interface provides a way to process "custom" parser commands.
- *	These commands are in the format: "&lt;![custom command name] ...".
- *	They must be registered with the TemplateParser to be recognized.
- *	See {@link TemplateReader#setCustomParserCommand(String, CustomParserCommand)}.</p>
+ * <p>
+ * This interface provides a way to process "custom" parser commands. These commands are in the format: "&lt;![custom
+ * command name] ...". They must be registered with the TemplateParser to be recognized. See
+ * {@link TemplateReader#setCustomParserCommand(String, CustomParserCommand)}.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface CustomParserCommand {
 
     /**
-     *	<p> This method processes a "custom" command.  These are commands that
-     *	    start with a !.  When this method receives control, the
-     *	    <code>name</code> (i.e. the token after the '!' character) has
-     *	    already been read.  It is passed via the <code>name</code>
-     *	    parameter.</p>
+     * <p>
+     * This method processes a "custom" command. These are commands that start with a !. When this method receives control,
+     * the <code>name</code> (i.e. the token after the '!' character) has already been read. It is passed via the
+     * <code>name</code> parameter.
+     * </p>
      *
-     *	<p> The {@link ProcessingContext} and
-     *	    {@link ProcessingContextEnvironment} are both available.</p>
+     * <p>
+     * The {@link ProcessingContext} and {@link ProcessingContextEnvironment} are both available.
+     * </p>
      */
     void process(ProcessingContext ctx, ProcessingContextEnvironment env, String name) throws IOException;
 }

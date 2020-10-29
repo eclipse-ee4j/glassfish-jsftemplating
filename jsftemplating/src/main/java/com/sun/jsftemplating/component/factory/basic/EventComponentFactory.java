@@ -16,47 +16,50 @@
 
 package com.sun.jsftemplating.component.factory.basic;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-
 import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	This factory is responsible for instantiating an <code>EventComponent
- *	UIComponent</code>.</p>
+ * <p>
+ * This factory is responsible for instantiating an <code>EventComponent
+ *	UIComponent</code>.
+ * </p>
  *
- *  <p>	The {@link com.sun.jsftemplating.layout.descriptors.ComponentType}
- *	id for this factory is: "event".</p>
+ * <p>
+ * The {@link com.sun.jsftemplating.layout.descriptors.ComponentType} id for this factory is: "event".
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 @UIComponentFactory("event")
 public class EventComponentFactory extends ComponentFactoryBase {
 
     /**
-     *	<p> This is the factory method responsible for creating the
-     *	    <code>UIComponent</code>.</p>
+     * <p>
+     * This is the factory method responsible for creating the <code>UIComponent</code>.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	descriptor  The {@link LayoutComponent} descriptor associated
-     *			    with the requested <code>UIComponent</code>.
-     *	@param	parent	    The parent <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>
+     * @param descriptor The {@link LayoutComponent} descriptor associated with the requested <code>UIComponent</code>.
+     * @param parent The parent <code>UIComponent</code>
      *
-     *	@return	The newly created <code>EventComponent</code>.
+     * @return The newly created <code>EventComponent</code>.
      */
+    @Override
     public UIComponent create(FacesContext context, LayoutComponent descriptor, UIComponent parent) {
-	// Create the UIComponent
-	UIComponent comp = createComponent(context, COMPONENT_TYPE, descriptor, parent);
+        // Create the UIComponent
+        UIComponent comp = createComponent(context, COMPONENT_TYPE, descriptor, parent);
 
-	// Set all the attributes / properties
-	setOptions(context, descriptor, comp);
+        // Set all the attributes / properties
+        setOptions(context, descriptor, comp);
 
-	// Return the component
-	return comp;
+        // Return the component
+        return comp;
     }
 
-    public static final String	COMPONENT_TYPE	= "com.sun.jsftemplating.EventComponent";
+    public static final String COMPONENT_TYPE = "com.sun.jsftemplating.EventComponent";
 }

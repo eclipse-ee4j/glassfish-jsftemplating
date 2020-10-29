@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -18,14 +18,13 @@ package com.sun.jsftemplating.layout;
 
 import com.sun.jsftemplating.TemplatingException;
 
-
 /**
- *  <p>	This exception is thrown when a {@link LayoutDefinitionManager} is
- *	unable to locate a
- *	{@link com.sun.jsftemplating.layout.descriptors.LayoutDefinition}.
- *	This exception should not be used to indicate that a syntax error has
- *	occurred, see {@link SyntaxException}.  This exception is meant for
- *	file not found, i/o problems, etc.</p>
+ * <p>
+ * This exception is thrown when a {@link LayoutDefinitionManager} is unable to locate a
+ * {@link com.sun.jsftemplating.layout.descriptors.LayoutDefinition}. This exception should not be used to indicate that
+ * a syntax error has occurred, see {@link SyntaxException}. This exception is meant for file not found, i/o problems,
+ * etc.
+ * </p>
  */
 public class LayoutDefinitionException extends TemplatingException {
     private static final long serialVersionUID = 1L;
@@ -34,27 +33,27 @@ public class LayoutDefinitionException extends TemplatingException {
      *
      */
     public LayoutDefinitionException(String msg, Throwable ex) {
-	super(msg, ex);
+        super(msg, ex);
     }
 
     /**
      *
      */
     public LayoutDefinitionException() {
-	super();
+        super();
     }
 
     /**
      *
      */
     public LayoutDefinitionException(Throwable ex) {
-	super(ex);
+        super(ex);
     }
 
     /**
      *
      */
     public LayoutDefinitionException(String msg) {
-	super(msg);
+        super(msg);
     }
 }

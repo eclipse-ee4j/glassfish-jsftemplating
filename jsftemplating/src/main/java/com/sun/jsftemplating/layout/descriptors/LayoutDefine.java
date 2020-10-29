@@ -22,12 +22,13 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	This {@link LayoutElement} provides a means to identify a portion of
- *	the LayoutDefinition tree by name (id).  This is used by
- *	{@link LayoutInsert} to include portions of the tree defined elsewhere
- *	at the location of the {@link LayoutInsert}.</p>
+ * <p>
+ * This {@link LayoutElement} provides a means to identify a portion of the LayoutDefinition tree by name (id). This is
+ * used by {@link LayoutInsert} to include portions of the tree defined elsewhere at the location of the
+ * {@link LayoutInsert}.
+ * </p>
  *
- *  @author Jason Lee
+ * @author Jason Lee
  */
 public class LayoutDefine extends LayoutElementBase {
     private static final long serialVersionUID = 1L;

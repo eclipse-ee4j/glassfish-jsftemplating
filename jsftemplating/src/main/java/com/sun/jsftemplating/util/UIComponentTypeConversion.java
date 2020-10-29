@@ -19,37 +19,38 @@ package com.sun.jsftemplating.util;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 
-
 /**
- *  <p>	This {@link TypeConversion} makes an attempt to convert a String
- *	clientId to a UIComponent.</p>
+ * <p>
+ * This {@link TypeConversion} makes an attempt to convert a String clientId to a UIComponent.
+ * </p>
  *
- *  @author Ken Paulsen (ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class UIComponentTypeConversion implements TypeConversion {
 
     /**
      *
      */
+    @Override
     public Object convertValue(Object value) {
-	if (value == null) {
-	    return null;
-	}
+        if (value == null) {
+            return null;
+        }
 
-	if (!(value instanceof UIComponent)) {
-	    String strVal = value.toString();
-	    if (strVal.trim().length() == 0) {
-		value = null;
-	    } else {
-		// Treat String as clientId
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		if (!strVal.startsWith(":")) {
-		    strVal = ":" + strVal;
-		}
-		value = ctx.getViewRoot().findComponent(strVal);
-	    }
-	}
+        if (!(value instanceof UIComponent)) {
+            String strVal = value.toString();
+            if (strVal.trim().length() == 0) {
+                value = null;
+            } else {
+                // Treat String as clientId
+                FacesContext ctx = FacesContext.getCurrentInstance();
+                if (!strVal.startsWith(":")) {
+                    strVal = ":" + strVal;
+                }
+                value = ctx.getViewRoot().findComponent(strVal);
+            }
+        }
 
-	return value;
+        return value;
     }
 }

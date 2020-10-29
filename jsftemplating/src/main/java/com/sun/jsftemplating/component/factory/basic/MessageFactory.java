@@ -16,52 +16,55 @@
 
 package com.sun.jsftemplating.component.factory.basic;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.component.UIMessage;
-import jakarta.faces.context.FacesContext;
-
 import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIMessage;
+import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	This factory is responsible for instantiating a <code>UIMessage
- *	UIComponent</code>.</p>
+ * <p>
+ * This factory is responsible for instantiating a <code>UIMessage
+ *	UIComponent</code>.
+ * </p>
  *
- *  <p>	The {@link com.sun.jsftemplating.layout.descriptors.ComponentType}
- *	id for this factory is: "message".</p>
+ * <p>
+ * The {@link com.sun.jsftemplating.layout.descriptors.ComponentType} id for this factory is: "message".
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 @UIComponentFactory("message")
 public class MessageFactory extends ComponentFactoryBase {
 
     /**
-     *	<p> This is the factory method responsible for creating the
-     *	    <code>UIComponent</code>.</p>
+     * <p>
+     * This is the factory method responsible for creating the <code>UIComponent</code>.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	descriptor  The {@link LayoutComponent} descriptor associated
-     *			    with the requested <code>UIComponent</code>.
-     *	@param	parent	    The parent <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>
+     * @param descriptor The {@link LayoutComponent} descriptor associated with the requested <code>UIComponent</code>.
+     * @param parent The parent <code>UIComponent</code>
      *
-     *	@return	The newly created <code>UIMessage</code>.
+     * @return The newly created <code>UIMessage</code>.
      */
+    @Override
     public UIComponent create(FacesContext context, LayoutComponent descriptor, UIComponent parent) {
-	// Create the UIComponent
-	UIMessage comp = new UIMessage();
+        // Create the UIComponent
+        UIMessage comp = new UIMessage();
 
-	// This needs to be done here (before setOptions) so that $...{...}
-	// expressions can be resolved... may want to defer these?
-	if (parent != null) {
-	    addChild(context, descriptor, parent, comp);
-	}
+        // This needs to be done here (before setOptions) so that $...{...}
+        // expressions can be resolved... may want to defer these?
+        if (parent != null) {
+            addChild(context, descriptor, parent, comp);
+        }
 
-	// Set all the attributes / properties
-	setOptions(context, descriptor, comp);
+        // Set all the attributes / properties
+        setOptions(context, descriptor, comp);
 
-	// Return the component
-	return comp;
+        // Return the component
+        return comp;
     }
 }
