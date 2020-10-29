@@ -18,23 +18,24 @@ package com.sun.jsftemplating.layout.event;
 
 import jakarta.faces.component.UIComponent;
 
-
 /**
- *  <p>	This interface defines a method for obtaining a
- *	<code>UIComponent</code>.  This is used by various
- *	<code>EventObject<code> implementations which hold
- *	<code>UIComponent</code>.  This allows event handling code to access
- *	the <code>UIComponent</code> related to the event.</p>
+ * <p>
+ * This interface defines a method for obtaining a <code>UIComponent</code>. This is used by various
+ * <code>EventObject<code> implementations which hold
+ *	<code>UIComponent</code>. This allows event handling code to access the <code>UIComponent</code> related to the
+ * event.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface UIComponentHolder {
 
     /**
-     *	<p> This method returns the <code>UIComponent</code> held by the
-     *	    <code>Object</code> implementing this interface.</p>
+     * <p>
+     * This method returns the <code>UIComponent</code> held by the <code>Object</code> implementing this interface.
+     * </p>
      *
-     *	@return The <code>UIComponent</code>.
+     * @return The <code>UIComponent</code>.
      */
-    public UIComponent getUIComponent();
+    UIComponent getUIComponent();
 }

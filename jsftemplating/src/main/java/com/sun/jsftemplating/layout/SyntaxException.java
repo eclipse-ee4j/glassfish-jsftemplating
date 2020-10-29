@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -18,10 +18,11 @@ package com.sun.jsftemplating.layout;
 
 import com.sun.jsftemplating.TemplatingException;
 
-
 /**
- *  <p>	This exception is thrown when a syntax error has occurred.  For i/o
- *	related exceptions, see {@link LayoutDefinitionException}.</p>
+ * <p>
+ * This exception is thrown when a syntax error has occurred. For i/o related exceptions, see
+ * {@link LayoutDefinitionException}.
+ * </p>
  */
 public class SyntaxException extends TemplatingException {
     private static final long serialVersionUID = 1L;
@@ -30,27 +31,27 @@ public class SyntaxException extends TemplatingException {
      *
      */
     public SyntaxException(String msg, Throwable ex) {
-	super(msg, ex);
+        super(msg, ex);
     }
 
     /**
      *
      */
     public SyntaxException() {
-	super();
+        super();
     }
 
     /**
      *
      */
     public SyntaxException(Throwable ex) {
-	super(ex);
+        super(ex);
     }
 
     /**
      *
      */
     public SyntaxException(String msg) {
-	super(msg);
+        super(msg);
     }
 }

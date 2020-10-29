@@ -18,20 +18,21 @@ package com.sun.jsftemplating.layout.event;
 
 import jakarta.faces.component.UIComponent;
 
-
 /**
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class AfterEncodeEvent extends EventObjectBase implements UIComponentHolder {
     private static final long serialVersionUID = 1L;
+
     /**
-     *	<p> Constructor.</p>
+     * <p>
+     * Constructor.
+     * </p>
      *
-     *	@param	component   The <code>UIComponent</code> associated with this
-     *			    <code>EventObject</code>.
+     * @param component The <code>UIComponent</code> associated with this <code>EventObject</code>.
      */
     public AfterEncodeEvent(UIComponent component) {
-	super(component);
+        super(component);
     }
 }

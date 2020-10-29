@@ -18,81 +18,81 @@ package com.sun.jsftemplating.layout.descriptors;
 
 import java.io.IOException;
 
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.context.ResponseWriter;
-import jakarta.el.ValueExpression;
-
 import com.sun.jsftemplating.component.ComponentUtil;
 import com.sun.jsftemplating.layout.LayoutDefinitionManager;
 
+import jakarta.el.ValueExpression;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.ResponseWriter;
 
 /**
- *  <p>	This class defines a LayoutStaticText.  A LayoutStaticText describes a
- *	text to be output to the screen.  This element is NOT a
- *	<code>UIComponent</code>.</p>
+ * <p>
+ * This class defines a LayoutStaticText. A LayoutStaticText describes a text to be output to the screen. This element
+ * is NOT a <code>UIComponent</code>.
+ * </p>
  *
- *  @author Ken Paulsen (ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class LayoutStaticText extends LayoutComponent {
     private static final long serialVersionUID = 1L;
 
     /**
-     *	<p> Constructor.</p>
+     * <p>
+     * Constructor.
+     * </p>
      */
     public LayoutStaticText(LayoutElement parent, String id, String value) {
-	super(parent, id,
-	    LayoutDefinitionManager.getGlobalComponentType(null, "staticText"));
-	addOption("value", value);
-	_value = value;
+        super(parent, id, LayoutDefinitionManager.getGlobalComponentType(null, "staticText"));
+        addOption("value", value);
+        _value = value;
     }
 
     /**
      *
      */
     public String getValue() {
-	return _value;
+        return _value;
     }
 
     /**
-     *	<p> This method displays the text described by this component.  If the
-     *	    text includes an EL expression, it will be evaluated.  It returns
-     *	    false to avoid attempting to render children.</p>
+     * <p>
+     * This method displays the text described by this component. If the text includes an EL expression, it will be
+     * evaluated. It returns false to avoid attempting to render children.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	component   The <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>
+     * @param component The <code>UIComponent</code>
      *
-     *	@return	false
+     * @return false
      */
+    @Override
     public boolean encodeThis(FacesContext context, UIComponent component) throws IOException {
-	// Get the ResponseWriter
-	ResponseWriter writer = context.getResponseWriter();
+        // Get the ResponseWriter
+        ResponseWriter writer = context.getResponseWriter();
 
-	// Render the child UIComponent
+        // Render the child UIComponent
 //	if (staticText.isEscape()) {
 //	    writer.writeText(getValue(), "value");
 //	} else {
-	    // This code depends on the side-effect of Util.setOption
-	    // converting the string to a ValueExpression if needed.  The
-	    // "__value" is arbitrary.
-	    Object value = ComponentUtil.getInstance(context).setOption(
-		context, "__value", getValue(),
-		getLayoutDefinition(), component);
+        // This code depends on the side-effect of Util.setOption
+        // converting the string to a ValueExpression if needed. The
+        // "__value" is arbitrary.
+        Object value = ComponentUtil.getInstance(context).setOption(context, "__value", getValue(), getLayoutDefinition(), component);
 
-	    // JSF 1.2 VB:
-	    if (value instanceof ValueExpression) {
-		value =
-		    ((ValueExpression) value).getValue(context.getELContext());
-	    }
+        // JSF 1.2 VB:
+        if (value instanceof ValueExpression) {
+            value = ((ValueExpression) value).getValue(context.getELContext());
+        }
 
-	    if (value != null) {
-		writer.write(value.toString());
-	    }
+        if (value != null) {
+            writer.write(value.toString());
+        }
 //	}
 
-	// No children
-	return false;
+        // No children
+        return false;
     }
 
-    private String _value   = null;
+    private String _value = null;
 }

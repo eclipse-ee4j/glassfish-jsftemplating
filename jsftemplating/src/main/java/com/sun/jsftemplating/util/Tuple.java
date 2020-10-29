@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2009, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -20,19 +20,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
  *
  * @author Jason CTR Lee
  */
 public class Tuple {
-    private List<Object> elements = new ArrayList<Object>();
+    private List<Object> elements = new ArrayList<>();
+
     public Tuple(Object... elements) {
         for (Object element : elements) {
             this.elements.add(element);
         }
     }
-    
+
     public Object getElement(int index) {
         return elements.get(index);
     }

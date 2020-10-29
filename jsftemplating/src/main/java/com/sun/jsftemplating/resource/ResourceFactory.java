@@ -16,29 +16,29 @@
 
 package com.sun.jsftemplating.resource;
 
-import jakarta.faces.context.FacesContext;
-
 import com.sun.jsftemplating.layout.descriptors.Resource;
 
+import jakarta.faces.context.FacesContext;
 
 /**
- *  <p>	This file defines the ResourceFactory interface.  Resources are added
- *	to the Request scope so that they may be accessed easily using JSF EL
- *	value-binding, or by other convient means.</p>
+ * <p>
+ * This file defines the ResourceFactory interface. Resources are added to the Request scope so that they may be
+ * accessed easily using JSF EL value-binding, or by other convient means.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface ResourceFactory {
 
     /**
-     *	<p> This is the method responsible for getting the resource using the
-     *	    given {@link Resource} descriptor.</p>
+     * <p>
+     * This is the method responsible for getting the resource using the given {@link Resource} descriptor.
+     * </p>
      *
-     *	@param	context	    The FacesContext
-     *	@param	descriptor  The Resource descriptor that is associated
-     *			    with the requested Resource.
+     * @param context The FacesContext
+     * @param descriptor The Resource descriptor that is associated with the requested Resource.
      *
-     *	@return	The newly created (or found) resource.
+     * @return The newly created (or found) resource.
      */
-    public Object getResource(FacesContext context, Resource descriptor);
+    Object getResource(FacesContext context, Resource descriptor);
 }

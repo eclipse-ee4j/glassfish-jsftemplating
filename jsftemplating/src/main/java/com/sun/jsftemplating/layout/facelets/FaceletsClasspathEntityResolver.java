@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -15,20 +15,22 @@
  */
 
 /**
- * 
+ *
  */
 package com.sun.jsftemplating.layout.facelets;
 
-import com.sun.jsftemplating.util.ClasspathEntityResolver;
 import org.xml.sax.InputSource;
+
+import com.sun.jsftemplating.util.ClasspathEntityResolver;
 
 /**
  * @author Jason Lee
  *
  */
 public class FaceletsClasspathEntityResolver extends ClasspathEntityResolver {
+    @Override
     public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId) {
-	String grammarName = systemId.substring(systemId.lastIndexOf('/') + 1);
-	return super.resolveEntity(name, publicId, baseURI, grammarName);
+        String grammarName = systemId.substring(systemId.lastIndexOf('/') + 1);
+        return super.resolveEntity(name, publicId, baseURI, grammarName);
     }
 }

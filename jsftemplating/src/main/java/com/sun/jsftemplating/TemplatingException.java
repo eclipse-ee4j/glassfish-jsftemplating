@@ -16,124 +16,124 @@
 
 package com.sun.jsftemplating;
 
-import jakarta.faces.component.UIComponent;
-
 import com.sun.jsftemplating.layout.descriptors.LayoutElement;
 
+import jakarta.faces.component.UIComponent;
 
 /**
- *  <p>	This is the base exception class for other exception types that may be
- *	used in this project.  It provides a means for setting / obtaining the
- *	responsible {@link LayoutElement} and / or <code>UIComponent</code>
- *	associated with the <code>Exception</code>.  This information is
- *	optional and may be null.</p>
+ * <p>
+ * This is the base exception class for other exception types that may be used in this project. It provides a means for
+ * setting / obtaining the responsible {@link LayoutElement} and / or <code>UIComponent</code> associated with the
+ * <code>Exception</code>. This information is optional and may be null.
+ * </p>
  */
 public class TemplatingException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
-     *	<p> This is the preferred constructor.</p>
+     * <p>
+     * This is the preferred constructor.
+     * </p>
      */
     public TemplatingException(String msg, Throwable ex, LayoutElement elt, UIComponent comp) {
-	super(msg, ex);
+        super(msg, ex);
 
-	// Setup the rest
-	setResponsibleLayoutElement(elt);
-	setResponsibleUIComponent(comp);
+        // Setup the rest
+        setResponsibleLayoutElement(elt);
+        setResponsibleUIComponent(comp);
     }
 
     /**
      *
      */
     public TemplatingException() {
-	super();
+        super();
     }
 
     /**
      *
      */
     public TemplatingException(LayoutElement elt, UIComponent comp) {
-	super();
+        super();
 
-	// Setup the rest
-	setResponsibleLayoutElement(elt);
-	setResponsibleUIComponent(comp);
+        // Setup the rest
+        setResponsibleLayoutElement(elt);
+        setResponsibleUIComponent(comp);
     }
 
     /**
      *
      */
     public TemplatingException(Throwable ex) {
-	super(ex);
+        super(ex);
     }
 
     /**
      *
      */
     public TemplatingException(Throwable ex, LayoutElement elt, UIComponent comp) {
-	super(ex);
+        super(ex);
 
-	// Setup the rest
-	setResponsibleLayoutElement(elt);
-	setResponsibleUIComponent(comp);
+        // Setup the rest
+        setResponsibleLayoutElement(elt);
+        setResponsibleUIComponent(comp);
     }
 
     /**
      *
      */
     public TemplatingException(String msg) {
-	super(msg);
+        super(msg);
     }
 
     /**
-     *	This is the preferred constructor if there is no root cause.
+     * This is the preferred constructor if there is no root cause.
      */
     public TemplatingException(String msg, LayoutElement elt, UIComponent comp) {
-	super(msg);
+        super(msg);
 
-	// Setup the rest
-	setResponsibleLayoutElement(elt);
-	setResponsibleUIComponent(comp);
+        // Setup the rest
+        setResponsibleLayoutElement(elt);
+        setResponsibleUIComponent(comp);
     }
 
     /**
      *
      */
     public TemplatingException(String msg, Throwable ex) {
-	super(msg, ex);
+        super(msg, ex);
     }
 
     /**
-     *	Allow the Exception to hold the responsible UIComponent
+     * Allow the Exception to hold the responsible UIComponent
      */
     public void setResponsibleUIComponent(UIComponent comp) {
-	_comp = comp;
+        _comp = comp;
     }
 
     /**
-     *	Allow the Exception to hold the responsible UIComponent
+     * Allow the Exception to hold the responsible UIComponent
      */
     public UIComponent getResponsibleUIComponent() {
-	return _comp;
+        return _comp;
     }
 
     /**
-     *	Allow the Exception to hold the responsible LayoutElement
+     * Allow the Exception to hold the responsible LayoutElement
      */
     public void setResponsibleLayoutElement(LayoutElement elt) {
-	_elt = elt;
+        _elt = elt;
     }
 
     /**
-     *	Allow the responsible LayoutElement to be obtained.
+     * Allow the responsible LayoutElement to be obtained.
      *
-     *	@return The responsible LayoutElement (null if not specified)
+     * @return The responsible LayoutElement (null if not specified)
      */
     public LayoutElement getResponsibleLayoutElement() {
-	return _elt;
+        return _elt;
     }
 
-
-    private UIComponent		_comp	    = null;
-    private LayoutElement	_elt	    = null;
+    private UIComponent _comp = null;
+    private LayoutElement _elt = null;
 }

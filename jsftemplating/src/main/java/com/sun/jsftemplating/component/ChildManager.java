@@ -16,34 +16,34 @@
 
 package com.sun.jsftemplating.component;
 
+import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
+
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 
-import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
-
-
 /**
- *  <p>	This interface defines a method to find or create a child
- *	<code>UIComponent</code>.  It is designed to be used in conjunction
- *	with <code>UIComponent</code> implementations.</p>
+ * <p>
+ * This interface defines a method to find or create a child <code>UIComponent</code>. It is designed to be used in
+ * conjunction with <code>UIComponent</code> implementations.
+ * </p>
  *
- *  @see    TemplateComponent
- *  @see    com.sun.jsftemplating.component.ComponentUtil
+ * @see TemplateComponent
+ * @see com.sun.jsftemplating.component.ComponentUtil
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface ChildManager {
 
     /**
-     *	<p> This method will find the request child UIComponent by id (the id
-     *	    is obtained from the given {@link LayoutComponent}).  If it is not
-     *	    found, it will attempt to create it from the supplied
-     *	    {@link LayoutComponent}.</p>
+     * <p>
+     * This method will find the request child UIComponent by id (the id is obtained from the given
+     * {@link LayoutComponent}). If it is not found, it will attempt to create it from the supplied {@link LayoutComponent}.
+     * </p>
      *
-     *	@param	context	    FacesContext
-     *	@param	descriptor  {@link LayoutComponent} describing the UIComponent
+     * @param context FacesContext
+     * @param descriptor {@link LayoutComponent} describing the UIComponent
      *
-     *	@return	Requested UIComponent
+     * @return Requested UIComponent
      */
-    public UIComponent getChild(FacesContext context, LayoutComponent descriptor);
+    UIComponent getChild(FacesContext context, LayoutComponent descriptor);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -16,33 +16,41 @@
 
 package com.sun.jsftemplating.component;
 
-
 /**
- *  <p>	This <code>UIComponent</code> exists so "if" conditions can be
- *	processed during rendering.</p>
+ * <p>
+ * This <code>UIComponent</code> exists so "if" conditions can be processed during rendering.
+ * </p>
  *
- *  @author Ken Paulsen (ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class If extends TemplateComponentBase {
+
     /**
-     *	<p> Constructor for <code>If</code>.</p>
+     * <p>
+     * This is the location of the XML file that declares the layout for the If. (/jsftemplating/if.xml)
+     * </p>
+     */
+    public static final String LAYOUT_KEY = "/jsftemplating/if.xml";
+
+    /**
+     * <p>
+     * Constructor for <code>If</code>.
+     * </p>
      */
     public If() {
-	super();
-	setRendererType("com.sun.jsftemplating.If");
-	setLayoutDefinitionKey(LAYOUT_KEY);
+        super();
+        setRendererType("com.sun.jsftemplating.If");
+        setLayoutDefinitionKey(LAYOUT_KEY);
     }
 
     /**
-     *	<p> Return the family for this component.</p>
+     * <p>
+     * Return the family for this component.
+     * </p>
      */
+    @Override
     public String getFamily() {
-	return "com.sun.jsftemplating.If";
+        return "com.sun.jsftemplating.If";
     }
 
-    /**
-     *	<p> This is the location of the XML file that declares the layout for
-     *	    the If. (/jsftemplating/if.xml)</p>
-     */
-    public static final String	LAYOUT_KEY  =	"/jsftemplating/if.xml";
 }

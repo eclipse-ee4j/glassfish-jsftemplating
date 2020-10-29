@@ -18,53 +18,54 @@ package com.sun.jsftemplating.component.factory;
 
 import java.io.Serializable;
 
+import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
+
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 
-import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
-
-
 /**
- *  <p>	This interface must be implemented by all UIComponent factories.
- *	This enabled UIComponents to be created via a consistent interface.
- *	This is critical to classes such as
- *	{@link com.sun.jsftemplating.component.TemplateComponentBase}
- *	and {@link LayoutComponent}.</p>
+ * <p>
+ * This interface must be implemented by all UIComponent factories. This enabled UIComponents to be created via a
+ * consistent interface. This is critical to classes such as
+ * {@link com.sun.jsftemplating.component.TemplateComponentBase} and {@link LayoutComponent}.
+ * </p>
  *
- *  @author Ken Paulsen	(ken.paulsen@sun.com)
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface ComponentFactory {
 
     /**
-     *	<p> This is the factory method responsible for creating the
-     *	    <code>UIComponent</code>.</p>
+     * <p>
+     * This is the factory method responsible for creating the <code>UIComponent</code>.
+     * </p>
      *
-     *	@param	context	    The <code>FacesContext</code>
-     *	@param	descriptor  The {@link LayoutComponent} descriptor associated
-     *			    with the requested <code>UIComponent</code>.
-     *	@param	parent	    The parent <code>UIComponent</code>
+     * @param context The <code>FacesContext</code>
+     * @param descriptor The {@link LayoutComponent} descriptor associated with the requested <code>UIComponent</code>.
+     * @param parent The parent <code>UIComponent</code>
      *
-     *	@return	The newly created <code>UIComponent</code>.
+     * @return The newly created <code>UIComponent</code>.
      */
-    public UIComponent create(FacesContext context, LayoutComponent descriptor, UIComponent parent);
+    UIComponent create(FacesContext context, LayoutComponent descriptor, UIComponent parent);
 
     /**
-     *	<p> This method returns the extraInfo that was set for this
-     *	    <code>ComponentFactory</code> from the
-     *	    {@link com.sun.jsftemplating.layout.descriptors.ComponentType}.</p>
+     * <p>
+     * This method returns the extraInfo that was set for this <code>ComponentFactory</code> from the
+     * {@link com.sun.jsftemplating.layout.descriptors.ComponentType}.
+     * </p>
      */
-    public Serializable getExtraInfo();
+    Serializable getExtraInfo();
 
     /**
-     *	<p> This method is invoked from the
-     *	    {@link com.sun.jsftemplating.layout.descriptors.ComponentType} to
-     *	    provide more information to the factory.  For example, if the JSF
-     *	    component type was passed in, a single factory class could
-     *	    instatiate multiple components the extra info that is passed in.</p>
+     * <p>
+     * This method is invoked from the {@link com.sun.jsftemplating.layout.descriptors.ComponentType} to provide more
+     * information to the factory. For example, if the JSF component type was passed in, a single factory class could
+     * instatiate multiple components the extra info that is passed in.
+     * </p>
      *
-     *	<p> Some factory implementations may want to use this method to
-     *	    execute intialization code for the factory based in the value
-     *	    passed in.</p>
+     * <p>
+     * Some factory implementations may want to use this method to execute intialization code for the factory based in the
+     * value passed in.
+     * </p>
      */
-    public void setExtraInfo(Serializable extraInfo);
+    void setExtraInfo(Serializable extraInfo);
 }
