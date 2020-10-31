@@ -85,22 +85,22 @@
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>
-                <version>5.0.0-M1</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish</groupId>
                 <artifactId>jakarta.faces</artifactId>
-                <version>3.0.0-RC1</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.faces</groupId>
                 <artifactId>jakarta.faces-api</artifactId>
-                <version>3.0.0-RC1</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.el</groupId>
                 <artifactId>jakarta.el-api</artifactId>
-                <version>4.0.0-RC1</version>
+                <version>4.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.woodstock.dependlibs</groupId>
@@ -110,7 +110,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.11</version>
+                <version>4.13.1</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -119,20 +119,39 @@
     <build>
         <pluginManagement>
             <plugins>
+                 <!-- Sets minimal Maven version to 3.5.4 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.0-beta-1</version>
+                    <version>3.0.0-M3</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireMavenVersion>
+                                        <version>3.5.4</version>
+                                    </requireMavenVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
+                
+                <!-- Restricts the Java version to 1.8 -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.5.1</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
+                        <compilerArgument>-Xlint:unchecked</compilerArgument>
                     </configuration>
                 </plugin>
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -152,7 +171,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.7</version>
+                    <version>3.0.0-M1</version>
                     <configuration>
                         <retryFailedDeploymentCount>10</retryFailedDeploymentCount>
                     </configuration>
@@ -184,7 +203,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>3.2.0</version>
                     <configuration>
                         <useDefaultManifestFile>true</useDefaultManifestFile>
                     </configuration>
@@ -192,12 +211,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.8</version>
+                    <version>3.1.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.17</version>
+                    <version>3.0.0-M4</version>
                     <configuration>
                         <forkCount>0</forkCount>
                         <systemPropertyVariables>
@@ -208,6 +227,7 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -247,25 +267,6 @@
                         <configuration>
                             <dropVersionComponent>qualifier</dropVersionComponent>
                             <versionPropertyName>project.osgi.version</versionPropertyName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <id>add-license.txt</id>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <resourceBundles>
-                                <resourceBundle>org.glassfish:legal:1.1</resourceBundle>
-                            </resourceBundles>
                         </configuration>
                     </execution>
                 </executions>
