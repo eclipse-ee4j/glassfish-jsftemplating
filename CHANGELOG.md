@@ -10,23 +10,29 @@ All notable changes to this project will be documented in this file.
 
 ### Notes
 
+## 3.0.0
+
+### Notes
+- Update for the javax.\* to jakarta.\* namespace transition
+- Applied formatting to source code
+
 ## 2.1.4
 
 ### Notes
 
-Project donated to Eclipse, first release under Eclipse for the EE4J 8 release.
+- Project donated to Eclipse, first release under Eclipse for the EE4J 8 release.
 
 ## 2.1.3
 
 ### Notes
 
-Few Bug Fixes and File headers updated.
+- Few Bug Fixes and File headers updated.
 
 ## 2.1.2
 
 ### Notes
 
-Relaxed OSGi import for javax.servlet.* to "[3.0,5)"
+- Relaxed OSGi import for javax.servlet.* to "[3.0,5)"
 
 ## 2.1.1
 
@@ -34,8 +40,8 @@ Relaxed OSGi import for javax.servlet.* to "[3.0,5)"
 
 - Move the build system to Maven 3.x
 - Updated the Annotation Processor to JSR 169 in order to support JSK8 (APT has
- been removed effectively in JDK8).
-- refactored events and task to match the state of com.sun.jsft in version 2.1.0.
+  been removed effectively in JDK8).
+- Refactored events and task to match the state of com.sun.jsft in version 2.1.0.
 
 ## 2.1.0
 
@@ -77,3 +83,4 @@ Relaxed OSGi import for javax.servlet.* to "[3.0,5)"
 - Removed DynaFaces references (DF is no longer supported w/ this version)
 - Added change to no process JSF2 Ajax requests targeted to @all via JSF2
   but instead handle them as a Full Page request.
+  
