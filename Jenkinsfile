@@ -108,7 +108,7 @@ spec:
       steps {
         container('build-container') {
           timeout(time: 10, unit: 'MINUTES') {
-            sh 'mvn clean install'
+            sh 'mvn clean install -Pstaging --batch-mode -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
             
             junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
           }
