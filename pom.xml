@@ -29,7 +29,7 @@
 
     <groupId>org.glassfish.jsftemplating</groupId>
     <artifactId>jsftemplating-parent</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>JSFTemplating is to work with Jakarta Faces technology to make building pages and components easier. It is used to define the layout of an example component.</description>
@@ -90,12 +90,12 @@
             <dependency>
                 <groupId>org.glassfish</groupId>
                 <artifactId>jakarta.faces</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1-SNAPSHOT-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.faces</groupId>
                 <artifactId>jakarta.faces-api</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1-SNAPSHOT-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.el</groupId>
