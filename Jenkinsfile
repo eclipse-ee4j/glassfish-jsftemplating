@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019-2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2022 Contributors to Eclipse Foundation. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -14,105 +15,29 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  */
 
-env.label = "ci-pod-${UUID.randomUUID().toString()}"
-
 pipeline {
-  
+  agent any
   options {
     // keep at most 50 builds
     buildDiscarder(logRotator(numToKeepStr: '50'))
-    
     // abort pipeline if previous stage is unstable
     skipStagesAfterUnstable()
-    
     // show timestamps in logs
     timestamps()
-    
     // global timeout, abort after 6 hours
     timeout(time: 20, unit: 'MINUTES')
   }
-  
-  agent {
-    kubernetes {
-      label "${env.label}"
-      defaultContainer 'jnlp'
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-spec:
-  volumes:
-    - name: "jenkins-home"
-      emptyDir: {}
-    - name: maven-repo-shared-storage
-      persistentVolumeClaim:
-       claimName: glassfish-maven-repo-storage
-    - name: settings-xml
-      secret:
-        secretName: m2-secret-dir
-        items:
-        - key: settings.xml
-          path: settings.xml
-    - name: settings-security-xml
-      secret:
-        secretName: m2-secret-dir
-        items:
-        - key: settings-security.xml
-          path: settings-security.xml
-    - name: maven-repo-local-storage
-      emptyDir: {}
-  containers:
-  - name: jnlp
-    image: jenkins/jnlp-slave:alpine
-    imagePullPolicy: IfNotPresent
-    volumeMounts:
-    env:
-      - name: JAVA_TOOL_OPTIONS
-        value: -Xmx1G
-    resources:
-      limits:
-        memory: "1Gi"
-        cpu: "1"
-  - name: build-container
-    image: ee4jglassfish/ci:tini-jdk-8.181
-    args:
-    - cat
-    tty: true
-    imagePullPolicy: Always
-    volumeMounts:
-      - name: "jenkins-home"
-        mountPath: "/home/jenkins"
-        readOnly: false
-      - name: maven-repo-shared-storage 
-        mountPath: "/home/jenkins/.m2/repository"
-      - name: settings-xml
-        mountPath: "/home/jenkins/.m2/settings.xml"
-        subPath: settings.xml
-        readOnly: true
-      - name: settings-security-xml
-        mountPath: "/home/jenkins/.m2/settings-security.xml"
-        subPath: settings-security.xml
-        readOnly: true
-      - name: maven-repo-local-storage
-        mountPath: "/home/jenkins/.m2/repository/com/sun/jsftemplating"
-    resources:
-      limits:
-        memory: "7Gi"
-        cpu: "3"
-"""
-    }
-  }
-  
   stages {
     stage('build') {
+      agent any
+      tools {
+        jdk 'temurin-jdk11-latest'
+        maven 'apache-maven-latest'
+      }
       steps {
-        container('build-container') {
-          timeout(time: 10, unit: 'MINUTES') {
-            sh 'mvn clean install -Pstaging --batch-mode -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
-            
-            junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
-          }
-        }
+        sh 'mvn clean install -Pstaging --batch-mode -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+
+        junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
       }
     }
   }
