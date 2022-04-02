@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -22,8 +22,6 @@ import java.util.Map;
 
 import jakarta.faces.component.UIViewRoot;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.el.EvaluationException;
-import jakarta.faces.el.VariableResolver;
 
 /**
  * <p>
@@ -35,7 +33,7 @@ import jakarta.faces.el.VariableResolver;
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
-public class PageSessionResolver extends VariableResolver {
+public class PageSessionResolver {
 
     /**
      * <p>
@@ -46,13 +44,6 @@ public class PageSessionResolver extends VariableResolver {
 
     /**
      * <p>
-     * The original <code>VariableResolver</code>.
-     * </p>
-     */
-    private VariableResolver _origVariableResolver = null;
-
-    /**
-     * <p>
      * The attribute key in which to store the "page" session Map.
      * </p>
      */
@@ -60,22 +51,10 @@ public class PageSessionResolver extends VariableResolver {
 
     /**
      * <p>
-     * Constructor.
+     * This method checks "page session" to see if the value exists.
      * </p>
      */
-    public PageSessionResolver(VariableResolver orig) {
-        super();
-        _origVariableResolver = orig;
-    }
-
-    /**
-     * <p>
-     * This first delegates to the original <code>VariableResolver</code>, it then checks "page session" to see if the value
-     * exists.
-     * </p>
-     */
-    @Override
-    public Object resolveVariable(FacesContext context, String name) throws EvaluationException {
+    public Object resolveVariable(FacesContext context, String name) {
         Object result = null;
         // Check to see if expression explicitly asks for PAGE_SESSION
         if (name.equals(PAGE_SESSION)) {
@@ -87,11 +66,6 @@ public class PageSessionResolver extends VariableResolver {
                 result = createPageSession(context, root);
             }
         } else {
-            if (_origVariableResolver != null) {
-                // Not explicit, let original resolver do its thing first...
-                result = _origVariableResolver.resolveVariable(context, name);
-            }
-
             if (result == null) {
                 // Original resolver couldn't find anything, check page session
                 Map<String, Serializable> map = getPageSession(context, (UIViewRoot) null);

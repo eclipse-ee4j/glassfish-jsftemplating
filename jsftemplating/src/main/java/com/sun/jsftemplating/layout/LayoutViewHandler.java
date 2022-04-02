@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -48,7 +48,6 @@ import com.sun.jsftemplating.util.fileStreamer.FileStreamer;
 
 import jakarta.faces.FactoryFinder;
 import jakarta.faces.application.StateManager;
-import jakarta.faces.application.StateManager.SerializedView;
 import jakarta.faces.application.ViewHandler;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIViewRoot;
@@ -785,7 +784,6 @@ public class LayoutViewHandler extends ViewHandler {
         } else {
             // b/c we pre-processed the ViewTree, we can just add it...
             StateManager stateManager = context.getApplication().getStateManager();
-            SerializedView view = stateManager.saveSerializedView(context);
 
             // New versions of JSF 1.2 changed the contract so that state is
             // always written (client and server state saving)
