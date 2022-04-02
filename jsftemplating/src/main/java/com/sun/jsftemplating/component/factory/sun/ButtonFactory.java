@@ -58,7 +58,9 @@ public class ButtonFactory extends ComponentFactoryBase {
         if (descriptor.getOption("primary") == null) {
             // Use ValueBinding vs. property so we don't set the local value
             // flag which will hide any future VB that is set on the component
-            comp.setValueBinding("primary", context.getApplication().createValueBinding("#{true}"));
+            // comp.setValueBinding("primary", context.getApplication().createValueBinding("#{true}"));
+            // FIXME: Temporary change to the removal of the JSF's EL APIs
+            descriptor.addOption("primary","#{true}");
         }
 
         // Set all the attributes / properties

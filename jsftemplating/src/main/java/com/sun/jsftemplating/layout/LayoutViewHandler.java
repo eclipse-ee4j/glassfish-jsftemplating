@@ -16,6 +16,9 @@
 
 package com.sun.jsftemplating.layout;
 
+import static jakarta.faces.application.StateManager.IS_SAVING_STATE;
+import static java.lang.Boolean.TRUE;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -56,6 +59,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.ResponseWriter;
 import jakarta.faces.render.RenderKit;
 import jakarta.faces.render.RenderKitFactory;
+import jakarta.faces.view.ViewDeclarationLanguage;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -784,9 +788,23 @@ public class LayoutViewHandler extends ViewHandler {
         } else {
             // b/c we pre-processed the ViewTree, we can just add it...
             StateManager stateManager = context.getApplication().getStateManager();
-
             // New versions of JSF 1.2 changed the contract so that state is
             // always written (client and server state saving)
+            // SerializedView view = stateManager.saveSerializedView(context);
+            // FIXME: Temporary change to the removal of the JSF's APIs
+            Object view = null;
+            String viewId = context.getViewRoot().getViewId();
+            ViewDeclarationLanguage vdl = context.getApplication().getViewHandler().getViewDeclarationLanguage(context, viewId);
+            if (vdl != null) {
+                Map<Object, Object> contextAttributes = context.getAttributes();
+                try {
+                    contextAttributes.put(IS_SAVING_STATE, TRUE);
+                    view = vdl.getStateManagementStrategy(context, viewId)
+                                      .saveView(context);
+                } finally {
+                    contextAttributes.remove(IS_SAVING_STATE);
+                }
+            }
             stateManager.writeState(context, view);
         }
     }
