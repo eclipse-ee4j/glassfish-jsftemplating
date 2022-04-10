@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -72,6 +72,7 @@ import jakarta.faces.event.ActionEvent;
  * <li>{@link #HAS_FACET} -- {@link HasFacetDataSource}</li>
  * <li>{@link #HAS_PROPERTY} -- {@link HasPropertyDataSource}</li>
  * <li>{@link #INT} -- {@link IntDataSource}</li>
+ * <li>{@link #METHOD_BINDING} -- {@link MethodBindingDataSource}</li>
  * <li>{@link #METHOD_EXPRESSION} -- {@link MethodExpressionDataSource}</li>
  * <li>{@link #OPTION} -- {@link OptionDataSource}</li>
  * <li>{@link #PAGE_SESSION} -- {@link PageSessionDataSource}</li>
@@ -216,6 +217,13 @@ public class VariableResolver {
      * </p>
      */
     public static final String INT = "int";
+
+    /**
+     * <p>
+     * Defines "methodBinding" in $methodBinding{...}. This allows MethodBindings to be created.
+     * </p>
+     */
+    public static final String METHOD_BINDING = "methodBinding";
 
     /**
      * <p>
@@ -721,6 +729,7 @@ public class VariableResolver {
             dataSourceMap.put(BOOLEAN, new BooleanDataSource());
             dataSourceMap.put(CONSTANT, new ConstantDataSource());
             dataSourceMap.put(RESOURCE, new ResourceBundleDataSource());
+            dataSourceMap.put(METHOD_BINDING, new MethodBindingDataSource());
             dataSourceMap.put(METHOD_EXPRESSION, new MethodExpressionDataSource());
             if (ctx != null) {
                 ctx.getExternalContext().getApplicationMap().put(VR_APP_KEY, dataSourceMap);
@@ -1328,6 +1337,35 @@ public class VariableResolver {
                 }
             }
             return ctx.getApplication().getExpressionFactory().createMethodExpression(ctx.getELContext(), key, Object.class, args);
+        }
+    }
+
+    /**
+     * <p>
+     * This {@link VariableResolver.DataSource} creates a MethodBinding from the supplied key. Example:
+     * </p>
+     *
+     * <p>
+     * $methodBinding{#{bean.key}}
+     * </p>
+     */
+    public static class MethodBindingDataSource implements DataSource {
+        /**
+         * <p>
+         * See class JavaDoc.
+         * </p>
+         *
+         * @param ctx The <code>FacesContext</code>
+         * @param desc The <code>LayoutElement</code>
+         * @param component The <code>UIComponent</code>
+         * @param key The key used to obtain information from this <code>DataSource</code>.
+         *
+         * @return The value resolved from key.
+         */
+        @Override
+        public Object getValue(FacesContext ctx, LayoutElement desc, UIComponent component, String key) {
+            return ctx.getApplication().getExpressionFactory()
+                .createMethodExpression(ctx.getELContext(), key, null, ACTION_ARGS);
         }
     }
 

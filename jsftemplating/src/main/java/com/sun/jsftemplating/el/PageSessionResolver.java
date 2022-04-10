@@ -16,16 +16,22 @@
 
 package com.sun.jsftemplating.el;
 
+import java.beans.FeatureDescriptor;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
+import jakarta.el.PropertyNotWritableException;
 import jakarta.faces.component.UIViewRoot;
 import jakarta.faces.context.FacesContext;
 
 /**
  * <p>
- * This <code>VariableResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
+ * This <code>ELResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
  * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page. This is longer
  * than request scope, but usually shorter than session. This implementation stores the attributes on the
  * <code>UIViewRoot</code>.
@@ -33,7 +39,7 @@ import jakarta.faces.context.FacesContext;
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
-public class PageSessionResolver {
+public class PageSessionResolver extends ELResolver {
 
     /**
      * <p>
@@ -51,31 +57,24 @@ public class PageSessionResolver {
 
     /**
      * <p>
-     * This method checks "page session" to see if the value exists.
+     * This first delegates to the original <code>ELResolver</code>, it then checks "page session" to see if the value
+     * exists.
      * </p>
      */
-    public Object resolveVariable(FacesContext context, String name) {
-        Object result = null;
-        // Check to see if expression explicitly asks for PAGE_SESSION
-        if (name.equals(PAGE_SESSION)) {
-            // It does, return the Map
-            UIViewRoot root = context.getViewRoot();
-            result = getPageSession(context, root);
-            if (result == null) {
-                // No Map! That's ok, create one...
-                result = createPageSession(context, root);
-            }
-        } else {
-            if (result == null) {
-                // Original resolver couldn't find anything, check page session
-                Map<String, Serializable> map = getPageSession(context, (UIViewRoot) null);
-                if (map != null) {
-                    result = map.get(name);
-                }
-            }
+    @Override
+    public Object getValue(ELContext context, Object base, Object property) {
+        if (null != base || property == null || !property.equals(PAGE_SESSION)) {
+            return null;
         }
-
-        return result;
+        Object result = null;
+        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+        UIViewRoot root = facesContext.getViewRoot();
+        Map<String, Serializable> map = getPageSession(facesContext, root);
+        if (map == null) {
+            map = createPageSession(facesContext, root);
+        }
+        context.setPropertyResolved(true);
+        return map.get(property.toString());
     }
 
     /**
@@ -112,5 +111,36 @@ public class PageSessionResolver {
         return map;
     }
 
+    @Override
+    public void setValue(ELContext context, Object base, Object property, Object value) {
+        if (base != null || property == null || value == null || !property.equals(PAGE_SESSION)) {
+            return;
+        }
+        throw new PropertyNotWritableException("PageSessionResolver doesn't support setValue. " +
+            "base=" + base + "property=" + property);
+    }
 
+    @Override
+    public Class<?> getType(ELContext context, Object base, Object property) {
+        if (base != null || property == null || !property.equals(PAGE_SESSION)) {
+            return null;
+        }
+        context.setPropertyResolved(true);
+        return String.class;
+    }
+
+    @Override
+    public boolean isReadOnly(ELContext context, Object base, Object property) {
+        return false;
+    }
+
+    @Override
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+        return null;
+    }
+
+    @Override
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
+        return null;
+    }
 }

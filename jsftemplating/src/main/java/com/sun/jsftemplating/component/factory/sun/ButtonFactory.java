@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -20,6 +20,7 @@ import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
 
+import jakarta.el.ValueExpression;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 
@@ -58,9 +59,9 @@ public class ButtonFactory extends ComponentFactoryBase {
         if (descriptor.getOption("primary") == null) {
             // Use ValueBinding vs. property so we don't set the local value
             // flag which will hide any future VB that is set on the component
-            // comp.setValueBinding("primary", context.getApplication().createValueBinding("#{true}"));
-            // FIXME: Temporary change to the removal of the JSF's EL APIs
-            descriptor.addOption("primary","#{true}");
+            ValueExpression ve = context.getApplication().getExpressionFactory()
+                .createValueExpression(context.getELContext(), "#{true}", Object.class);
+            comp.setValueExpression("primary", ve);
         }
 
         // Set all the attributes / properties

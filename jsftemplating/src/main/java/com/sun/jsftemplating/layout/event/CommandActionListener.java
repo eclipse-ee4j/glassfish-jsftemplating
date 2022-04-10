@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -29,21 +29,26 @@ import com.sun.jsftemplating.layout.descriptors.LayoutElement;
 import com.sun.jsftemplating.layout.descriptors.handler.Handler;
 import com.sun.jsftemplating.util.LogUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIViewRoot;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.event.ActionListener;
+import jakarta.inject.Named;
 
 /**
  * <p>
  * The purpose of this class is to provide an <code>ActionListener</code> that can delegate to handlers (that are likely
  * defined via XML). It is safe to register this class as a managed bean at the Application scope. Or to use it directly
  * as an <code>ActionListener</code>.
+ * The "invokeCommandHandlers" ActionListener in this managed bean capable of dispatching "command" handlers.
  * </p>
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
+@ApplicationScoped
+@Named(value="lfCommand")
 public class CommandActionListener implements ActionListener, Serializable {
 
     /**
