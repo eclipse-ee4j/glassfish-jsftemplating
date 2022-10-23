@@ -23,12 +23,12 @@
  */
 package com.sun.jsft.commands;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.faces.component.UIComponent;
+import jakarta.inject.Named;
+
 import java.util.Iterator;
 import java.util.Map;
-
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.bean.ManagedBean;
-import jakarta.faces.bean.ApplicationScoped;
 
 
 /**
@@ -38,7 +38,7 @@ import jakarta.faces.bean.ApplicationScoped;
  *  @author  Ken Paulsen (kenapaulsen@gmail.com)
  */
 @ApplicationScoped
-@ManagedBean(name="util")
+@Named("util")
 public class UtilCommands {
 
     /**

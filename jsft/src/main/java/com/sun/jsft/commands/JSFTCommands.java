@@ -24,16 +24,15 @@
 package com.sun.jsft.commands;
 
 import com.sun.jsft.event.Command;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
-
-import jakarta.faces.bean.ManagedBean;
-import jakarta.faces.bean.ApplicationScoped;
-import jakarta.faces.context.FacesContext;
 
 
 /**
@@ -43,7 +42,7 @@ import jakarta.faces.context.FacesContext;
  *  @author  Ken Paulsen (kenapaulsen@gmail.com)
  */
 @ApplicationScoped
-@ManagedBean(name="jsft")
+@Named("jsft")
 public class JSFTCommands {
 
     /**
