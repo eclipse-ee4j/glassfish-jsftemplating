@@ -16,18 +16,19 @@
 
 package com.sun.jsftemplating.el;
 
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
+import jakarta.el.PropertyNotFoundException;
+import jakarta.faces.component.UIViewRoot;
+import jakarta.faces.context.FacesContext;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.faces.component.UIViewRoot;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.el.EvaluationException;
-import jakarta.faces.el.VariableResolver;
-
 /**
  * <p>
- * This <code>VariableResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
+ * This <code>ELResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
  * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page. This is longer
  * than request scope, but usually shorter than session. This implementation stores the attributes on the
  * <code>UIViewRoot</code>.
@@ -35,7 +36,7 @@ import jakarta.faces.el.VariableResolver;
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
-public class PageSessionResolver extends VariableResolver {
+public class PageSessionResolver extends ELResolver {
 
     /**
      * <p>
@@ -46,13 +47,6 @@ public class PageSessionResolver extends VariableResolver {
 
     /**
      * <p>
-     * The original <code>VariableResolver</code>.
-     * </p>
-     */
-    private VariableResolver _origVariableResolver = null;
-
-    /**
-     * <p>
      * The attribute key in which to store the "page" session Map.
      * </p>
      */
@@ -60,48 +54,66 @@ public class PageSessionResolver extends VariableResolver {
 
     /**
      * <p>
-     * Constructor.
-     * </p>
-     */
-    public PageSessionResolver(VariableResolver orig) {
-        super();
-        _origVariableResolver = orig;
-    }
-
-    /**
-     * <p>
-     * This first delegates to the original <code>VariableResolver</code>, it then checks "page session" to see if the value
-     * exists.
+     * Checks "page session" to see if the value exists.
      * </p>
      */
     @Override
-    public Object resolveVariable(FacesContext context, String name) throws EvaluationException {
-        Object result = null;
-        // Check to see if expression explicitly asks for PAGE_SESSION
-        if (name.equals(PAGE_SESSION)) {
-            // It does, return the Map
-            UIViewRoot root = context.getViewRoot();
-            result = getPageSession(context, root);
-            if (result == null) {
-                // No Map! That's ok, create one...
-                result = createPageSession(context, root);
-            }
-        } else {
-            if (_origVariableResolver != null) {
-                // Not explicit, let original resolver do its thing first...
-                result = _origVariableResolver.resolveVariable(context, name);
-            }
+    public Object getValue(ELContext elContext, Object base, Object property) {
+        if (base != null) {
+            return null;
+        }
 
-            if (result == null) {
-                // Original resolver couldn't find anything, check page session
-                Map<String, Serializable> map = getPageSession(context, (UIViewRoot) null);
-                if (map != null) {
-                    result = map.get(name);
-                }
+        if (property == null) {
+            throw new PropertyNotFoundException();
+        }
+
+        FacesContext facesContext = (FacesContext) elContext.getContext(FacesContext.class);
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        Map<String, Serializable> pageSession = getPageSession(facesContext, viewRoot);
+
+        Object value = null;
+        // Check to see if expression explicitly asks for PAGE_SESSION
+        if (property.equals(PAGE_SESSION)) {
+            // It does, return the Map
+            if (pageSession == null) {
+                // No Map! That's ok, create one...
+                pageSession = createPageSession(facesContext, viewRoot);
+            }
+            value = pageSession;
+        } else {
+            if (pageSession != null) {
+                // Check page session
+                value = pageSession.get(property.toString());
             }
         }
 
-        return result;
+        if (value != null || (pageSession != null && pageSession.containsKey(property.toString()))) {
+            elContext.setPropertyResolved(true);
+        }
+
+        return value;
+    }
+
+    @Override
+    public Class<?> getType(ELContext elContext, Object base, Object property) {
+        checkPropertyFound(base, property);
+        return null;
+    }
+
+    @Override
+    public void setValue(ELContext elContext, Object base, Object property, Object value) {
+        checkPropertyFound(base, property);
+    }
+
+    @Override
+    public boolean isReadOnly(ELContext elContext, Object base, Object property) {
+        checkPropertyFound(base, property);
+        return false;
+    }
+
+    @Override
+    public Class<?> getCommonPropertyType(ELContext elContext, Object base) {
+        return base == null ? String.class : null;
     }
 
     /**
@@ -111,11 +123,12 @@ public class PageSessionResolver extends VariableResolver {
      * used.
      * </p>
      */
-    public static Map<String, Serializable> getPageSession(FacesContext ctx, UIViewRoot root) {
-        if (root == null) {
-            root = ctx.getViewRoot();
+    @SuppressWarnings("unchecked")
+    public static Map<String, Serializable> getPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
+        if (viewRoot == null) {
+            viewRoot = facesContext.getViewRoot();
         }
-        return (Map<String, Serializable>) root.getAttributes().get(PAGE_SESSION_KEY);
+        return (Map<String, Serializable>) viewRoot.getAttributes().get(PAGE_SESSION_KEY);
     }
 
     /**
@@ -124,19 +137,24 @@ public class PageSessionResolver extends VariableResolver {
      * <code>Map</code>, so be careful.
      * </p>
      */
-    public static Map<String, Serializable> createPageSession(FacesContext ctx, UIViewRoot root) {
-        if (root == null) {
-            root = ctx.getViewRoot();
+    public static Map<String, Serializable> createPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
+        if (viewRoot == null) {
+            viewRoot = facesContext.getViewRoot();
         }
+
         // Create it...
-        Map<String, Serializable> map = new HashMap<>(4);
+        Map<String, Serializable> pageSession = new HashMap<>(4);
 
         // Store it...
-        root.getAttributes().put(PAGE_SESSION_KEY, map);
+        viewRoot.getAttributes().put(PAGE_SESSION_KEY, pageSession);
 
         // Return it...
-        return map;
+        return pageSession;
     }
 
-
+    private static void checkPropertyFound(Object base, Object property) {
+        if (base == null && property == null) {
+            throw new PropertyNotFoundException();
+        }
+    }
 }
