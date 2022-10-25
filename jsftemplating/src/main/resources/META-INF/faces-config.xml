@@ -31,6 +31,7 @@
     <application>
         <!-- -->
 	<view-handler>com.sun.jsftemplating.layout.LayoutViewHandler</view-handler>
+	<state-manager>com.sun.jsftemplating.layout.LayoutStateManager</state-manager>
 	<el-resolver>com.sun.jsftemplating.el.PageSessionResolver</el-resolver>
         <!-- -->
         <locale-config>

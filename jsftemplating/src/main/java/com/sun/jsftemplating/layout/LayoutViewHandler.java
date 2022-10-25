@@ -16,19 +16,6 @@
 
 package com.sun.jsftemplating.layout;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-
 import com.sun.jsftemplating.el.PageSessionResolver;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
 import com.sun.jsftemplating.layout.descriptors.LayoutComposition;
@@ -45,10 +32,8 @@ import com.sun.jsftemplating.util.UIComponentTypeConversion;
 import com.sun.jsftemplating.util.fileStreamer.Context;
 import com.sun.jsftemplating.util.fileStreamer.FacesStreamerContext;
 import com.sun.jsftemplating.util.fileStreamer.FileStreamer;
-
 import jakarta.faces.FactoryFinder;
 import jakarta.faces.application.StateManager;
-import jakarta.faces.application.StateManager.SerializedView;
 import jakarta.faces.application.ViewHandler;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIViewRoot;
@@ -61,6 +46,19 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 // FIXME: Things to consider:
 // FIXME:   - What is necessary to support Portlets...
@@ -596,7 +594,7 @@ public class LayoutViewHandler extends ViewHandler {
 
     /**
      * <p>
-     * This implementation relies on the default behavior to reconstruct the UIViewRoot.
+     * Reconstructs the UIViewRoot.
      * </p>
      *
      * <p>
@@ -615,12 +613,16 @@ public class LayoutViewHandler extends ViewHandler {
         }
 
         // Perform default behavior...
-        UIViewRoot root = _oldViewHandler.restoreView(context, viewId);
+        if (viewId == null || !isMappedView(viewId)) {
+             return _oldViewHandler.restoreView(context, viewId);
+        }
+
+        UIViewRoot viewRoot = StateManagerUtil.restoreView(context, viewId, context.getApplication().getViewHandler().calculateRenderKitId(context));
 
         // We can check for JSFT UIViewRoots by calling
         // getLayoutDefinitionKey(root) as this will return null if not JSFT
-        if (root != null) {
-            String key = ViewRootUtil.getLayoutDefinitionKey(root);
+        if (viewRoot != null) {
+            String key = ViewRootUtil.getLayoutDefinitionKey(viewRoot);
             if (key != null) {
                 // Set the View Root to the new viewRoot (needed for initPage)
                 // NOTE: See createView note about saving / restoring the
@@ -629,7 +631,7 @@ public class LayoutViewHandler extends ViewHandler {
                 // NOTE: normally called by a developer or framework as
                 // NOTE: navigation rules will call createView. For this
                 // NOTE: reason, I am not resetting the UIViewRoot for now.
-                context.setViewRoot(root);
+                context.setViewRoot(viewRoot);
 
                 // Call getLayoutDefinition() to ensure initPage events are
                 // fired, only do this for JSFT ViewRoots. Its good to call
@@ -644,12 +646,12 @@ public class LayoutViewHandler extends ViewHandler {
                 // we can provide a page-level decode() functionality. This
                 // won't effect components in the page, or JSFT-based
                 // components.
-                def.decode(context, root);
+                def.decode(context, viewRoot);
             }
         }
 
         // Return the UIViewRoot
-        return root;
+        return viewRoot;
     }
 
     /**
@@ -785,11 +787,13 @@ public class LayoutViewHandler extends ViewHandler {
         } else {
             // b/c we pre-processed the ViewTree, we can just add it...
             StateManager stateManager = context.getApplication().getStateManager();
-            SerializedView view = stateManager.saveSerializedView(context);
 
             // New versions of JSF 1.2 changed the contract so that state is
             // always written (client and server state saving)
-            stateManager.writeState(context, view);
+            Object savedView = StateManagerUtil.saveView(context, context.getViewRoot().getViewId());
+            if (savedView != null) {
+                stateManager.writeState(context, savedView);
+            }
         }
     }
 
