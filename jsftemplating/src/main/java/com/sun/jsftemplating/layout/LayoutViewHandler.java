@@ -133,7 +133,7 @@ public class LayoutViewHandler extends ViewHandler {
         }
 
         // Check to see if jsftemplating should create the view
-        if (!this.isMappedView(viewId) || viewId == null) {
+        if (!this.isMappedView(viewId)) {
             return  _oldViewHandler.createView(context, viewId);
         }
 
@@ -266,6 +266,9 @@ public class LayoutViewHandler extends ViewHandler {
      * @since 1.2
      */
     private boolean isMappedView(String viewId) {
+        if (viewId == null) {
+            return false;
+        }
         if (this._viewMappings == null) {
             String initParam = FacesContext.getCurrentInstance().getExternalContext().getInitParameterMap().get(VIEW_MAPPINGS);
             this._viewMappings = SimplePatternMatcher.parseMultiPatternString(initParam, ";");
@@ -612,7 +615,7 @@ public class LayoutViewHandler extends ViewHandler {
         }
 
         // Perform default behavior...
-        if (viewId == null || !isMappedView(viewId)) {
+        if (!isMappedView(viewId)) {
              return _oldViewHandler.restoreView(context, viewId);
         }
 
