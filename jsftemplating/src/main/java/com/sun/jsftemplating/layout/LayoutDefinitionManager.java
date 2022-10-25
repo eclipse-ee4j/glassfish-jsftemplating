@@ -685,7 +685,7 @@ public abstract class LayoutDefinitionManager {
             Document document = builder.parse(is);
             XPath xpath = XPathFactory.newInstance().newXPath();
             NSContext ns = new NSContext();
-            ns.addNamespace("f", "http://java.sun.com/JSF/Facelet");
+            ns.addNamespace("f", "jakarta.faces.facelets");
             // Although the following should work, XPath doesn't attempt to
             // get the namespace when no namespace is supplied.
             // ns.setDefaultNSURI("http://java.sun.com/JSF/Facelet");
