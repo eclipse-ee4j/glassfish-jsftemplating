@@ -36,6 +36,7 @@ import com.sun.jsftemplating.util.LogUtil;
 import com.sun.jsftemplating.util.MessageUtil;
 import com.sun.jsftemplating.util.Util;
 
+import jakarta.el.ExpressionFactory;
 import jakarta.faces.component.NamingContainer;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIViewRoot;
@@ -1364,7 +1365,8 @@ public class VariableResolver {
          */
         @Override
         public Object getValue(FacesContext ctx, LayoutElement desc, UIComponent component, String key) {
-            return ctx.getApplication().createMethodBinding(key, ACTION_ARGS);
+            ExpressionFactory factory = ctx.getApplication().getExpressionFactory();
+            return factory.createMethodExpression(ctx.getELContext(), key, null, ACTION_ARGS);
         }
     }
 

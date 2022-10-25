@@ -97,14 +97,4 @@
 	</renderer>
     </render-kit>
 
-    <managed-bean>
-        <description>
-	    The "invokeCommandHandlers" ActionListener in this managed bean
-	    capable of dispatching "command" handlers.
-	</description>
-        <managed-bean-name>lfCommand</managed-bean-name>
-        <managed-bean-class>com.sun.jsftemplating.layout.event.CommandActionListener</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
-    </managed-bean>
-
 </faces-config>
