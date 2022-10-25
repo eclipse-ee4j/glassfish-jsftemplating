@@ -134,8 +134,7 @@ public class LayoutViewHandler extends ViewHandler {
 
         // Check to see if jsftemplating should create the view
         if (!this.isMappedView(viewId) || viewId == null) {
-            UIViewRoot viewRoot = _oldViewHandler.createView(context, viewId);
-            return viewRoot;
+            return  _oldViewHandler.createView(context, viewId);
         }
 
         Locale locale = null;
@@ -158,7 +157,7 @@ public class LayoutViewHandler extends ViewHandler {
         }
 
         // Create the ViewRoot
-        UIViewRoot viewRoot = _oldViewHandler.createView(context, viewId);
+        UIViewRoot viewRoot = (UIViewRoot) context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         viewRoot.setViewId(viewId);
         ViewRootUtil.setLayoutDefinitionKey(viewRoot, viewId);
 
