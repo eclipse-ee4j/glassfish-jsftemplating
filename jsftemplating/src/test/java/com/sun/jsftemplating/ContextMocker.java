@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation. All rights reserved.
+ * Copyright (c) 2020, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -32,6 +33,7 @@ import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.ResponseStream;
 import jakarta.faces.context.ResponseWriter;
+import jakarta.faces.lifecycle.Lifecycle;
 import jakarta.faces.render.RenderKit;
 import org.mockito.Mockito;
 
@@ -50,6 +52,11 @@ public class ContextMocker extends FacesContext {
   static ContextMocker _ctx = new ContextMocker();
   public static void init(){
     setCurrentInstance(_ctx);
+  }
+
+  @Override
+  public Lifecycle getLifecycle() {
+    return Mockito.mock(Lifecycle.class);
   }
 
   @Override
@@ -328,6 +335,11 @@ public class ContextMocker extends FacesContext {
     @Override
     public String encodeWebsocketURL(String string) {
         throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public void release() {
+        throw new UnsupportedOperationException("Not supported");
     }
   }
 }

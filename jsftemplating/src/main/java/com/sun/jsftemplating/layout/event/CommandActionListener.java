@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2006, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation. All rights reserved.
+ * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -29,11 +30,14 @@ import com.sun.jsftemplating.layout.descriptors.LayoutElement;
 import com.sun.jsftemplating.layout.descriptors.handler.Handler;
 import com.sun.jsftemplating.util.LogUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIViewRoot;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.event.ActionListener;
+import jakarta.inject.Named;
 
 /**
  * <p>
@@ -61,6 +65,9 @@ public class CommandActionListener implements ActionListener, Serializable {
      * This delegates to {@link #getInstance(FacesContext)}.
      * </p>
      */
+    @Produces
+    @ApplicationScoped
+    @Named("lfCommand")
     public static CommandActionListener getInstance() {
         return getInstance(FacesContext.getCurrentInstance());
     }

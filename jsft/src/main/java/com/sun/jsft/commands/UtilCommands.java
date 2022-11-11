@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation. All rights reserved.
+ * Copyright (c) 2011, 2022 Oracle and/or its affiliates. All rights reserved.
  * Portions Copyright (c) 2011 Ken Paulsen
  *
  * This program and the accompanying materials are made available under the
@@ -23,12 +24,12 @@
  */
 package com.sun.jsft.commands;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.faces.component.UIComponent;
+import jakarta.inject.Named;
+
 import java.util.Iterator;
 import java.util.Map;
-
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.bean.ManagedBean;
-import jakarta.faces.bean.ApplicationScoped;
 
 
 /**
@@ -38,7 +39,7 @@ import jakarta.faces.bean.ApplicationScoped;
  *  @author  Ken Paulsen (kenapaulsen@gmail.com)
  */
 @ApplicationScoped
-@ManagedBean(name="util")
+@Named("util")
 public class UtilCommands {
 
     /**

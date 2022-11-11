@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
+	Copyright (c) 2022 Contributors to the Eclipse Foundation. All rights reserved.
+    Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
     terms of the Eclipse Public License v. 2.0, which is available at
@@ -17,10 +18,10 @@
 
 -->
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+<faces-config xmlns="https://jakarta.ee/xml/ns/jakartaee"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-facesconfig_1_2.xsd"
-        version="1.2">
+        xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd"
+        version="4.0">
 
 
     <!--
@@ -31,7 +32,8 @@
     <application>
         <!-- -->
 	<view-handler>com.sun.jsftemplating.layout.LayoutViewHandler</view-handler>
-	<variable-resolver>com.sun.jsftemplating.el.PageSessionResolver</variable-resolver>
+	<state-manager>com.sun.jsftemplating.layout.LayoutStateManager</state-manager>
+	<el-resolver>com.sun.jsftemplating.el.PageSessionResolver</el-resolver>
         <!-- -->
         <locale-config>
           <default-locale>en</default-locale>
@@ -95,15 +97,5 @@
 	    <renderer-class>com.sun.jsftemplating.renderer.TemplateRenderer</renderer-class>
 	</renderer>
     </render-kit>
-
-    <managed-bean>
-        <description>
-	    The "invokeCommandHandlers" ActionListener in this managed bean
-	    capable of dispatching "command" handlers.
-	</description>
-        <managed-bean-name>lfCommand</managed-bean-name>
-        <managed-bean-class>com.sun.jsftemplating.layout.event.CommandActionListener</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
-    </managed-bean>
 
 </faces-config>
