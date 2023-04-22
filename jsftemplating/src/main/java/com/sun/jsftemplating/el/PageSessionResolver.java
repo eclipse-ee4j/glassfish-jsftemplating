@@ -32,7 +32,8 @@ import java.util.Map;
  * This <code>ELResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
  * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page. This is longer
  * than request scope, but usually shorter than session. This implementation stores the attributes on the
- * <code>UIViewRoot</code>.
+ * {@link UIViewRoot#getViewMap()}. Therefore it resolves exactly the same values as the `faces.ScopedAttributeELResolver`, which is
+ * specified in the Jakarta Faces specification, if there's nothing stored in lower scopes (request scope) and there are no other resolvers.
  * </p>
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
@@ -45,13 +46,6 @@ public class PageSessionResolver extends ELResolver {
      * </p>
      */
     public static final String PAGE_SESSION = "pageSession";
-
-    /**
-     * <p>
-     * The attribute key in which to store the "page" session Map.
-     * </p>
-     */
-    private static final String PAGE_SESSION_KEY = "_ps";
 
     /**
      * <p>
@@ -129,28 +123,20 @@ public class PageSessionResolver extends ELResolver {
         if (viewRoot == null) {
             viewRoot = facesContext.getViewRoot();
         }
-        return (Map<String, Serializable>) viewRoot.getAttributes().get(PAGE_SESSION_KEY);
+        return Map.class.cast(viewRoot.getViewMap(false));
     }
 
     /**
      * <p>
-     * This method will create a new "page session" <code>Map</code>. It will overwrite any existing "page session"
-     * <code>Map</code>, so be careful.
+     * This method will create a new "page session" <code>Map</code> if it doesn't exist yet. If it exists, 
+     * it will return it as if {@link #getPageSession(jakarta.faces.context.FacesContext, jakarta.faces.component.UIViewRoot)} was called.
      * </p>
      */
     public static Map<String, Serializable> createPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
         if (viewRoot == null) {
             viewRoot = facesContext.getViewRoot();
         }
-
-        // Create it...
-        Map<String, Serializable> pageSession = new HashMap<>(4);
-
-        // Store it...
-        viewRoot.getAttributes().put(PAGE_SESSION_KEY, pageSession);
-
-        // Return it...
-        return pageSession;
+        return Map.class.cast(viewRoot.getViewMap());
     }
 
     private static void checkPropertyFound(Object base, Object property) {
