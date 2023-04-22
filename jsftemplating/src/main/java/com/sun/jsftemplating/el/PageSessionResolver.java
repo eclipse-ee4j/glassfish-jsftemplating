@@ -123,7 +123,7 @@ public class PageSessionResolver extends ELResolver {
         if (viewRoot == null) {
             viewRoot = facesContext.getViewRoot();
         }
-        return Map.class.cast(viewRoot.getViewMap(false));
+        return (Map)viewRoot.getViewMap(false);
     }
 
     /**
