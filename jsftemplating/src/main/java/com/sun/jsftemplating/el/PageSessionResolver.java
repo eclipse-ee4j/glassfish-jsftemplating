@@ -97,7 +97,20 @@ public class PageSessionResolver extends ELResolver {
 
     @Override
     public void setValue(ELContext elContext, Object base, Object property, Object value) {
-        checkPropertyFound(base, property);
+        if (base != null) {
+            return;
+        }
+
+        if (property == null) {
+            throw new PropertyNotFoundException();
+        }
+
+        FacesContext facesContext = (FacesContext) elContext.getContext(FacesContext.class);
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        Map pageSession = getPageSession(facesContext, viewRoot);
+        if (pageSession != null) {
+            pageSession.put(property.toString(), value);
+        }
     }
 
     @Override
