@@ -30,7 +30,7 @@
 
     <groupId>org.glassfish.jsftemplating</groupId>
     <artifactId>jsftemplating-parent</artifactId>
-    <version>4.0.2-SNAPSHOT</version>
+    <version>4.0.2</version>
     <packaging>pom</packaging>
 
     <description>JSFTemplating is to work with Jakarta Faces technology to make building pages and components easier. It is used to define the layout of an example component.</description>
