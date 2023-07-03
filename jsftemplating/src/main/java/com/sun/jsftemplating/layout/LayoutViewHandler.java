@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation. All rights reserved.
+ * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation. All rights reserved.
  * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -231,7 +231,7 @@ public class LayoutViewHandler extends ViewHandler {
         if (def != null && !context.getResponseComplete()) {
             // Ensure that our Resources are available
             Iterator<Resource> it = def.getResources().iterator();
-            Resource resource = null;
+            Resource resource;
             while (it.hasNext()) {
                 resource = it.next();
                 // Just calling getResource() puts it in the Request scope
@@ -246,9 +246,22 @@ public class LayoutViewHandler extends ViewHandler {
             buildUIComponentTree(context, viewRoot, def);
         }
 
-        // Restore the current UIViewRoot
-        if (currentViewRoot != null) {
+        // Restore the current UIViewRoot.
+        // Because new UIViewRoot was temporary set, this will clear
+        // view map, which also contains our "page session".
+        // Thus we need reset a new view root's view map after restore original
+        // view root.
+        if (currentViewRoot != null) {            
+            Map<String, Object> pageSession = viewRoot.getViewMap(false);            
+            if (pageSession != null) {
+                pageSession = new HashMap<>(pageSession);
+            }
+            
             context.setViewRoot(currentViewRoot);
+            
+            if (pageSession != null) {
+                viewRoot.getViewMap().putAll(pageSession);
+            }
         }
 
         // Return the populated UIViewRoot
