@@ -247,21 +247,8 @@ public class LayoutViewHandler extends ViewHandler {
         }
 
         // Restore the current UIViewRoot.
-        // Because new UIViewRoot was temporary set, this will clear
-        // view map, which also contains our "page session".
-        // Thus we need reset a new view root's view map after restore original
-        // view root.
-        if (currentViewRoot != null) {            
-            Map<String, Object> pageSession = viewRoot.getViewMap(false);            
-            if (pageSession != null) {
-                pageSession = new HashMap<>(pageSession);
-            }
-            
+        if (currentViewRoot != null) {
             context.setViewRoot(currentViewRoot);
-            
-            if (pageSession != null) {
-                viewRoot.getViewMap().putAll(pageSession);
-            }
         }
 
         // Return the populated UIViewRoot
