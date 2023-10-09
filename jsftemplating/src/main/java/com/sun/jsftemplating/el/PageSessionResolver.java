@@ -21,6 +21,7 @@ import jakarta.el.ELContext;
 import jakarta.el.ELResolver;
 import jakarta.el.PropertyNotFoundException;
 import jakarta.faces.component.UIViewRoot;
+import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 
 import java.io.Serializable;
@@ -44,7 +45,7 @@ public class PageSessionResolver extends ELResolver {
 
     /**
      * <p>
-     * The name an expression must use when it explicitly specifies page session. ("pageSession")
+     * The name an expression must use when it explicitly specifies page session ("pageSession").
      * </p>
      */
     public static final String PAGE_SESSION = "pageSession";
@@ -58,7 +59,7 @@ public class PageSessionResolver extends ELResolver {
 
     /**
      * <p>
-     * Checks "page session" to see if the value exists.
+     * Checks standard scopes and "page session" to see if the value exists.
      * </p>
      */
     @Override
@@ -71,11 +72,14 @@ public class PageSessionResolver extends ELResolver {
             throw new PropertyNotFoundException();
         }
 
+        elContext.setPropertyResolved(true);
+
         FacesContext facesContext = (FacesContext) elContext.getContext(FacesContext.class);
+        ExternalContext externalContext = facesContext.getExternalContext();
         UIViewRoot viewRoot = facesContext.getViewRoot();
         Map<String, Serializable> pageSession = getPageSession(facesContext, viewRoot);
+        String attribute = (String) property;
 
-        Object value = null;
         // Check to see if expression explicitly asks for PAGE_SESSION
         if (property.equals(PAGE_SESSION)) {
             // It does, return the Map
@@ -83,19 +87,45 @@ public class PageSessionResolver extends ELResolver {
                 // No Map! That's ok, create one...
                 pageSession = createPageSession(facesContext, viewRoot);
             }
-            value = pageSession;
-        } else {
-            if (pageSession != null) {
-                // Check page session
-                value = pageSession.get(property.toString());
+            return pageSession;
+        }
+
+        // Check page session exists and contains a property
+        if (pageSession == null || !pageSession.containsKey(attribute)) {
+            elContext.setPropertyResolved(false);
+            return null;
+        }
+
+        // Check request map
+        Object value = externalContext.getRequestMap().get(attribute);
+        if (value != null) {
+            return value;
+        }
+
+        // Check view map
+        Map<String, Object> viewMap = viewRoot.getViewMap(false);
+        if (viewMap != null) {
+            value = viewMap.get(attribute);
+            if (value != null) {
+                return value;
             }
         }
 
-        if (value != null || (pageSession != null && pageSession.containsKey(property.toString()))) {
-            elContext.setPropertyResolved(true);
+        // Check session map
+        value = externalContext.getSessionMap().get(attribute);
+        if (value != null) {
+            return value;
         }
 
-        return value;
+        // Check application map
+        value = externalContext.getApplicationMap().get(attribute);
+        if (value != null) {
+            return value;
+        }
+
+        // Not found updated property in the standard scopes.
+        // Return value from page session.
+        return pageSession.get(attribute);
     }
 
     @Override
