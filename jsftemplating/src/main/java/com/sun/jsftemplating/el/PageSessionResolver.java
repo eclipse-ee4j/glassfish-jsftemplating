@@ -29,38 +29,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * This <code>ELResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
- * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page. This is longer
- * than request scope, but usually shorter than session.
- * </p>
+ * This {@link ELResolver} exists to resolve "page session" attributes. This concept, borrowed from
+ * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page.
+ * This is longer than request scope, but usually shorter than session.
  *
  * <p>
  * This implementation stores the attributes on the {@link UIViewRoot}.
- * </p>
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class PageSessionResolver extends ELResolver {
 
     /**
-     * <p>
      * The name an expression must use when it explicitly specifies page session ("pageSession").
-     * </p>
      */
     public static final String PAGE_SESSION = "pageSession";
 
     /**
-     * <p>
      * The attribute key in which to store the "page" session Map.
-     * </p>
      */
     private static final String PAGE_SESSION_KEY = "_ps";
 
     /**
-     * <p>
      * Checks standard scopes and "page session" to see if the value exists.
-     * </p>
      */
     @Override
     public Object getValue(ELContext elContext, Object base, Object property) {
@@ -151,11 +142,9 @@ public class PageSessionResolver extends ELResolver {
     }
 
     /**
-     * <p>
-     * This method provides access to the "page session" <code>Map</code>. If it doesn't exist, it returns
-     * <code>null</code>. If the given <code>UIViewRoot</code> is null, then the current <code>UIViewRoot</code>
+     * This method provides access to the "page session" {@link Map}. If it doesn't exist, it returns
+     * {@code null}. If the given {@link UIViewRoot} is {@code null}, then the current {@link UIViewRoot}
      * will be used.
-     * </p>
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Serializable> getPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
@@ -166,10 +155,8 @@ public class PageSessionResolver extends ELResolver {
     }
 
     /**
-     * <p>
-     * This method will create a new "page session" <code>Map</code> if it doesn't exist yet.
-     * It will overwrite any existing "page session" <code>Map</code>, so be careful.
-     * </p>
+     * This method will create a new "page session" {@code Map} if it doesn't exist yet.
+     * It will overwrite any existing "page session" {@code Map}, so be careful.
      */
     public static Map<String, Serializable> createPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
         if (viewRoot == null) {

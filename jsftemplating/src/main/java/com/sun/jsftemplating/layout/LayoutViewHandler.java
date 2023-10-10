@@ -33,6 +33,7 @@ import com.sun.jsftemplating.util.UIComponentTypeConversion;
 import com.sun.jsftemplating.util.fileStreamer.Context;
 import com.sun.jsftemplating.util.fileStreamer.FacesStreamerContext;
 import com.sun.jsftemplating.util.fileStreamer.FileStreamer;
+
 import jakarta.faces.FactoryFinder;
 import jakarta.faces.application.StateManager;
 import jakarta.faces.application.ViewHandler;
@@ -52,48 +53,92 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
 // FIXME: Things to consider:
-// FIXME:   - What is necessary to support Portlets...
 // FIXME:   - Should I attempt to clean up old unused UIComponents?
 // FIXME:   - f:view supported setting locale, I should too...
 
 /**
- * <p>
- * This class provides a custom <code>ViewHandler</code> that is able to create and populate a <code>UIViewRoot</code>
- * from a {@link LayoutDefinition}. This is often defined by an XML document, the default implementation's DTD is
- * defined in <code>layout.dtd</code>.
- * </p>
+ * This class provides a custom {@link ViewHandler} that is able to create and populate a {@link UIViewRoot}
+ * from a {@link LayoutDefinition}. This is often defined by an XML document, the default implementation's DTD
+ * is defined in {@code layout.dtd}.
  *
  * <p>
- * Besides the default <code>ViewHandler</code> behavior, this class is responsible for using the given
- * <code>viewId</code> as the {@link LayoutDefinition} key and setting it on the UIViewRoot that is created. It will
- * obtain the {@link LayoutDefinition}, initialize the declared {@link Resource}s, and instantiate
- * <code>UIComponent</code> tree using the {@link LayoutDefinition}'s declared {@link LayoutComponent} structure. During
- * rendering, it delegates to the {@link LayoutDefinition}.
- * </p>
+ * Besides the default {@link ViewHandler} behavior, this class is responsible for using the given
+ * {@code viewId} as the {@link LayoutDefinition} key and setting it on the {@link UIViewRoot} that is created.
+ * It will obtain the {@link LayoutDefinition}, initialize the declared {@link Resource}s, and instantiate
+ * {@link UIComponent} tree using the {@link LayoutDefinition}'s declared {@link LayoutComponent} structure.
+ * During rendering, it delegates to the {@link LayoutDefinition}.
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class LayoutViewHandler extends ViewHandler {
 
     /**
-     * <p>
+     * This is the key that may be used to identify the clientId of the UIComponent that is to be updated
+     * via an Ajax request.
+     */
+    public static final String AJAX_REQ_KEY = "ajaxReq";
+
+    public static final String RESTORE_VIEW_ID = "_resViewID";
+
+    /**
+     * This is the default prefix that must be included on all requests for resources.
+     */
+    public static final String DEFAULT_RESOURCE_PREFIX = "/resource";
+
+    /**
+     * The name of the {@code context-param} to set the resource prefix.
+     */
+    public static final String RESOURCE_PREFIX = "com.sun.jsftemplating.RESOURCE_PREFIX";
+
+    /**
+     * This key can be used to override the encoding type used in your application.
+     */
+    public static final String ENCODING_TYPE = "com.sun.jsftemplating.ENCODING";
+
+    static final String AJAX_REQ_TARGET_KEY = "_ajaxReqTarget";
+
+    /**
+     * The name of the <code>context-param</code> to set the view mappings.
+     */
+    // TODO: should these keys be added to a new Class f.e. com.sun.jsftemplating.Keys?
+    private static final String VIEW_MAPPINGS = "com.sun.jsftemplating.VIEW_MAPPINGS";
+
+    private static final TypeConversion UICOMPONENT_TYPE_CONVERSION = new UIComponentTypeConversion();
+
+    private final ViewHandler oldViewHandler;
+    private Set<String> resourcePrefix;
+    private Collection<SimplePatternMatcher> viewMappings;
+
+    /*
+     * This is intended to initialize additional type conversions for the {@link TypeConverter}. These additional
+     * type conversions are typically specific to JSF or JSFTemplating. If you are reading this and want additional
+     * custom type conversions, bug Ken Paulsen to add an init event which will allow you to easily initialize
+     * your own type conversions.
+     */
+    static {
+        // Add type conversions by class
+        TypeConverter.registerTypeConversion(null, UIComponent.class, UICOMPONENT_TYPE_CONVERSION);
+        // Add type conversions by class name
+        TypeConverter.registerTypeConversion(null, UIComponent.class.getName(), UICOMPONENT_TYPE_CONVERSION);
+    }
+
+    /**
      * Constructor.
-     * </p>
      *
-     * @param oldViewHandler The old <code>ViewHandler</code>.
+     * @param oldViewHandler The old {@link ViewHandler}.
      */
     public LayoutViewHandler(ViewHandler oldViewHandler) {
-        _oldViewHandler = oldViewHandler;
+        this.oldViewHandler = oldViewHandler;
 
 // FIXME: Fire an initializtion event, work out how to listen for this event
 
@@ -105,92 +150,87 @@ public class LayoutViewHandler extends ViewHandler {
         LayoutDefinitionManager.clearGlobalResources(null);
     }
 
-    /**
-     * <p>
-     * Initialize the view for the request processing lifecycle. It is called at the beginning of the Restore View phase.
-     * </p>
-     * public void initView(FacesContext context) throws FacesException { // Not used yet... I left this here as a reminder
-     * that it is here }
-     */
+//    /**
+//     * Initialize the view for the request processing lifecycle. It is called at the beginning of the Restore View phase.
+//     */
+//     public void initView(FacesContext context) throws FacesException {
+//         // Not used yet... I left this here as a reminder that it is here
+//     }
 
     /**
-     * <p>
-     * This method is invoked when restoreView does not yield a <code>UIViewRoot</code> (initial requests and new pages).
-     * </p>
+     * This method is invoked when restoreView does not yield a {@link UIViewRoot} (initial requests and new pages).
      *
      * <p>
-     * This implementation should work with both {@link LayoutDefinition}-based pages as well as traditional JSP pages (or
-     * other frameworks).
-     * </p>
+     * This implementation should work with both {@link LayoutDefinition}-based pages as well as traditional JSF pages
+     * (or other frameworks).
      */
     @Override
-    public UIViewRoot createView(FacesContext context, String viewId) {
-//_time = new java.util.Date();
+    public UIViewRoot createView(FacesContext facesContext, String viewId) {
         // Check to see if this is a resource request
-        String path = getResourcePath(viewId);
-        if (path != null) {
+        String resourcePath = getResourcePath(viewId);
+        if (resourcePath != null) {
             // Serve Resource
-            return serveResource(context, path);
+            return serveResource(facesContext, resourcePath);
         }
 
         // Check to see if jsftemplating should create the view
         if (!this.isMappedView(viewId)) {
-            return  _oldViewHandler.createView(context, viewId);
+            return  oldViewHandler.createView(facesContext, viewId);
         }
 
         Locale locale = null;
         String renderKitId = null;
 
-        // use the locale from the previous view if is was one which will be
+        // Use the locale from the previous view if is was one which will be
         // the case if this is called from NavigationHandler. There wouldn't be
         // one for the initial case.
-        if (context.getViewRoot() != null) {
-            UIViewRoot oldViewRoot = context.getViewRoot();
-            LayoutDefinition oldLD = ViewRootUtil.getLayoutDefinition(oldViewRoot);
-            if (oldLD != null && oldViewRoot.getViewId().equals(viewId)) {
+        if (facesContext.getViewRoot() != null) {
+            UIViewRoot oldViewRoot = facesContext.getViewRoot();
+            LayoutDefinition oldLayoutDefinition = ViewRootUtil.getLayoutDefinition(oldViewRoot);
+            if (oldLayoutDefinition != null && oldViewRoot.getViewId().equals(viewId)) {
                 // If you navigate to the page you are already on, JSF will
                 // re-create the UIViewRoot of the current page. The initPage
                 // event needs to be reset so that it will re-execute itself.
-                oldLD.setInitPageExecuted(context, Boolean.FALSE);
+                oldLayoutDefinition.setInitPageExecuted(facesContext, Boolean.FALSE);
             }
-            locale = context.getViewRoot().getLocale();
-            renderKitId = context.getViewRoot().getRenderKitId();
+            locale = facesContext.getViewRoot().getLocale();
+            renderKitId = facesContext.getViewRoot().getRenderKitId();
         }
 
-        // Create the ViewRoot
-        UIViewRoot viewRoot = (UIViewRoot) context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+        // Create the View Root
+        UIViewRoot viewRoot = (UIViewRoot) facesContext.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         viewRoot.setViewId(viewId);
         ViewRootUtil.setLayoutDefinitionKey(viewRoot, viewId);
 
-        // if there was no locale from the previous view, calculate the locale
+        // If there was no locale from the previous view, calculate the locale
         // for this view.
         if (locale == null) {
-            locale = calculateLocale(context);
+            locale = calculateLocale(facesContext);
         }
         viewRoot.setLocale(locale);
 
-        // set the renderkit
+        // Set the renderKit
         if (renderKitId == null) {
-            renderKitId = calculateRenderKitId(context);
+            renderKitId = calculateRenderKitId(facesContext);
         }
         viewRoot.setRenderKitId(renderKitId);
 
-        // Save the current viewRoot, temporarily set the new UIViewRoot so
+        // Save the current View Root, temporarily set the new UIViewRoot so
         // beforeCreate, afterCreate will function correctly
-        UIViewRoot currentViewRoot = context.getViewRoot();
+        UIViewRoot currentViewRoot = facesContext.getViewRoot();
 
-        // Set the View Root to the new viewRoot
-        // NOTE: This must happen after return _oldViewHandler.createView(...)
+        // Set the View Root to the new View Root
+        // NOTE: This must happen after return oldViewHandler.createView(...)
         // NOTE2: However, we really want the UIViewRoot available during
         // initPage events which are fired during
         // getLayoutDefinition()... so we need to set this, then unset
-        // it if we go through _oldViewHandler.createView(...)
-        context.setViewRoot(viewRoot);
+        // it if we go through oldViewHandler.createView(...)
+        facesContext.setViewRoot(viewRoot);
 
         // Initialize Resources / Create Tree
-        LayoutDefinition def = null;
+        LayoutDefinition layoutDefinition;
         try {
-            def = ViewRootUtil.getLayoutDefinition(viewRoot);
+            layoutDefinition = ViewRootUtil.getLayoutDefinition(viewRoot);
         } catch (LayoutDefinitionException ex) {
             if (LogUtil.configEnabled()) {
                 LogUtil.config("JSFT0005", (Object) viewId);
@@ -199,22 +239,22 @@ public class LayoutViewHandler extends ViewHandler {
                 }
             }
 
-            // Restore original ViewRoot, we set it prematurely
+            // Restore original View Root, we set it prematurely
             if (currentViewRoot != null) {
 // FIXME: Talk to Ryan about restoring the ViewRoot to null!!
-                context.setViewRoot(currentViewRoot);
+                facesContext.setViewRoot(currentViewRoot);
             }
 
 // FIXME: Provide better feedback when no .jsf & no .jsp
 // FIXME: Difficult to tell at this stage if no .jsp is present
 
             // Not found, delegate to old ViewHandler
-            return _oldViewHandler.createView(context, viewId);
+            return oldViewHandler.createView(facesContext, viewId);
         } catch (RuntimeException ex) {
-            // Restore original ViewRoot, we set it prematurely
+            // Restore original View Root, we set it prematurely
             if (currentViewRoot != null) {
 // FIXME: Talk to Ryan about restoring the ViewRoot to null!!
-                context.setViewRoot(currentViewRoot);
+                facesContext.setViewRoot(currentViewRoot);
             }
 
             // Allow error to be thrown (this isn't the normal code path)
@@ -223,32 +263,29 @@ public class LayoutViewHandler extends ViewHandler {
 
         // We need to do this again b/c an initPage handler may have changed
         // the viewRoot
-        viewRoot = context.getViewRoot();
+        viewRoot = facesContext.getViewRoot();
 
-        // Check to make sure we found a LD and that the response isn't
+        // Check to make sure we found a LayoutDefinition and that the response isn't
         // already finished (initPage could complete the response...
         // i.e. during a redirect).
-        if (def != null && !context.getResponseComplete()) {
+        if (layoutDefinition != null && !facesContext.getResponseComplete()) {
             // Ensure that our Resources are available
-            Iterator<Resource> it = def.getResources().iterator();
-            Resource resource;
-            while (it.hasNext()) {
-                resource = it.next();
+            for (Resource resource : layoutDefinition.getResources()) {
                 // Just calling getResource() puts it in the Request scope
-                resource.getFactory().getResource(context, resource);
+                resource.getFactory().getResource(facesContext, resource);
             }
 
             // Get the Tree and pre-walk it
-            if (LayoutDefinitionManager.isDebug(context)) {
+            if (LayoutDefinitionManager.isDebug(facesContext)) {
                 // Make sure to reset all the client ids we're about to check
-                getClientIdMap(context).clear();
+                getClientIdMap(facesContext).clear();
             }
-            buildUIComponentTree(context, viewRoot, def);
+            buildUIComponentTree(facesContext, viewRoot, layoutDefinition);
         }
 
         // Restore the current UIViewRoot.
         if (currentViewRoot != null) {
-            context.setViewRoot(currentViewRoot);
+            facesContext.setViewRoot(currentViewRoot);
         }
 
         // Return the populated UIViewRoot
@@ -256,28 +293,26 @@ public class LayoutViewHandler extends ViewHandler {
     }
 
     /**
-     * <p>
-     * Tests if the provided <code>viewId</code> matches one of the configured view-mappings. If no view-mappings are
-     * defined, all <code>viewId</code>s will match.
-     * </p>
+     * Tests if the provided {@code viewId} matches one of the configured view-mappings. If no view-mappings are
+     * defined, all {@code viewId}s will match.
      *
-     * @param viewId The viewId to be tested.
+     * @param viewId The {@code viewId} to be tested.
      *
-     * @return true If the viewId matched or no view-mappings are defined, false otherwise.
+     * @return {@code true} if the viewId matched or no view-mappings are defined, {@code false} otherwise.
      * @since 1.2
      */
     private boolean isMappedView(String viewId) {
         if (viewId == null) {
             return false;
         }
-        if (this._viewMappings == null) {
+        if (viewMappings == null) {
             String initParam = FacesContext.getCurrentInstance().getExternalContext().getInitParameterMap().get(VIEW_MAPPINGS);
-            this._viewMappings = SimplePatternMatcher.parseMultiPatternString(initParam, ";");
+            viewMappings = SimplePatternMatcher.parseMultiPatternString(initParam, ";");
         }
-        if (this._viewMappings.isEmpty()) {
+        if (viewMappings.isEmpty()) {
             return true;
         }
-        for (SimplePatternMatcher mapping : this._viewMappings) {
+        for (SimplePatternMatcher mapping : viewMappings) {
             if (mapping.matches(viewId)) {
                 return true;
             }
@@ -286,279 +321,257 @@ public class LayoutViewHandler extends ViewHandler {
     }
 
     /**
-     * <p>
      * If this is a resource request, this method will handle the request.
-     * </p>
      */
-    public static UIViewRoot serveResource(FacesContext context, String path) {
+    public static UIViewRoot serveResource(FacesContext facesContext, String resourcePath) {
         // Mark the response complete so no more processing occurs
-        context.responseComplete();
+        facesContext.responseComplete();
 
         // Create dummy UIViewRoot
-        UIViewRoot root = new UIViewRoot();
-        root.setRenderKitId("dummy");
+        UIViewRoot viewRoot = new UIViewRoot();
+        viewRoot.setRenderKitId("dummy");
 
         // Setup the FacesStreamerContext
-        Context fsContext = new FacesStreamerContext(context);
-        fsContext.setAttribute(Context.FILE_PATH, path);
+        Context facesStreamerContext = new FacesStreamerContext(facesContext);
+        facesStreamerContext.setAttribute(Context.FILE_PATH, resourcePath);
 
         // Get the HttpServletResponse
-        Object obj = context.getExternalContext().getResponse();
-        HttpServletResponse resp = null;
-        if (obj instanceof HttpServletResponse) {
-            resp = (HttpServletResponse) obj;
+        Object response = facesContext.getExternalContext().getResponse();
+        HttpServletResponse httpServletResponse = null;
+        if (response instanceof HttpServletResponse) {
+            httpServletResponse = (HttpServletResponse) response;
 
             // We have an HttpServlet response, do some extra stuff...
             // Check the last modified time to see if we need to serve the resource
-            long mod = fsContext.getContentSource().getLastModified(fsContext);
-            if (mod != -1) {
-                long ifModifiedSince = ((HttpServletRequest) context.getExternalContext().getRequest()).getDateHeader("If-Modified-Since");
+            long lastModified = facesStreamerContext.getContentSource().getLastModified(facesStreamerContext);
+            if (lastModified != -1) {
+                long ifModifiedSince = ((HttpServletRequest) facesContext.getExternalContext().getRequest()).getDateHeader("If-Modified-Since");
                 // Round down to the nearest second for a proper compare
-                if (ifModifiedSince < mod / 1000 * 1000) {
+                if (ifModifiedSince < lastModified / 1000 * 1000) {
                     // A ifModifiedSince of -1 will always be less
-                    resp.setDateHeader("Last-Modified", mod);
+                    httpServletResponse.setDateHeader("Last-Modified", lastModified);
                 } else {
                     // Set not modified header and complete response
-                    resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                    return root;
+                    httpServletResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    return viewRoot;
                 }
             }
         }
 
         // Stream the content
         try {
-            FileStreamer.getFileStreamer(context).streamContent(fsContext);
+            FileStreamer.getFileStreamer(facesContext).streamContent(facesStreamerContext);
         } catch (FileNotFoundException ex) {
             if (LogUtil.infoEnabled()) {
-                LogUtil.info("JSFT0004", (Object) path);
+                LogUtil.info("JSFT0004", (Object) resourcePath);
             }
-            if (resp != null) {
+            if (httpServletResponse != null) {
                 try {
-                    resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
                 } catch (IOException ioEx) {
                     // Ignore
                 }
             }
         } catch (IOException ex) {
             if (LogUtil.infoEnabled()) {
-                LogUtil.info("JSFT0004", (Object) path);
+                LogUtil.info("JSFT0004", (Object) resourcePath);
                 if (LogUtil.fineEnabled()) {
-                    LogUtil.fine("Resource (" + path + ") not available!", ex);
+                    LogUtil.fine("Resource (" + resourcePath + ") not available!", ex);
                 }
             }
 // FIXME: send 404?
         }
 
         // Return dummy UIViewRoot to avoid NPE
-        return root;
+        return viewRoot;
     }
 
     /**
-     * <p>
      * Returns the current encoding type.
-     * </p>
      *
-     * @param ctx The <code>FacesContext</code>.
+     * @param facesContext The {@link FacesContext}.
      */
-    public static String getEncoding(FacesContext ctx) {
+    public static String getEncoding(FacesContext facesContext) {
         // Sanity check
-        if (ctx == null) {
+        if (facesContext == null) {
             return null;
         }
 
-        String encType = null;
-        UIViewRoot root = ctx.getViewRoot();
-        Map<String, Serializable> map = PageSessionResolver.getPageSession(ctx, root);
-        if (map != null) {
-            // check for page session
-            encType = (String) map.get(ENCODING_TYPE);
+        String encodingType = null;
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        Map<String, Serializable> pageSession = PageSessionResolver.getPageSession(facesContext, viewRoot);
+        if (pageSession != null) {
+            // Check for page session
+            encodingType = (String) pageSession.get(ENCODING_TYPE);
         }
-        if (encType == null || encType.equals("")) {
-            // check for application level
-            encType = ctx.getExternalContext().getInitParameter(ENCODING_TYPE);
+        if (encodingType == null || encodingType.isEmpty()) {
+            // Check for application level
+            encodingType = facesContext.getExternalContext().getInitParameter(ENCODING_TYPE);
         }
-        if (encType == null || encType.equals("")) {
-            ExternalContext extCtx = ctx.getExternalContext();
+        if (encodingType == null || encodingType.isEmpty()) {
+            ExternalContext externalContext = facesContext.getExternalContext();
             try {
-                ServletRequest request = (ServletRequest) extCtx.getRequest();
-                encType = request.getCharacterEncoding();
+                ServletRequest request = (ServletRequest) externalContext.getRequest();
+                encodingType = request.getCharacterEncoding();
             } catch (Exception ex) {
-                // FIXME: Portlet?
+                // Ignore
             }
-            if (encType == null || encType.equals("")) {
-                // default encoding type
-                encType = "UTF-8";
+            if (encodingType == null || encodingType.isEmpty()) {
+                // Default encoding type
+                encodingType = StandardCharsets.UTF_8.name();
             }
         }
-        return encType;
+        return encodingType;
     }
 
     /**
-     * <p>
      * This method checks the given viewId and returns a the path to the requested resource if it refers to a resource.
-     * Resources are things like JavaScript files, images, etc. Basically anything that is not a JSF page that you'd like to
-     * serve up via the FacesServlet. Serving resources this way allows you to bundle the resources in a jar file, this is
-     * useful if you want to package up part of an app (or a JSF component) in a single file.
-     * </p>
+     * Resources are things like JavaScript files, images, etc. Basically anything that is not a JSF page that you'd
+     * like to serve up via the FacesServlet. Serving resources this way allows you to bundle the resources in
+     * a jar file, this is useful if you want to package up part of an app (or a JSF component) in a single file.
      *
      * <p>
-     * A request for a resource must be prefixed by the resource prefix, see @{link #getResourcePrefixes}. This prefix must
-     * also be mapped to the <code>FacesServlet</code> in order for this class to handle the request.
-     * </p>
+     * A request for a resource must be prefixed by the resource prefix, see @{link #getResourcePrefixes}.
+     * This prefix must also be mapped to the <code>FacesServlet</code> in order for this class to handle the request.
      */
     public String getResourcePath(String viewId) {
-        ExternalContext extCtx = FacesContext.getCurrentInstance().getExternalContext();
-// FIXME: Portlet!
-        String servletPath = extCtx.getRequestServletPath();
-        Iterator<String> it = getResourcePrefixes().iterator();
-        while (it.hasNext()) {
-            if (servletPath.equals(it.next())) {
-                return extCtx.getRequestPathInfo();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String servletPath = externalContext.getRequestServletPath();
+        for (String resourcePrefix : getResourcePrefixes()) {
+            if (servletPath.equals(resourcePrefix)) {
+                return externalContext.getRequestPathInfo();
             }
         }
         return null;
     }
 
     /**
-     * <p>
      * This method returns the prefix that a URL must contain in order to retrieve a "resource" through this
-     * <code>ViewHandler</code>.
-     * </p>
+     * {@link ViewHandler}.
      *
      * <p>
      * The prefix itself does not manifest itself in the file system / classpath.
-     * </p>
      *
      * <p>
-     * If the prefix is not set, then an init parameter (see {@link #RESOURCE_PREFIX}) will be checked. If that is still not
-     * specified, then the {@link #DEFAULT_RESOURCE_PREFIX} will be used.
-     * </p>
+     * If the prefix is not set, then an init parameter (see {@link #RESOURCE_PREFIX}) will be checked.
+     * If that is still not specified, then the {@link #DEFAULT_RESOURCE_PREFIX} will be used.
      */
     public Set<String> getResourcePrefixes() {
-        if (_resourcePrefix == null) {
-            HashSet<String> set = new HashSet<>();
+        if (resourcePrefix == null) {
+            HashSet<String> prefixes = new HashSet<>();
             // Check to see if it's specified by a context param
             // Get context parameter map (initParams in JSF are context params)
             String initParam = FacesContext.getCurrentInstance().getExternalContext().getInitParameterMap().get(RESOURCE_PREFIX);
             if (initParam != null) {
-                for (String token : initParam.split(",")) {
-                    set.add(token.trim());
+                for (String prefix : initParam.split(",")) {
+                    prefixes.add(prefix.trim());
                 }
             }
             // Add default...
-            set.add(DEFAULT_RESOURCE_PREFIX);
-            _resourcePrefix = set;
+            prefixes.add(DEFAULT_RESOURCE_PREFIX);
+            resourcePrefix = prefixes;
         }
-        return _resourcePrefix;
+        return resourcePrefix;
     }
 
     /**
-     * <p>
      * This method allows a user to set the resource prefix which will be checked to obtain a resource via this
-     * <code>Viewhandler</code>. Currently, only 1 prefix is supported. The prefix itself does not manifest itself in the
-     * file system / classpath.
-     * </p>
+     * {@link ViewHandler}. Currently, only one prefix is supported. The prefix itself does not manifest itself
+     * in the file system / classpath.
      */
-    public void setResourcePrefixes(Set<String> prefix) {
-        _resourcePrefix = prefix;
+    public void setResourcePrefixes(Set<String> prefixes) {
+        resourcePrefix = prefixes;
     }
 
     /**
-     * <p>
-     * This method iterates over the child {@link LayoutElement}s of the given <code>elt</code> to create
-     * <code>UIComponent</code>s for each {@link LayoutComponent}.
-     * </p>
+     * This method iterates over the child {@link LayoutElement}s of the given {@code element} to create
+     * {@link UIComponent}s for each {@link LayoutComponent}.
      *
-     * @param context The <code>FacesContext</code>.
-     * @param parent The parent <code>UIComponent</code> of the <code>UIComponent</code> to be found or created.
-     * @param elt The <code>LayoutElement</code> driving everything.
+     * @param facesContext The {@link FacesContext}.
+     * @param parentComponent The parent {@link UIComponent} of the {@link UIComponent} to be found or created.
+     * @param layoutElement The {@link LayoutElement} driving everything.
      */
-    public static void buildUIComponentTree(FacesContext context, UIComponent parent, LayoutElement elt) {
+    public static void buildUIComponentTree(FacesContext facesContext, UIComponent parentComponent, LayoutElement layoutElement) {
 // FIXME: Consider processing *ALL* LayoutElements so that <if> and others
 // FIXME: have meaning when inside other components.
-        Iterator<LayoutElement> it = elt.getChildLayoutElements().iterator();
-        LayoutElement childElt;
-        UIComponent child = null;
-        while (it.hasNext()) {
-            childElt = it.next();
-            if (childElt instanceof LayoutFacet) {
-                if (!((LayoutFacet) childElt).isRendered()) {
+        for (LayoutElement childLayoutElement : layoutElement.getChildLayoutElements()) {
+            if (childLayoutElement instanceof LayoutFacet) {
+                if (!((LayoutFacet) childLayoutElement).isRendered()) {
                     // The contents of this should be a single UIComponent
-                    buildUIComponentTree(context, parent, childElt);
+                    buildUIComponentTree(facesContext, parentComponent, childLayoutElement);
                 }
                 // NOTE: LayoutFacets that aren't JSF facets aren't
                 // NOTE: meaningful in this context
-            } else if (childElt instanceof LayoutComposition) {
-                LayoutComposition compo = (LayoutComposition) childElt;
-                String template = compo.getTemplate();
+            } else if (childLayoutElement instanceof LayoutComposition) {
+                LayoutComposition layoutComposition = (LayoutComposition) childLayoutElement;
+                String template = layoutComposition.getTemplate();
                 if (template != null) {
                     // Add LayoutComposition to the stack
-                    LayoutComposition.push(context, childElt);
+                    LayoutComposition.push(facesContext, childLayoutElement);
 
                     try {
                         // Add the template here.
-                        buildUIComponentTree(context, parent, LayoutDefinitionManager.getLayoutDefinition(context, template));
+                        buildUIComponentTree(facesContext, parentComponent, LayoutDefinitionManager.getLayoutDefinition(facesContext, template));
                     } catch (LayoutDefinitionException ex) {
-                        if (((LayoutComposition) childElt).isRequired()) {
+                        if (((LayoutComposition) childLayoutElement).isRequired()) {
                             throw ex;
                         }
                     }
 
                     // Remove the LayoutComposition from the stack
-                    LayoutComposition.pop(context);
+                    LayoutComposition.pop(facesContext);
                 } else {
                     // In this case we don't have a template, so instead we
                     // render the body
-                    buildUIComponentTree(context, parent, childElt);
+                    buildUIComponentTree(facesContext, parentComponent, childLayoutElement);
                 }
-            } else if (childElt instanceof LayoutInsert) {
-                Stack<LayoutElement> stack = LayoutComposition.getCompositionStack(context);
-                if (stack.empty()) {
+            } else if (childLayoutElement instanceof LayoutInsert) {
+                Stack<LayoutElement> compositionStack = LayoutComposition.getCompositionStack(facesContext);
+                if (compositionStack.empty()) {
                     // No template-client found...
                     // Is this supposed to do nothing? Or throw an exception?
                     throw new IllegalArgumentException("'ui:insert' encountered, however, no " + "'ui:composition' was used!");
                 }
 
                 // Get associated UIComposition
-                String insertName = ((LayoutInsert) childElt).getName();
+                String insertName = ((LayoutInsert) childLayoutElement).getName();
                 if (insertName == null) {
-                    // include everything
-                    buildUIComponentTree(context, parent, stack.get(0));
+                    // Include everything
+                    buildUIComponentTree(facesContext, parentComponent, compositionStack.get(0));
                 } else {
                     // First resolve any EL in the insertName
-                    insertName = "" + ((LayoutInsert) childElt).resolveValue(context, parent, insertName);
+                    insertName = "" + ((LayoutInsert) childLayoutElement).resolveValue(facesContext, parentComponent, insertName);
 
                     // Search for specific LayoutDefine
-                    LayoutElement def = LayoutInsert.findLayoutDefine(context, parent, stack, insertName);
-                    if (def == null) {
+                    LayoutElement layoutDefine = LayoutInsert.findLayoutDefine(facesContext, parentComponent, compositionStack, insertName);
+                    if (layoutDefine == null) {
                         // Not found include the body-content of the insert
-                        buildUIComponentTree(context, parent, childElt);
+                        buildUIComponentTree(facesContext, parentComponent, childLayoutElement);
                     } else {
                         // Found, include the ui:define content
-                        buildUIComponentTree(context, parent, def);
+                        buildUIComponentTree(facesContext, parentComponent, layoutDefine);
                     }
                 }
-            } else if (childElt instanceof LayoutComponent) {
+            } else if (childLayoutElement instanceof LayoutComponent) {
                 // Calling getChild will add the child UIComponent to tree
-                child = ((LayoutComponent) childElt).getChild(context, parent);
+                UIComponent childComponent = ((LayoutComponent) childLayoutElement).getChild(facesContext, parentComponent);
 
-                if (LayoutDefinitionManager.isDebug(context)) {
-                    // To help developer avoid duplicate ids, we'll check the
-                    // ids here.
-                    Map idMap = getClientIdMap(context);
-                    String id = child.getClientId(context);
-                    if (idMap.containsKey(id)) {
-                        if (!((LayoutComponent) childElt).containsOption(LayoutComponent.SKIP_ID_CHECK) && LogUtil.warningEnabled()) {
-                            LogUtil.warning("JSFT0011", (Object) id);
+                if (LayoutDefinitionManager.isDebug(facesContext)) {
+                    // To help developer avoid duplicate ids, we'll check the ids here.
+                    Map<String, String> clientIdMap = getClientIdMap(facesContext);
+                    String clientId = childComponent.getClientId(facesContext);
+                    if (clientIdMap.containsKey(clientId)) {
+                        if (!((LayoutComponent) childLayoutElement).containsOption(LayoutComponent.SKIP_ID_CHECK) && LogUtil.warningEnabled()) {
+                            LogUtil.warning("JSFT0011", (Object) clientId);
                         }
 
                         // Clear the map as a way to prevent this message from
                         // being shown tons of times as may occur in some
                         // valid use cases. Remember this is just a debug-time
                         // only helpful message anyway...
-                        idMap.clear();
+                        clientIdMap.clear();
                     }
-                    idMap.put(id, id);
+                    clientIdMap.put(clientId, clientId);
                 }
 
                 // Check for events
@@ -573,60 +586,52 @@ public class LayoutViewHandler extends ViewHandler {
                 // NOTE: automatically).
 
                 // Recurse
-                buildUIComponentTree(context, child, childElt);
+                buildUIComponentTree(facesContext, childComponent, childLayoutElement);
             } else {
-                buildUIComponentTree(context, parent, childElt);
+                buildUIComponentTree(facesContext, parentComponent, childLayoutElement);
             }
         }
     }
 
     /**
-     * <p>
-     * This method provides access to a <code>Map</code> of clientIds that have been used in this page.
-     * </p>
+     * This method provides access to a {@link Map} of clientIds that have been used in this page.
      */
-    private static Map<String, String> getClientIdMap(FacesContext context) {
-        Map<String, Object> reqMap = context.getExternalContext().getRequestMap();
-        Map<String, String> idMap = (Map<String, String>) reqMap.get("__debugIdMap");
-        if (idMap == null) {
-            idMap = new HashMap<>();
-            reqMap.put("__debugIdMap", idMap);
+    private static Map<String, String> getClientIdMap(FacesContext facesContext) {
+        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+        @SuppressWarnings("unchecked")
+        Map<String, String> debugIdMap = (Map<String, String>) requestMap.get("__debugIdMap");
+        if (debugIdMap == null) {
+            debugIdMap = new HashMap<>();
+            requestMap.put("__debugIdMap", debugIdMap);
         }
-        return idMap;
+        return debugIdMap;
     }
 
     /**
-     * <p>
      * Reconstructs the UIViewRoot.
-     * </p>
-     *
-     * <p>
-     * ...
-     * </p>
      */
     @Override
-    public UIViewRoot restoreView(FacesContext context, String viewId) {
-//_time = new java.util.Date();
-        Map<String, Object> map = context.getExternalContext().getRequestMap();
-        if (map.get(RESTORE_VIEW_ID) == null) {
-            map.put(RESTORE_VIEW_ID, viewId);
+    public UIViewRoot restoreView(FacesContext facesContext, String viewId) {
+        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+        if (requestMap.get(RESTORE_VIEW_ID) == null) {
+            requestMap.put(RESTORE_VIEW_ID, viewId);
         } else {
             // This request has already been processed, it must be a forward()
-            return createView(context, viewId);
+            return createView(facesContext, viewId);
         }
 
         // Perform default behavior...
         if (!isMappedView(viewId)) {
-             return _oldViewHandler.restoreView(context, viewId);
+             return oldViewHandler.restoreView(facesContext, viewId);
         }
 
-        UIViewRoot viewRoot = StateManagerUtil.restoreView(context, viewId, context.getApplication().getViewHandler().calculateRenderKitId(context));
+        UIViewRoot viewRoot = StateManagerUtil.restoreView(facesContext, viewId, facesContext.getApplication().getViewHandler().calculateRenderKitId(facesContext));
 
         // We can check for JSFT UIViewRoots by calling
         // getLayoutDefinitionKey(root) as this will return null if not JSFT
         if (viewRoot != null) {
-            String key = ViewRootUtil.getLayoutDefinitionKey(viewRoot);
-            if (key != null) {
+            String layoutDefinitionKey = ViewRootUtil.getLayoutDefinitionKey(viewRoot);
+            if (layoutDefinitionKey != null) {
                 // Set the View Root to the new viewRoot (needed for initPage)
                 // NOTE: See createView note about saving / restoring the
                 // NOTE: original UIViewRoot and issue with setting it to
@@ -634,7 +639,7 @@ public class LayoutViewHandler extends ViewHandler {
                 // NOTE: normally called by a developer or framework as
                 // NOTE: navigation rules will call createView. For this
                 // NOTE: reason, I am not resetting the UIViewRoot for now.
-                context.setViewRoot(viewRoot);
+                facesContext.setViewRoot(viewRoot);
 
                 // Call getLayoutDefinition() to ensure initPage events are
                 // fired, only do this for JSFT ViewRoots. Its good to call
@@ -643,13 +648,13 @@ public class LayoutViewHandler extends ViewHandler {
                 // ApplyRequestValuesPhase, however, I no longer have a custom
                 // UIViewRoot to use for this purpose, so I will do it here,
                 // which should be just as good.
-                LayoutDefinition def = ViewRootUtil.getLayoutDefinition(key);
+                LayoutDefinition layoutDefinition = ViewRootUtil.getLayoutDefinition(layoutDefinitionKey);
 
                 // While we're at it, we should call the LD decode() event so
                 // we can provide a page-level decode() functionality. This
                 // won't effect components in the page, or JSFT-based
                 // components.
-                def.decode(context, viewRoot);
+                layoutDefinition.decode(facesContext, viewRoot);
             }
         }
 
@@ -658,26 +663,27 @@ public class LayoutViewHandler extends ViewHandler {
     }
 
     /**
-     *
+     * Perform whatever actions are required to render the response view to the response object associated
+     * with the current {@link FacesContext}.
      */
     @Override
-    public void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException {
+    public void renderView(FacesContext facesContext, UIViewRoot viewToRender) throws IOException {
         // Make sure we have a def
-        LayoutDefinition def = ViewRootUtil.getLayoutDefinition(viewToRender);
-        if (def == null) {
+        LayoutDefinition layoutDefinition = ViewRootUtil.getLayoutDefinition(viewToRender);
+        if (layoutDefinition == null) {
             // PartialRequest or No def, fall back to default behavior
-            _oldViewHandler.renderView(context, viewToRender);
+            oldViewHandler.renderView(facesContext, viewToRender);
         } else {
             // Start document
-            if (!context.getPartialViewContext().isPartialRequest() || context.getPartialViewContext().isRenderAll()) {
-                ResponseWriter writer = setupResponseWriter(context);
-                writer.startDocument();
+            if (!facesContext.getPartialViewContext().isPartialRequest() || facesContext.getPartialViewContext().isRenderAll()) {
+                ResponseWriter responseWriter = setupResponseWriter(facesContext);
+                responseWriter.startDocument();
 
                 // Render content
-                def.encode(context, viewToRender);
+                layoutDefinition.encode(facesContext, viewToRender);
 
                 // End document
-                writer.endDocument();
+                responseWriter.endDocument();
             } else {
                 // NOTE: This "if" branch has been added to avoid the
                 // NOTE: start/endDocument calls being called 2x on PartialView
@@ -686,251 +692,163 @@ public class LayoutViewHandler extends ViewHandler {
                 // NOTE: correct... which I do not feel that it is).
                 //
                 // Render content
-                def.encode(context, viewToRender);
+                layoutDefinition.encode(facesContext, viewToRender);
             }
         }
-//System.out.println("PROCESSING TIME: " + (new java.util.Date().getTime() - _time.getTime()));
     }
 
-    private static void renderComponent(FacesContext context, UIComponent comp) throws IOException {
-        if (!comp.isRendered()) {
+    private static void renderComponent(FacesContext facesContext, UIComponent component) throws IOException {
+        if (!component.isRendered()) {
             return;
         }
 
-        comp.encodeBegin(context);
-        if (comp.getRendersChildren()) {
-            comp.encodeChildren(context);
+        component.encodeBegin(facesContext);
+        if (component.getRendersChildren()) {
+            component.encodeChildren(facesContext);
         } else {
-            UIComponent child = null;
-            Iterator<UIComponent> it = comp.getChildren().iterator();
-            while (it.hasNext()) {
-                child = it.next();
-                renderComponent(context, child);
+            for (UIComponent childComponent : component.getChildren()) {
+                renderComponent(facesContext, childComponent);
             }
         }
-        comp.encodeEnd(context);
+        component.encodeEnd(facesContext);
     }
 
     /**
      *
      */
-    private ResponseWriter setupResponseWriter(FacesContext context) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        if (writer != null) {
+    private ResponseWriter setupResponseWriter(FacesContext facesContext) throws IOException {
+        ResponseWriter responseWriter = facesContext.getResponseWriter();
+        if (responseWriter != null) {
             // It is already setup
-            return writer;
+            return responseWriter;
         }
 
-        ExternalContext extCtx = context.getExternalContext();
-// FIXME: Portlet?
-        ServletResponse response = (ServletResponse) extCtx.getResponse();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        ServletResponse response = (ServletResponse) externalContext.getResponse();
 
-        RenderKitFactory renderFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit = renderFactory.getRenderKit(context, context.getViewRoot().getRenderKitId());
+        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(facesContext, facesContext.getViewRoot().getRenderKitId());
 
         // See if the user (page author) specified a ContentType...
         String contentTypeList = null;
 // FIXME: Provide a way for the user to specify this...
 // FIXME: Test multiple browsers against this code!!
         String userContentType = "text/html";
-        if (userContentType != null && userContentType.length() > 0) {
+        if (userContentType != null && !userContentType.isEmpty()) {
             // User picked this, use it...
             response.setContentType(userContentType);
         } else {
             // No explicit Content-type, find best match...
-            contentTypeList = extCtx.getRequestHeaderMap().get("Accept");
+            contentTypeList = externalContext.getRequestHeaderMap().get("Accept");
             if (contentTypeList == null) {
                 contentTypeList = "text/html;q=1.0";
             }
         }
-        String encType = getEncoding(context);
-        // Object encValue = extCtx.getSessionMap().get(
-        // ViewHandler.CHARACTER_ENCODING_KEY);
+        String encodingType = getEncoding(facesContext);
 
-        extCtx.getSessionMap().put(ViewHandler.CHARACTER_ENCODING_KEY, encType);
+        externalContext.getSessionMap().put(ViewHandler.CHARACTER_ENCODING_KEY, encodingType);
 // FIXME: use the external context to set the character encoding, it is supported
-        response.setCharacterEncoding(encType);
+        response.setCharacterEncoding(encodingType);
 
-// FIXME: Portlet?
-        writer = renderKit.createResponseWriter(new OutputStreamWriter(response.getOutputStream(), encType), contentTypeList, encType);
-        context.setResponseWriter(writer);
-// Not setting the contentType here results in XHTML which formats differently
-// than text/html in Mozilla.. even though the documentation claims this
-// works, it doesn't (try viewing the Tree)
-//        response.setContentType("text/html");
+        responseWriter = renderKit.createResponseWriter(new OutputStreamWriter(response.getOutputStream(), encodingType), contentTypeList, encodingType);
+        facesContext.setResponseWriter(responseWriter);
+        // Not setting the contentType here results in XHTML which formats differently
+        // than text/html in Mozilla.. even though the documentation claims this
+        // works, it doesn't (try viewing the Tree)
+        // response.setContentType("text/html");
 
         // As far as I can tell JSF doesn't ever set the Content-type that it
         // works so hard to calculate... This is the code we should be
         // calling, however we can't do this yet
-        response.setContentType(writer.getContentType());
+        response.setContentType(responseWriter.getContentType());
 
-        return writer;
+        return responseWriter;
     }
 
     /**
-     * <p>
      * Take any appropriate action to either immediately write out the current state information (by calling
-     * <code>StateManager.writeState</code>, or noting where state information should later be written.
-     * </p>
+     * {@link StateManager#writeState}, or noting where state information should later be written.
      *
-     * @param context <code>FacesContext</code> for the current request
-     *
+     * @param facesContext {@link FacesContext} for the current request
      * @exception IOException if an input/output error occurs
      */
     @Override
-    public void writeState(FacesContext context) throws IOException {
+    public void writeState(FacesContext facesContext) throws IOException {
         // Check to see if we should delegate back to the legacy ViewHandler
-        UIViewRoot root = context.getViewRoot();
+        UIViewRoot viewRoot = facesContext.getViewRoot();
 // FIXME: For now I am treating "@all" Ajax requests as normal requests...
 // FIXME: Otherwise the view state is not written.
-        if (root == null || context.getPartialViewContext().isPartialRequest() && !context.getPartialViewContext().isRenderAll()
-                || ViewRootUtil.getLayoutDefinition(root) == null) {
+        if (viewRoot == null || facesContext.getPartialViewContext().isPartialRequest() && !facesContext.getPartialViewContext().isRenderAll()
+                || ViewRootUtil.getLayoutDefinition(viewRoot) == null) {
             // Use old behavior...
-            _oldViewHandler.writeState(context);
+            oldViewHandler.writeState(facesContext);
         } else {
-            // b/c we pre-processed the ViewTree, we can just add it...
-            StateManager stateManager = context.getApplication().getStateManager();
+            // Because we pre-processed the ViewTree, we can just add it...
+            StateManager stateManager = facesContext.getApplication().getStateManager();
 
             // New versions of JSF 1.2 changed the contract so that state is
             // always written (client and server state saving)
-            Object savedView = StateManagerUtil.saveView(context, context.getViewRoot().getViewId());
+            Object savedView = StateManagerUtil.saveView(facesContext, facesContext.getViewRoot().getViewId());
             if (savedView != null) {
-                stateManager.writeState(context, savedView);
+                stateManager.writeState(facesContext, savedView);
             }
         }
     }
 
     /**
-     * <p>
-     * Return a URL suitable for rendering (after optional encoding performed by the <code>encodeResourceURL()</code> method
-     * of <code>ExternalContext<code> that selects the specified web
-     *	    application resource.  If the specified path starts with a slash,
-     *	    it must be treated as context relative; otherwise, it must be
-     *	    treated as relative to the action URL of the current view.</p>
+     * Return a URL suitable for rendering (after optional encoding performed by the {@code encodeResourceURL()}
+     * method of {@code ExternalContext} that selects the specified web application resource.  If the specified path
+     * starts with a slash, it must be treated as context relative; otherwise, it must be treated as relative to the
+     * action URL of the current view.
      *
-     *	&#64;param context	<code>FacesContext</code> for the current request
-     * @param path Resource path to convert to a URL
-     *
-     * @exception IllegalArgumentException If <code>viewId</code> is not valid for this <code>ViewHandler</code>.
+     * @param facesContext {@link FacesContext} for the current request
+     * @param resourcePath Resource path to convert to a URL
+     * @exception IllegalArgumentException If {@code viewId} is not valid for this {@link ViewHandler}.
      */
     @Override
-    public String getResourceURL(FacesContext context, String path) {
-        return _oldViewHandler.getResourceURL(context, path);
+    public String getResourceURL(FacesContext facesContext, String resourcePath) {
+        return oldViewHandler.getResourceURL(facesContext, resourcePath);
     }
 
     @Override
-    public String getWebsocketURL(FacesContext context, String channel) {
+    public String getWebsocketURL(FacesContext facesContext, String channel) {
         throw new UnsupportedOperationException("Not supported.");
     }
 
     /**
-     * <p>
-     * Return a URL suitable for rendering (after optional encoding performed by the <code>encodeActionURL()</code> method
-     * of <code>ExternalContext</code> that selects the specified view identifier.
-     * </p>
+     * Return a URL suitable for rendering (after optional encoding performed by the {@code encodeActionURL()}
+     * method of {@code ExternalContext} that selects the specified view identifier.
      *
-     * @param context <code>FacesContext</code> for this request
+     * @param facesContext {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
-     *
-     * @exception IllegalArgumentException If <code>viewId</code> is not valid for this <code>ViewHandler</code>.
+     * @exception IllegalArgumentException If {@code viewId} is not valid for this {@link ViewHandler}.
      */
     @Override
-    public String getActionURL(FacesContext context, String viewId) {
-        return _oldViewHandler.getActionURL(context, viewId);
+    public String getActionURL(FacesContext facesContext, String viewId) {
+        return oldViewHandler.getActionURL(facesContext, viewId);
     }
 
     /**
-     * <p>
-     * Returns an appropriate <code>Locale</code> to use for this and subsequent requests for the current client.
-     * </p>
+     * Returns an appropriate {@link Locale} to use for this and subsequent requests for the current client.
      *
-     * @param context <code>FacesContext</code> for the current request
-     *
-     * @exception NullPointerException if <code>context</code> is <code>null</code>
+     * @param facesContext {@link FacesContext} for the current request
+     * @exception NullPointerException if {@code context} is {@code null}
      */
     @Override
-    public Locale calculateLocale(FacesContext context) {
-        return _oldViewHandler.calculateLocale(context);
+    public Locale calculateLocale(FacesContext facesContext) {
+        return oldViewHandler.calculateLocale(facesContext);
     }
 
     /**
-     * <p>
-     * Return an appropriate <code>renderKitId</code> for this and subsequent requests from the current client.
-     * </p>
+     * Return an appropriate {@code renderKitId} for this and subsequent requests from the current client.
      *
      * <p>
-     * The default return value is <code>jakarta.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.
-     * </p>
+     * The default return value is {@link  jakarta.faces.render.RenderKitFactory#HTML_BASIC_RENDER_KIT}.
      *
-     * @param context <code>FacesContext</code> for the current request.
+     * @param facesContext {@link FacesContext} for the current request.
      */
     @Override
-    public String calculateRenderKitId(FacesContext context) {
-        return _oldViewHandler.calculateRenderKitId(context);
+    public String calculateRenderKitId(FacesContext facesContext) {
+        return oldViewHandler.calculateRenderKitId(facesContext);
     }
-
-    /**
-     * <p>
-     * This is the key that may be used to identify the clientId of the UIComponent that is to be updated via an Ajax
-     * request.
-     * </p>
-     */
-    public static final String AJAX_REQ_KEY = "ajaxReq";
-
-    public static final String RESTORE_VIEW_ID = "_resViewID";
-
-    /**
-     * <p>
-     * This is the default prefix that must be included on all requests for resources.
-     * </p>
-     */
-    public static final String DEFAULT_RESOURCE_PREFIX = "/resource";
-
-    /**
-     * <p>
-     * The name of the <code>context-param</code> to set the resource prefix.
-     * </p>
-     */
-    public static final String RESOURCE_PREFIX = "com.sun.jsftemplating.RESOURCE_PREFIX";
-
-    private Set<String> _resourcePrefix = null;
-//private transient java.util.Date _time = null;
-
-    private ViewHandler _oldViewHandler = null;
-    static final String AJAX_REQ_TARGET_KEY = "_ajaxReqTarget";
-
-    /**
-     * <p>
-     * The name of the <code>context-param</code> to set the view mappings
-     * </p>
-     */
-    // TODO: should these keys be added to a new Class f.e. com.sun.jsftemplating.Keys?
-    private static final String VIEW_MAPPINGS = "com.sun.jsftemplating.VIEW_MAPPINGS";
-
-    /**
-     *
-     */
-    private static final TypeConversion UICOMPONENT_TYPE_CONVERSION = new UIComponentTypeConversion();
-
-    /*
-     * <p> This is intended to initialize additional type conversions for the {@link TypeConverter}. These additional type
-     * conversions are typically specific to JSF or JSFTemplating. If you are reading this and want additional custom type
-     * conversions, bug Ken Paulsen to add an init event which will allow you to easily initialize your own type
-     * conversions.</p>
-     */
-    static {
-        // Add type conversions by class
-        TypeConverter.registerTypeConversion(null, UIComponent.class, UICOMPONENT_TYPE_CONVERSION);
-        // Add type conversions by class name
-        TypeConverter.registerTypeConversion(null, UIComponent.class.getName(), UICOMPONENT_TYPE_CONVERSION);
-    }
-
-    private Collection<SimplePatternMatcher> _viewMappings = null;
-
-    /**
-     * <p>
-     * This key can be used to override the encoding type used in your application.
-     * </p>
-     */
-    public static final String ENCODING_TYPE = "com.sun.jsftemplating.ENCODING";
 }
