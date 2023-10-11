@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Contributors to the Eclipse Foundation. All rights reserved.
+ * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation. All rights reserved.
  * Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,7 @@ import jakarta.el.ELContext;
 import jakarta.el.ELResolver;
 import jakarta.el.PropertyNotFoundException;
 import jakarta.faces.component.UIViewRoot;
+import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 
 import java.io.Serializable;
@@ -28,29 +29,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This {@link ELResolver} exists to resolve "page session" attributes. This concept, borrowed from
+ * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page.
+ * This is longer than request scope, but usually shorter than session.
+ *
  * <p>
- * This <code>ELResolver</code> exists to resolve "page session" attributes. This concept, borrowed from
- * NetDynamics / JATO, stores data w/ the page so that it is available throughout the life of the page. This is longer
- * than request scope, but usually shorter than session. This implementation stores the attributes on the
- * {@link UIViewRoot#getViewMap()}. Therefore it resolves exactly the same values as the `faces.ScopedAttributeELResolver`, which is
- * specified in the Jakarta Faces specification, if there's nothing stored in lower scopes (request scope) and there are no other resolvers.
- * </p>
+ * This implementation stores the attributes on the {@link UIViewRoot}.
  *
  * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public class PageSessionResolver extends ELResolver {
 
     /**
-     * <p>
-     * The name an expression must use when it explicitly specifies page session. ("pageSession")
-     * </p>
+     * The name an expression must use when it explicitly specifies page session ("pageSession").
      */
     public static final String PAGE_SESSION = "pageSession";
 
     /**
-     * <p>
-     * Checks "page session" to see if the value exists.
-     * </p>
+     * The attribute key in which to store the "page" session Map.
+     */
+    private static final String PAGE_SESSION_KEY = "_ps";
+
+    /**
+     * Checks standard scopes and "page session" to see if the value exists.
      */
     @Override
     public Object getValue(ELContext elContext, Object base, Object property) {
@@ -62,11 +63,14 @@ public class PageSessionResolver extends ELResolver {
             throw new PropertyNotFoundException();
         }
 
+        elContext.setPropertyResolved(true);
+
         FacesContext facesContext = (FacesContext) elContext.getContext(FacesContext.class);
+        ExternalContext externalContext = facesContext.getExternalContext();
         UIViewRoot viewRoot = facesContext.getViewRoot();
         Map<String, Serializable> pageSession = getPageSession(facesContext, viewRoot);
+        String attribute = (String) property;
 
-        Object value = null;
         // Check to see if expression explicitly asks for PAGE_SESSION
         if (property.equals(PAGE_SESSION)) {
             // It does, return the Map
@@ -74,19 +78,45 @@ public class PageSessionResolver extends ELResolver {
                 // No Map! That's ok, create one...
                 pageSession = createPageSession(facesContext, viewRoot);
             }
-            value = pageSession;
-        } else {
-            if (pageSession != null) {
-                // Check page session
-                value = pageSession.get(property.toString());
+            return pageSession;
+        }
+
+        // Check page session exists and contains a property
+        if (pageSession == null || !pageSession.containsKey(attribute)) {
+            elContext.setPropertyResolved(false);
+            return null;
+        }
+
+        // Check request map
+        Object value = externalContext.getRequestMap().get(attribute);
+        if (value != null) {
+            return value;
+        }
+
+        // Check view map
+        Map<String, Object> viewMap = viewRoot.getViewMap(false);
+        if (viewMap != null) {
+            value = viewMap.get(attribute);
+            if (value != null) {
+                return value;
             }
         }
 
-        if (value != null || (pageSession != null && pageSession.containsKey(property.toString()))) {
-            elContext.setPropertyResolved(true);
+        // Check session map
+        value = externalContext.getSessionMap().get(attribute);
+        if (value != null) {
+            return value;
         }
 
-        return value;
+        // Check application map
+        value = externalContext.getApplicationMap().get(attribute);
+        if (value != null) {
+            return value;
+        }
+
+        // Not found updated property in the standard scopes.
+        // Return value from page session.
+        return pageSession.get(attribute);
     }
 
     @Override
@@ -97,20 +127,7 @@ public class PageSessionResolver extends ELResolver {
 
     @Override
     public void setValue(ELContext elContext, Object base, Object property, Object value) {
-        if (base != null) {
-            return;
-        }
-
-        if (property == null) {
-            throw new PropertyNotFoundException();
-        }
-
-        FacesContext facesContext = (FacesContext) elContext.getContext(FacesContext.class);
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-        Map pageSession = getPageSession(facesContext, viewRoot);
-        if (pageSession != null) {
-            pageSession.put(property.toString(), value);
-        }
+        checkPropertyFound(base, property);
     }
 
     @Override
@@ -125,31 +142,35 @@ public class PageSessionResolver extends ELResolver {
     }
 
     /**
-     * <p>
-     * This method provides access to the "page session" <code>Map</code>. If it doesn't exist, it returns
-     * <code>null</code>. If the given <code>UIViewRoot</code> is null, then the current <code>UIViewRoot</code> will be
-     * used.
-     * </p>
+     * This method provides access to the "page session" {@link Map}. If it doesn't exist, it returns
+     * {@code null}. If the given {@link UIViewRoot} is {@code null}, then the current {@link UIViewRoot}
+     * will be used.
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Serializable> getPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
         if (viewRoot == null) {
             viewRoot = facesContext.getViewRoot();
         }
-        return (Map)viewRoot.getViewMap(false);
+        return (Map<String, Serializable>) viewRoot.getAttributes().get(PAGE_SESSION_KEY);
     }
 
     /**
-     * <p>
-     * This method will create a new "page session" <code>Map</code> if it doesn't exist yet. If it exists, 
-     * it will return it as if {@link #getPageSession(jakarta.faces.context.FacesContext, jakarta.faces.component.UIViewRoot)} was called.
-     * </p>
+     * This method will create a new "page session" {@code Map} if it doesn't exist yet.
+     * It will overwrite any existing "page session" {@code Map}, so be careful.
      */
     public static Map<String, Serializable> createPageSession(FacesContext facesContext, UIViewRoot viewRoot) {
         if (viewRoot == null) {
             viewRoot = facesContext.getViewRoot();
         }
-        return Map.class.cast(viewRoot.getViewMap());
+
+        // Create it...
+        Map<String, Serializable> pageSession = new HashMap<>(4);
+
+        // Store it...
+        viewRoot.getAttributes().put(PAGE_SESSION_KEY, pageSession);
+
+        // Return it...
+        return pageSession;
     }
 
     private static void checkPropertyFound(Object base, Object property) {
