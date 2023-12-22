@@ -28,6 +28,8 @@
     </parent>
 
     <artifactId>jsftemplating</artifactId>
+    
+    <name>jsftemplating</name>
 
     <dependencies>
         <dependency>

@@ -28,6 +28,8 @@
     </parent>
 
     <artifactId>jsft</artifactId>
+    
+    <name>jsft</name>
 
     <dependencies>
         <dependency>
