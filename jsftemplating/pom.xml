@@ -43,6 +43,14 @@
             <artifactId>jakarta.el-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.sun.woodstock.dependlibs</groupId>
             <artifactId>dataprovider</artifactId>
         </dependency>
