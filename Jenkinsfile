@@ -20,10 +20,13 @@ pipeline {
   options {
     // keep at most 50 builds
     buildDiscarder(logRotator(numToKeepStr: '50'))
+    
     // abort pipeline if previous stage is unstable
     skipStagesAfterUnstable()
+    
     // show timestamps in logs
     timestamps()
+    
     // global timeout, abort after 6 hours
     timeout(time: 20, unit: 'MINUTES')
   }
@@ -31,7 +34,7 @@ pipeline {
     stage('build') {
       agent any
       tools {
-        jdk 'temurin-jdk11-latest'
+        jdk 'temurin-jdk17-latest'
         maven 'apache-maven-latest'
       }
       steps {
