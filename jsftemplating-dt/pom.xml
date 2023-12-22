@@ -28,6 +28,8 @@
     </parent>
 
     <artifactId>jsftemplating-dt</artifactId>
+    
+    <name>jsftemplating-dt</name>
 
     <build>
         <plugins>

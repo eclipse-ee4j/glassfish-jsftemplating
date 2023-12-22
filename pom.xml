@@ -33,6 +33,7 @@
     <version>4.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>JSFTemplating</name>
     <description>JSFTemplating is to work with Jakarta Faces technology to make building pages and components easier. It is used to define the layout of an example component.</description>
     <licenses>
         <license>
