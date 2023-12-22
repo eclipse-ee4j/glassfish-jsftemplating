@@ -30,7 +30,7 @@
 
     <groupId>org.glassfish.jsftemplating</groupId>
     <artifactId>jsftemplating-parent</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.1.0-M1</version>
     <packaging>pom</packaging>
 
     <name>JSFTemplating</name>
