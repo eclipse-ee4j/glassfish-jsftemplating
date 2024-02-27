@@ -23,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,6 +39,26 @@ import com.sun.jsftemplating.layout.xml.XMLErrorHandler;
 public class DbFactory {
     public static DocumentBuilder getInstance() throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        String FEATURE = null;
+        try {
+            FEATURE = "http://xml.org/sax/features/external-parameter-entities";
+            factory.setFeature(FEATURE, false);
+
+            FEATURE = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+            factory.setFeature(FEATURE, false);
+
+            FEATURE = "http://xml.org/sax/features/external-general-entities";
+            factory.setFeature(FEATURE, false);
+
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+        } catch (ParserConfigurationException e) {
+            throw new IllegalStateException("The feature '"
+            + FEATURE + "' is not supported by your XML processor.", e);
+        }
         factory.setNamespaceAware(true);
         factory.setValidating(false);
         factory.setIgnoringComments(true);

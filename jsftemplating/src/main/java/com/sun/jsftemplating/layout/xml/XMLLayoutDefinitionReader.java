@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -139,6 +140,26 @@ public class XMLLayoutDefinitionReader {
         try {
             // Get a DocumentBuilderFactory and set it up
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            String FEATURE = null;
+            try {
+                FEATURE = "http://xml.org/sax/features/external-parameter-entities";
+                dbf.setFeature(FEATURE, false);
+
+                FEATURE = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+                dbf.setFeature(FEATURE, false);
+
+                FEATURE = "http://xml.org/sax/features/external-general-entities";
+                dbf.setFeature(FEATURE, false);
+
+                dbf.setXIncludeAware(false);
+                dbf.setExpandEntityReferences(false);
+
+                dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+            } catch (ParserConfigurationException e) {
+                throw new IllegalStateException("The feature '"
+                + FEATURE + "' is not supported by your XML processor.", e);
+            }
             dbf.setNamespaceAware(true);
             dbf.setValidating(true);
             dbf.setIgnoringComments(true);
