@@ -259,6 +259,8 @@
                     <version>1.7.3</version>
                     <configuration>
                         <flattenMode>ossrh</flattenMode>
+                        <updatePomFile>true</updatePomFile>
+                        <flattenedPomFilename>target/.flattened-pom.xml</flattenedPomFilename>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -318,7 +320,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
                 <executions>
-                    <!-- enable flattening -->
                     <execution>
                         <id>flatten</id>
                         <phase>process-resources</phase>
@@ -326,7 +327,6 @@
                             <goal>flatten</goal>
                         </goals>
                     </execution>
-                    <!-- ensure proper cleanup -->
                     <execution>
                         <id>flatten.clean</id>
                         <phase>clean</phase>
