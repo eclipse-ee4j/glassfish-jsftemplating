@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
+    Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation.
     Copyright (c) 2014, 2020 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
@@ -23,10 +24,12 @@
     <parent>
         <groupId>org.glassfish.jsftemplating</groupId>
         <artifactId>jsftemplating-parent</artifactId>
-        <version>4.0.5-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>jsftemplating</artifactId>
+
+    <name>jsftemplating</name>
 
     <dependencies>
         <dependency>
@@ -40,6 +43,14 @@
         <dependency>
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.sun.woodstock.dependlibs</groupId>
@@ -57,10 +68,10 @@
             <artifactId>jsftemplating-dt</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        
+
+
         <!-- Test dependencies -->
-        
+
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.faces</artifactId>
@@ -73,8 +84,8 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>5.8.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
