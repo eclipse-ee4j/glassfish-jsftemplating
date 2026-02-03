@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation.
+    Copyright (c) 2022, 2026 Contributors to the Eclipse Foundation.
     Copyright (c) 2014, 2020 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
@@ -126,7 +126,7 @@
                                 <Bundle-Name>com.sun.jsftemplating</Bundle-Name>
                                 <excludeDependencies>jakarta.faces</excludeDependencies>
                                 <Import-Package>com.sun.data.provider.*;resolution:=optional;password=GlassFish,!com.sun.jsftemplating.annotation.*,jakarta.servlet.*,*</Import-Package>
-                                <Export-Package>!com.sun.jsftemplating.annotation.*,!com.sun.data.*,com.sun.jsftemplating.*;version=${project.osgi.version}</Export-Package>
+                                <Export-Package>!com.sun.jsftemplating.annotation.*,!com.sun.data.*,com.sun.jsftemplating.*</Export-Package>
                             </instructions>
                         </configuration>
                     </execution>
