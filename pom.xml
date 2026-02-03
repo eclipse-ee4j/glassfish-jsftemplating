@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation. All rights reserved.
+    Copyright (c) 2022, 2026 Contributors to the Eclipse Foundation. All rights reserved.
     Copyright (c) 2014, 2018 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
@@ -84,38 +84,40 @@
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>
-                <version>6.1.0-M1</version>
+                <version>6.1.0</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.faces</groupId>
                 <artifactId>jakarta.faces-api</artifactId>
-                <version>4.1.0-M1</version>
+                <version>4.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish</groupId>
                 <artifactId>jakarta.faces</artifactId>
-                <version>4.1.0-M1</version>
+                <version>4.1.6</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.el</groupId>
                 <artifactId>jakarta.el-api</artifactId>
-                <version>6.0.0-M1</version>
+                <version>6.0.0</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.enterprise</groupId>
                 <artifactId>jakarta.enterprise.cdi-api</artifactId>
-                <version>4.1.0-M1</version>
+                <version>4.1.0</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.enterprise</groupId>
                 <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
-                <version>4.1.0-M1</version>
+                <version>4.1.0</version>
             </dependency>
+
             <dependency>
                 <groupId>com.sun.woodstock.dependlibs</groupId>
                 <artifactId>dataprovider</artifactId>
                 <version>1.0</version>
             </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -128,39 +130,22 @@
     <build>
         <pluginManagement>
             <plugins>
-                 <!-- Sets minimal Maven version to 3.6.0 -->
                 <plugin>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>enforce-maven</id>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                            <configuration>
-                                <rules>
-                                    <requireMavenVersion>
-                                        <version>3.6.0</version>
-                                    </requireMavenVersion>
-                                </rules>
-                            </configuration>
-                        </execution>
-                    </executions>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.15.0</version>
+                    <configuration>
+                        <release>17</release>
+                    </configuration>
                 </plugin>
 
                 <!-- Generate the OSGi jar Manifest. -->
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>5.1.9</version>
+                    <version>6.0.0</version>
                     <configuration>
                         <instructions>
-                            <!-- By default, we don't export anything. -->
                             <Export-Package />
-                            <Bundle-Version>${project.osgi.version}</Bundle-Version>
-                            <!-- Read all the configuration from osgi.bundle file, if it exists. See Felix-699 to find out
-                                why we use ${basedir}. -->
-                            <_include>-${basedir}/osgi.bundle</_include>
                             <_noimportjava>true</_noimportjava>
                             <_runee>JavaSE-17</_runee>
                         </instructions>
@@ -171,7 +156,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.5.0</version>
                     <configuration>
                         <archive>
                             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -184,6 +169,7 @@
                 -->
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.12.0</version>
                     <configuration>
                         <quiet>true</quiet>
                         <detectJavaApiLink>false</detectJavaApiLink>
@@ -192,9 +178,8 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2.1</version>
+                    <version>3.4.0</version>
                     <configuration>
                         <includePom>true</includePom>
                     </configuration>
@@ -202,13 +187,12 @@
 
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.9.0</version>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.5.4</version>
                     <configuration>
                         <forkCount>0</forkCount>
                         <systemPropertyVariables>
@@ -217,47 +201,40 @@
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.7.3</version>
+                    <configuration>
+                        <flattenMode>ossrh</flattenMode>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
-            <!-- Restricts the Java version to 17 -->
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                    <compilerArgument>-Xlint:unchecked</compilerArgument>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.glassfish.hk2</groupId>
-                <artifactId>osgiversion-maven-plugin</artifactId>
-                <version>2.3.0-b05</version>
+                <artifactId>maven-enforcer-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>compute-osgi-version</id>
-                        <phase>initialize</phase>
+                        <id>enforce-maven</id>
                         <goals>
-                            <goal>compute-osgi-version</goal>
+                            <goal>enforce</goal>
                         </goals>
                         <configuration>
-                            <dropVersionComponent>qualifier</dropVersionComponent>
-                            <versionPropertyName>project.osgi.version</versionPropertyName>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.9.0</version>
+                                </requireMavenVersion>
+                            </rules>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.5.0</version>
-                <configuration>
-                    <flattenMode>ossrh</flattenMode>
-                </configuration>
                 <executions>
                     <!-- enable flattening -->
                     <execution>
