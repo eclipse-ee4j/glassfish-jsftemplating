@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2019-2020 Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2022 Contributors to Eclipse Foundation. All rights reserved.
+ * Copyright (c) 2022, 2026 Contributors to Eclipse Foundation.
+ * Copyright (c) 2019, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -19,11 +19,14 @@ pipeline {
   agent any
   options {
     // keep at most 50 builds
-    buildDiscarder(logRotator(numToKeepStr: '50'))
+    buildDiscarder(logRotator(numToKeepStr: '10'))
+
     // abort pipeline if previous stage is unstable
     skipStagesAfterUnstable()
+
     // show timestamps in logs
     timestamps()
+
     // global timeout, abort after 6 hours
     timeout(time: 20, unit: 'MINUTES')
   }
@@ -31,12 +34,11 @@ pipeline {
     stage('build') {
       agent any
       tools {
-        jdk 'temurin-jdk11-latest'
+        jdk 'temurin-jdk17-latest'
         maven 'apache-maven-latest'
       }
       steps {
-        sh 'mvn clean install -Pstaging --batch-mode -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
-
+        sh 'mvn -B -V clean install'
         junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
       }
     }

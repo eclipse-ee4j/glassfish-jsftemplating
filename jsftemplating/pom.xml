@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
+    Copyright (c) 2022, 2026 Contributors to the Eclipse Foundation.
     Copyright (c) 2014, 2020 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
@@ -17,16 +18,18 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.glassfish.jsftemplating</groupId>
         <artifactId>jsftemplating-parent</artifactId>
-        <version>4.0.5-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>jsftemplating</artifactId>
+
+    <name>jsftemplating</name>
 
     <dependencies>
         <dependency>
@@ -40,6 +43,14 @@
         <dependency>
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.sun.woodstock.dependlibs</groupId>
@@ -57,10 +68,10 @@
             <artifactId>jsftemplating-dt</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        
+
+
         <!-- Test dependencies -->
-        
+
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.faces</artifactId>
@@ -73,8 +84,8 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>5.21.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -115,7 +126,7 @@
                                 <Bundle-Name>com.sun.jsftemplating</Bundle-Name>
                                 <excludeDependencies>jakarta.faces</excludeDependencies>
                                 <Import-Package>com.sun.data.provider.*;resolution:=optional;password=GlassFish,!com.sun.jsftemplating.annotation.*,jakarta.servlet.*,*</Import-Package>
-                                <Export-Package>!com.sun.jsftemplating.annotation.*,!com.sun.data.*,com.sun.jsftemplating.*;version=${project.osgi.version}</Export-Package>
+                                <Export-Package>!com.sun.jsftemplating.annotation.*,!com.sun.data.*,com.sun.jsftemplating.*</Export-Package>
                             </instructions>
                         </configuration>
                     </execution>
