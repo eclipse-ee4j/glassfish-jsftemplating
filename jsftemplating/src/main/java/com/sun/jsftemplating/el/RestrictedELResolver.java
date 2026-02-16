@@ -31,6 +31,7 @@ import java.util.Objects;
  *     <li>Constructor calls</li>
  *     <li>The {@code getClass() instance method calls}</li>
  *     <li>The {@code class} instance property</li>
+ *     <li>Static fields</li>
  * </ul>
  *
  * @author avpinchuk
@@ -43,8 +44,8 @@ public class RestrictedELResolver extends ELResolver {
         if (base == null) {
             return null;
         }
-        // Disable 'class' instance property
-        if (Objects.equals(property, "class")) {
+        // Disable static fields and 'class' instance property
+        if (base instanceof ELClass || Objects.equals(property, "class")) {
             elContext.setPropertyResolved(true);
             throw new PropertyNotAllowedException();
         }
