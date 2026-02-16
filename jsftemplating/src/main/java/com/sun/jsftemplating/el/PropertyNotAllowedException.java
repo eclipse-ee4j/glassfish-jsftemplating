@@ -20,48 +20,11 @@ import jakarta.el.ELException;
 
 /**
  * Thrown when a property could not be accessed while evaluating a
- * {@link jakarta.el.ValueExpression ValueExpression} or
- * {@link jakarta.el.MethodExpression MethodExpression}.
+ * {@link jakarta.el.ValueExpression ValueExpression}.
  *
  * @author avpinchuk
  */
-public class PropertyNotAllowedException extends ELException {
+final class PropertyNotAllowedException extends ELException {
 
-    private static final long serialVersionUID = -1L;
-
-    /**
-     * Creates a {@link PropertyNotAllowedException} with no detail message.
-     */
-    public PropertyNotAllowedException() {
-        super();
-    }
-
-    /**
-     * Creates a {@link PropertyNotAllowedException} with the given detail message.
-     *
-     * @param message the detail message
-     */
-    public PropertyNotAllowedException(String message) {
-        super(message);
-    }
-
-    /**
-     * Creates a {@link PropertyNotAllowedException} with the given root cause.
-     *
-     * @param cause the originating cause of this exception
-     */
-    public PropertyNotAllowedException(Throwable cause) {
-        super(cause);
-    }
-
-    /**
-     * Creates a {@link PropertyNotAllowedException} with the given detail message
-     * and root cause.
-     *
-     * @param message the detail message
-     * @param cause the originating cause of this exception
-     */
-    public PropertyNotAllowedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    private static final long serialVersionUID = 1L;
 }

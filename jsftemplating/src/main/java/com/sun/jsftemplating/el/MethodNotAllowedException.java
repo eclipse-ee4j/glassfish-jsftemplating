@@ -24,43 +24,7 @@ import jakarta.el.ELException;
  *
  * @author avpinchuk
  */
-public class MethodNotAllowedException extends ELException {
+final class MethodNotAllowedException extends ELException {
 
-    private static final long serialVersionUID = -1L;
-
-    /**
-     * Creates a {@link MethodNotAllowedException} with no detail message.
-     */
-    public MethodNotAllowedException() {
-        super();
-    }
-
-    /**
-     * Creates a {@link MethodNotAllowedException} with the given detail message.
-     *
-     * @param message the detail message
-     */
-    public MethodNotAllowedException(String message) {
-        super(message);
-    }
-
-    /**
-     * Creates a {@link MethodNotAllowedException} with the given root cause.
-     *
-     * @param cause the originating cause of this exception
-     */
-    public MethodNotAllowedException(Throwable cause) {
-        super(cause);
-    }
-
-    /**
-     * Creates a {@link MethodNotAllowedException} with the given detail message
-     * and root cause.
-     *
-     * @param message the detail message
-     * @param cause the originating cause of this exception
-     */
-    public MethodNotAllowedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    private static final long serialVersionUID = 1L;
 }
