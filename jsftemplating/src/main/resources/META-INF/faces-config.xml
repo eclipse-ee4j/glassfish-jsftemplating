@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation. All rights reserved.
+    Copyright (c) 2022, 2026 Contributors to the Eclipse Foundation.
     Copyright (c) 2006, 2022 Oracle and/or its affiliates. All rights reserved.
 
     This program and the accompanying materials are made available under the
@@ -31,6 +31,7 @@
     <application>
         <view-handler>com.sun.jsftemplating.layout.LayoutViewHandler</view-handler>
         <state-manager>com.sun.jsftemplating.layout.LayoutStateManager</state-manager>
+        <el-resolver>com.sun.jsftemplating.el.RestrictedELResolver</el-resolver>
         <el-resolver>com.sun.jsftemplating.el.PageSessionResolver</el-resolver>
         <locale-config>
             <default-locale>en</default-locale>
