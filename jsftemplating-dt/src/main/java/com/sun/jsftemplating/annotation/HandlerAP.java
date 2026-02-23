@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -55,7 +56,7 @@ import javax.tools.StandardLocation;
   "com.sun.jsftemplating.annotation.Handler",
   "com.sun.jsftemplating.annotation.HandlerInput",
   "com.sun.jsftemplating.annotation.HandlerOutput"})
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_17)
 @SupportedOptions(value = {
     "AnnotationVerifier.Annotations",
     "AnnotationVerifier.Baseclasses",
@@ -270,11 +271,7 @@ public class HandlerAP extends AbstractProcessor {
 
   @Override
   public SourceVersion getSupportedSourceVersion() {
-    if (SourceVersion.latest().compareTo(SourceVersion.RELEASE_6) > 0) {
-      return SourceVersion.valueOf("RELEASE_7");
-    } else {
-      return SourceVersion.RELEASE_6;
-    }
+      return SourceVersion.RELEASE_17;
   }
 
   @Override
@@ -373,18 +370,12 @@ public class HandlerAP extends AbstractProcessor {
                   pdec),
               decl);
         }
-
-// FIXME: Consider an alternate method declaration that annotates a pojo method
-//	    @Handler(id="foo")
-//	    public String method(String a, String b, String c)
-//		annotates a handler "foo" with 3 inputs (a:String, b:String, c:String) and 1 output "result:String"
-//		Will need a special way to invoke this.        
       }
     }
 
     if(_setup){
       writer.close();
-    }    
+    }
     return roundEnv.processingOver();
   }
 }
