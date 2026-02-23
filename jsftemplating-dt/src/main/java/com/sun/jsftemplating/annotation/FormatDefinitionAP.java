@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -24,6 +25,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Set;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -42,7 +44,7 @@ import javax.tools.StandardLocation;
  * @author Romain Grecourt
  */
 @SupportedAnnotationTypes(value = {"com.sun.jsftemplating.annotation.FormatDefinition"})
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class FormatDefinitionAP extends AbstractProcessor {
 
   public static final String FACTORY_FILE = "META-INF/jsftemplating/FormatDefinition.map";
@@ -96,19 +98,10 @@ public class FormatDefinitionAP extends AbstractProcessor {
   }
 
   @Override
-  public SourceVersion getSupportedSourceVersion() {
-    if (SourceVersion.latest().compareTo(SourceVersion.RELEASE_6) > 0) {
-      return SourceVersion.valueOf("RELEASE_7");
-    } else {
-      return SourceVersion.RELEASE_6;
-    }
-  }
-
-  @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
     setup();
- 
+
     for (Element decl : roundEnv.getElementsAnnotatedWith(FormatDefinition.class)) {
       for (AnnotationMirror an : decl.getAnnotationMirrors()) {
         writer.println(decl.toString());

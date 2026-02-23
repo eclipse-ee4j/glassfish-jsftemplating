@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  * Copyright (c) 2006, 2018 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -25,6 +26,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -45,7 +47,7 @@ import javax.tools.StandardLocation;
  * @author Romain Grecourt
  */
 @SupportedAnnotationTypes(value = {"com.sun.jsftemplating.annotation.UIComponentFactory"})
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class UIComponentFactoryAP extends AbstractProcessor {
 
   public static final String FACTORY_FILE = "META-INF/jsftemplating/UIComponentFactory.map";
@@ -114,15 +116,6 @@ public class UIComponentFactoryAP extends AbstractProcessor {
       }
     }
     return buf.toString();
-  }
-
-  @Override
-  public SourceVersion getSupportedSourceVersion() {
-    if (SourceVersion.latest().compareTo(SourceVersion.RELEASE_6) > 0) {
-      return SourceVersion.valueOf("RELEASE_7");
-    } else {
-      return SourceVersion.RELEASE_6;
-    }
   }
 
   @Override
