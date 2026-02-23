@@ -270,11 +270,6 @@ public class HandlerAP extends AbstractProcessor {
   }
 
   @Override
-  public SourceVersion getSupportedSourceVersion() {
-      return SourceVersion.RELEASE_17;
-  }
-
-  @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
     String key;
     Object value;

@@ -119,11 +119,6 @@ public class UIComponentFactoryAP extends AbstractProcessor {
   }
 
   @Override
-  public SourceVersion getSupportedSourceVersion() {
-      return SourceVersion.RELEASE_17;
-  }
-
-  @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
     setup();
     for (Element decl : roundEnv.getElementsAnnotatedWith(UIComponentFactory.class)) {
